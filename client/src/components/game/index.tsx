@@ -1,10 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexCenter } from '../../shared/styles/flex';
+import { FlexRow } from '../../shared/styles/flex';
 import app, { appDOMId } from '../../shared/pixi';
+import { Chat } from './chat';
 
-const Container = styled(FlexCenter)`
+const Container = styled(FlexRow)`
   padding: 8px;
 `;
 
-export const Game = React.memo(() => <Container id={appDOMId} />);
+const ChatContainer = styled.div`
+  height: 100%;
+  flex: 0.25;
+`;
+
+const GameClient = styled.div`
+  flex: 0.75;
+`;
+
+export const Game = React.memo(() => (
+  <Container>
+    <ChatContainer>
+      <Chat />
+    </ChatContainer>
+    <GameClient id={appDOMId} />
+  </Container>
+));
