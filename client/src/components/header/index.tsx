@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import routes from '../../shared/routes';
 import theme from '../../shared/styles/theme';
 import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
 
@@ -23,7 +25,7 @@ const Account = styled(FlexRow)`
   margin-bottom: 8px;
 `;
 
-const AccountLink = styled.div`
+const AccountLink = styled(Link)`
   padding: 0px 16px;
   cursor: pointer;
 `;
@@ -45,10 +47,10 @@ export const Header = React.memo(() => (
     <Spacing />
     <Navigation>
       <Account>
-        <AccountLink>Name</AccountLink>
-        <AccountLink>About</AccountLink>
-        <AccountLink>Login</AccountLink>
-        <AccountLink>Logout</AccountLink>
+        <AccountLink to="">Name</AccountLink>
+        <AccountLink to="">About</AccountLink>
+        <AccountLink to="">Login</AccountLink>
+        <AccountLink to={routes.signup.path}>Signup</AccountLink>
       </Account>
       <Tabs>
         <TabLink>Me</TabLink>
