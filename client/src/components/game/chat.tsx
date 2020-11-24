@@ -59,6 +59,7 @@ const SendButton = styled(FlexCenter)`
   padding: 6px;
   color: #ffffff;
   background-color: #28acde;
+  cursor: pointer;
 `;
 
 export const Chat = React.memo(() => (
