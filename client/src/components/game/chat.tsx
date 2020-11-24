@@ -29,38 +29,32 @@ const User = styled.div`
 `;
 
 const ChatHistory = styled(FlexColumn)`
-  flex: 0.7;
+  flex: 0.75;
   justify-content: flex-end;
   align-items: flex-start;
 `;
 
 interface MessageProps {
-  readonly isAlternate: boolean;
+  readonly backgroundColor: string;
 }
 
 const Message = styled.div<MessageProps>`
-  margin-bottom: 2px;
+  position: relative;
+  margin-bottom: 36px;
   padding: 8px;
   width: 80%;
-  background-color: ${({ isAlternate }) => (isAlternate ? `${qAlphaTheme.primary}` : `${theme.secondary}`)};
+  border-radius: 6px;
+  background-color: ${({ backgroundColor }) => backgroundColor};
 `;
 
-const ChatBox = styled(FlexCenter)`
-  flex: 0.05;
-`;
-
-const ChatTextField = styled.input`
-  flex: 0.8;
-  height: 24px;
-  margin-right: 4px;
-`;
-
-const SendButton = styled(FlexCenter)`
-  flex: 0.2;
-  padding: 6px;
-  color: ${theme.secondary};
-  background-color: ${theme.primary};
-  cursor: pointer;
+const MessageSender = styled.div`
+  position: absolute;
+  bottom: -16px;
+  left: 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: ${theme.secondary};
+  font-size: 12px;
 `;
 
 export const Chat = React.memo(() => (
@@ -73,12 +67,18 @@ export const Chat = React.memo(() => (
       <User>Zahreik</User>
     </UsersList>
     <ChatHistory>
-      <Message isAlternate>Shadowsych: This is a message.</Message>
-      <Message isAlternate={false}>Five: This is another message.</Message>
+      <Message backgroundColor="#5FC7FF">
+        This is a message.
+        <MessageSender>Shadowsych</MessageSender>
+      </Message>
+      <Message backgroundColor="#94FF54">
+        This is also a message.
+        <MessageSender>Five</MessageSender>
+      </Message>
+      <Message backgroundColor="#FFA9FF">
+        This is another message.
+        <MessageSender>Five</MessageSender>
+      </Message>
     </ChatHistory>
-    <ChatBox>
-      <ChatTextField placeholder="Type here to chat" />
-      <SendButton>Send</SendButton>
-    </ChatBox>
   </Container>
 ));
