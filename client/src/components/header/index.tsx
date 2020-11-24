@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
+import { AppName } from '../../shared/constants';
 import theme from '../../shared/styles/theme';
 import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
 
@@ -43,13 +44,13 @@ const TabLink = styled(FlexCenter)`
 
 export const Header = React.memo(() => (
   <Container>
-    <Logo>HTML5 Whirled</Logo>
+    <Logo>{AppName}</Logo>
     <Spacing />
     <Navigation>
       <Account>
         <AccountLink to="">Name</AccountLink>
         <AccountLink to="">About</AccountLink>
-        <AccountLink to="">Login</AccountLink>
+        <AccountLink to={routes.signup.path}>Login</AccountLink>
         <AccountLink to={routes.signup.path}>Signup</AccountLink>
       </Account>
       <Tabs>

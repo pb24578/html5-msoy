@@ -1,7 +1,8 @@
 export default {
   primary: '#28acde',
   secondary: '#ffffff',
-  teritary: '#282c2f',
+  teritary: '#FFAD25',
+  quaternary: '#282c2f',
 };
 
 /**
