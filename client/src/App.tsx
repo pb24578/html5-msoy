@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Header } from './components/header';
 
 const App = () => (
   <BrowserRouter>
+    <Header />
     <Switch>
-      <Route path="/">
-        <div>Hello World!</div>
-      </Route>
+      <Route path="/" />
     </Switch>
   </BrowserRouter>
 );
