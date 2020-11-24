@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import theme, { qAlphaTheme } from '../../shared/styles/theme';
 import { FlexColumn, FlexCenter } from '../../shared/styles/flex';
 
 const Container = styled(FlexColumn)`
@@ -20,7 +21,7 @@ const UsersList = styled(FlexColumn)`
   max-width: 200px;
   overflow-y: auto;
   overflow-x: auto;
-  background-color: rgba(40, 172, 222, 0.25);
+  background-color: ${qAlphaTheme.primary};
 `;
 
 const User = styled.div`
@@ -41,7 +42,7 @@ const Message = styled.div<MessageProps>`
   margin-bottom: 2px;
   padding: 8px;
   width: 80%;
-  background-color: ${({ isAlternate }) => (isAlternate ? 'rgba(40, 172, 222, 0.25)' : '#ffffff')};
+  background-color: ${({ isAlternate }) => (isAlternate ? `${qAlphaTheme.primary}` : `${theme.secondary}`)};
 `;
 
 const ChatBox = styled(FlexCenter)`
@@ -57,8 +58,8 @@ const ChatTextField = styled.input`
 const SendButton = styled(FlexCenter)`
   flex: 0.2;
   padding: 6px;
-  color: #ffffff;
-  background-color: #28acde;
+  color: ${theme.secondary};
+  background-color: ${theme.primary};
   cursor: pointer;
 `;
 

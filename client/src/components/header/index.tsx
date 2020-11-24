@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import theme from '../../shared/styles/theme';
 import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
 
 const Container = styled(FlexRow)``;
@@ -33,8 +34,8 @@ const TabLink = styled(FlexCenter)`
   margin: 0px 16px;
   padding: 6px;
   width: 64px;
-  color: #ffffff;
-  background-color: #28acde;
+  color: ${theme.secondary};
+  background-color: ${theme.primary};
   cursor: pointer;
 `;
 
