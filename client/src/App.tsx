@@ -1,8 +1,15 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 const App = () => {
   return (
-    <div>HTML5 Whirled</div>
+    <BrowserRouter>
+      <Switch>
+        <Route path='/'>
+          <div>Hello World!</div>
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
