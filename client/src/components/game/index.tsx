@@ -9,7 +9,6 @@ const Container = styled(FlexRow)`
 `;
 
 const ChatContainer = styled.div`
-  height: 100%;
   flex: 0.25;
 `;
 
