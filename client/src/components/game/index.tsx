@@ -6,6 +6,7 @@ import { Chat } from './chat';
 
 const Container = styled(FlexRow)`
   padding: 8px;
+  padding-bottom: 16px;
 `;
 
 const ChatContainer = styled.div`
