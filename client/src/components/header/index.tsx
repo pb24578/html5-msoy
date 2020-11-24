@@ -38,28 +38,25 @@ const TabLink = styled(FlexCenter)`
   cursor: pointer;
 `;
 
-export const Header = React.memo(() => {
-  console.log('Hello');
-  return (
-    <Container>
-      <Logo>HTML5 Whirled</Logo>
-      <Spacing />
-      <Navigation>
-        <Account>
-          <AccountLink>Name</AccountLink>
-          <AccountLink>About</AccountLink>
-          <AccountLink>Login</AccountLink>
-          <AccountLink>Logout</AccountLink>
-        </Account>
-        <Tabs>
-          <TabLink>Me</TabLink>
-          <TabLink>Stuff</TabLink>
-          <TabLink>Games</TabLink>
-          <TabLink>Rooms</TabLink>
-          <TabLink>Groups</TabLink>
-          <TabLink>Shop</TabLink>
-        </Tabs>
-      </Navigation>
-    </Container>
-  );
-});
+export const Header = React.memo(() => (
+  <Container>
+    <Logo>HTML5 Whirled</Logo>
+    <Spacing />
+    <Navigation>
+      <Account>
+        <AccountLink>Name</AccountLink>
+        <AccountLink>About</AccountLink>
+        <AccountLink>Login</AccountLink>
+        <AccountLink>Logout</AccountLink>
+      </Account>
+      <Tabs>
+        <TabLink>Me</TabLink>
+        <TabLink>Stuff</TabLink>
+        <TabLink>Games</TabLink>
+        <TabLink>Rooms</TabLink>
+        <TabLink>Groups</TabLink>
+        <TabLink>Shop</TabLink>
+      </Tabs>
+    </Navigation>
+  </Container>
+));

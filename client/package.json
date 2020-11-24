@@ -13,6 +13,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^5.1.4",
     "async-selector-kit": "^2.0.0",
+    "pixi.js": "^5.3.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
