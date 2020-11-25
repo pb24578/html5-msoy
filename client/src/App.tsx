@@ -9,18 +9,18 @@ import { Toolbar } from './components/toolbar';
 import { Signup } from './components/signup';
 
 /**
- * The client container will take the entire screen
+ * The client component will take the entire screen
  * if no other flex elements are on the DOM.
  */
-const ClientContainer = styled(FlexColumn)`
+const Client = styled(FlexColumn)`
   flex: 6;
 `;
 
 /**
- * The menu container will take up a portion of the
- * screen with the game container once it appears.
+ * The menu component will take up a portion of the
+ * screen with the client component once it appears.
  */
-const MenuContainer = styled.div`
+const Menu = styled.div`
   flex: 4;
 `;
 
@@ -28,15 +28,15 @@ const App = () => (
   <BrowserRouter>
     <Header />
     <FlexRow>
-      <ClientContainer>
+      <Client>
         <Game />
         <Toolbar />
-      </ClientContainer>
+      </Client>
       <Switch>
         <Route path={routes.signup.path}>
-          <MenuContainer>
+          <Menu>
             <Signup />
-          </MenuContainer>
+          </Menu>
         </Route>
       </Switch>
     </FlexRow>

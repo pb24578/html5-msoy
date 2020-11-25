@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { socket } from '../../sockets/room';
 import { FlexRow } from '../../shared/styles/flex';
 import app, { appDOMId } from '../../shared/pixi';
 import { Chat } from './chat';

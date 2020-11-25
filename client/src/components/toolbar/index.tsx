@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { socket } from '../../sockets/room';
 import theme from '../../shared/styles/theme';
+import { ChatMessage } from '../../shared/types/room';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
 
 const Container = styled(FlexRow)`
@@ -36,16 +38,33 @@ const Utility = styled.div`
   cursor: pointer;
 `;
 
-export const Toolbar = React.memo(() => (
-  <Container>
-    <ChatBox>
-      <ChatTextField placeholder="Type here to chat" />
-      <SendButton>Send</SendButton>
-    </ChatBox>
-    <Utilities>
-      <Utility>Volume</Utility>
-      <Utility>Friends</Utility>
-      <Utility>Room</Utility>
-    </Utilities>
-  </Container>
-));
+export const Toolbar = React.memo(() => {
+  const [text, setText] = useState('');
+
+  const onChangeText = (event: React.FormEvent<EventTarget>) => {
+    const { value } = event.target as HTMLInputElement;
+    setText(value);
+  };
+
+  const onSendMessage = () => {
+    const message: ChatMessage = {
+      message: text,
+    };
+    socket.send(JSON.stringify(message));
+    setText('');
+  };
+
+  return (
+    <Container>
+      <ChatBox>
+        <ChatTextField onChange={onChangeText} placeholder="Type here to chat" value={text} />
+        <SendButton onClick={onSendMessage}>Send</SendButton>
+      </ChatBox>
+      <Utilities>
+        <Utility>Volume</Utility>
+        <Utility>Friends</Utility>
+        <Utility>Room</Utility>
+      </Utilities>
+    </Container>
+  );
+});
