@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { socket } from '../../sockets/room';
 import theme, { qAlphaTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
-import { ChatMessage, isChatMessage, isUsersList } from '../../shared/types/room';
+import { isChatMessage, isUsersList } from '../../shared/types/room';
 
 const Container = styled(FlexColumn)`
   height: 100%;
@@ -18,6 +18,7 @@ const UsersTitle = styled.div`
 
 const UsersList = styled(FlexColumn)`
   flex: 0.15;
+  margin-bottom: 8px;
   padding: 4px;
   max-width: 200px;
   overflow-y: auto;
@@ -29,10 +30,19 @@ const User = styled.div`
   margin: 2px;
 `;
 
-const ChatHistory = styled(FlexColumn)`
+/**
+ * A container for the chat history's overflow-y.
+ */
+const ChatHistoryContainer = styled(FlexColumn)`
   flex: 0.8;
-  justify-content: flex-end;
+  height: 0;
+`;
+
+const ChatHistory = styled(FlexColumn)`
+  flex-direction: column-reverse;
   align-items: flex-start;
+  height: 100%;
+  overflow-y: auto;
 `;
 
 interface MessageProps {
@@ -70,7 +80,7 @@ export const Chat = React.memo(() => {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (isChatMessage(data)) {
-        chats.push(
+        chats.unshift(
           <Message key={chats.length} backgroundColor="#5FC7FF">
             {data.message}
             <MessageSender>Anonymous</MessageSender>
@@ -88,7 +98,9 @@ export const Chat = React.memo(() => {
     <Container>
       <UsersTitle>Users Online</UsersTitle>
       <UsersList>{usersList}</UsersList>
-      <ChatHistory>{chats}</ChatHistory>
+      <ChatHistoryContainer>
+        <ChatHistory>{chats}</ChatHistory>
+      </ChatHistoryContainer>
     </Container>
   );
 });
