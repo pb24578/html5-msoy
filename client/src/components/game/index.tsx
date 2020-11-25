@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexRow, FlexColumn } from '../../shared/styles/flex';
+import { FlexRow } from '../../shared/styles/flex';
 import app, { appDOMId } from '../../shared/pixi';
 import { Chat } from './chat';
-import { Toolbar } from './toolbar';
 
-const Container = styled(FlexColumn)`
+const Container = styled(FlexRow)`
   padding: 8px;
-  padding-bottom: 16px;
 `;
 
 const ChatContainer = styled.div`
@@ -20,12 +18,9 @@ const GameClient = styled.div`
 
 export const Game = React.memo(() => (
   <Container>
-    <FlexRow>
-      <ChatContainer>
-        <Chat />
-      </ChatContainer>
-      <GameClient id={appDOMId} />
-    </FlexRow>
-    <Toolbar />
+    <ChatContainer>
+      <Chat />
+    </ChatContainer>
+    <GameClient id={appDOMId} />
   </Container>
 ));
