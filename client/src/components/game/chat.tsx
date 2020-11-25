@@ -4,7 +4,6 @@ import theme, { qAlphaTheme } from '../../shared/styles/theme';
 import { FlexColumn, FlexCenter } from '../../shared/styles/flex';
 
 const Container = styled(FlexColumn)`
-  padding: 8px;
   height: 100%;
 `;
 
@@ -16,7 +15,7 @@ const UsersTitle = styled.div`
 `;
 
 const UsersList = styled(FlexColumn)`
-  flex: 0.2;
+  flex: 0.15;
   padding: 4px;
   max-width: 200px;
   overflow-y: auto;
@@ -29,7 +28,7 @@ const User = styled.div`
 `;
 
 const ChatHistory = styled(FlexColumn)`
-  flex: 0.75;
+  flex: 0.8;
   justify-content: flex-end;
   align-items: flex-start;
 `;
