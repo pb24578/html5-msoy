@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import theme, { qAlphaTheme } from '../../shared/styles/theme';
-import { FlexColumn, FlexCenter } from '../../shared/styles/flex';
+import { FlexColumn } from '../../shared/styles/flex';
 
 const Container = styled(FlexColumn)`
   height: 100%;
