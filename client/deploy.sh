@@ -1,2 +1,2 @@
 echo "Serving the Msoy client!"
-serve -s build
+serve -s build -l 80
