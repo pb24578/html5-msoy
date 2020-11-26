@@ -46,6 +46,13 @@ export const Toolbar = React.memo(() => {
     setText(value);
   };
 
+  const onKeyPress = (event: React.KeyboardEvent<EventTarget>) => {
+    const { key } = event;
+    if (key === 'Enter') {
+      onSendMessage();
+    }
+  };
+
   const onSendMessage = () => {
     const message: ChatMessage = {
       message: text,
@@ -57,7 +64,7 @@ export const Toolbar = React.memo(() => {
   return (
     <Container>
       <ChatBox>
-        <ChatTextField onChange={onChangeText} placeholder="Type here to chat" value={text} />
+        <ChatTextField onChange={onChangeText} onKeyPress={onKeyPress} placeholder="Type here to chat" value={text} />
         <SendButton onClick={onSendMessage}>Send</SendButton>
       </ChatBox>
       <Utilities>

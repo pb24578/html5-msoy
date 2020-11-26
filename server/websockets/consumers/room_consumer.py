@@ -65,6 +65,10 @@ class RoomConsumer(AsyncWebsocketConsumer):
         json_data = json.loads(text_data)
         message = json_data['message']
 
+        # prevent blank messages from being sent
+        if not bool(message):
+            return
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
