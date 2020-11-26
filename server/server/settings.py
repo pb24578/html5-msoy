@@ -25,7 +25,7 @@ SECRET_KEY = 'uw)c&*da5!vz+7qze6(f5ftyvk(@0o6445bql=bgjtvy456k$v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['74.91.124.141', 'html5whirled.tk']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '74.91.124.141', 'html5whirled.tk']
 
 
 # Application definition
