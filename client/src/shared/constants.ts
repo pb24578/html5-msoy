@@ -1,4 +1,4 @@
-export const RestURI = 'http://html5whirled.tk';
+export const RestURI = 'http://html5whirled.tk:8000';
 
 export const SocketURI = 'ws://html5whirled.tk:8000';
 
