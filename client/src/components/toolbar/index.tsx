@@ -6,8 +6,6 @@ import { ChatMessage } from '../../shared/types/room';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
 
 const Container = styled(FlexRow)`
-  padding: 8px;
-  height: 100%;
   align-items: center;
 `;
 
