@@ -34,7 +34,7 @@ const User = styled.div`
 /**
  * A container for the chat history's overflow-y.
  */
-const ChatHistoryContainer = styled(FlexColumn)`
+const ChatHistoryOverflow = styled(FlexColumn)`
   flex: 0.8;
   height: 0;
 `;
@@ -74,8 +74,7 @@ const MessageSender = styled.div`
 export const Chat = React.memo(() => {
   const [usersList, setUsersList] = useState([] as React.ReactElement[]);
   const [chats, setChats] = useState([] as React.ReactElement[]);
-  // const socket = useSelector(getRoomSocket);
-  const socket = new WebSocket('ws://localhost:5000')
+  const socket = useSelector(getRoomSocket);
 
   /**
    * Listen to chat messages from other users when this component mounts.
@@ -103,9 +102,9 @@ export const Chat = React.memo(() => {
     <Container>
       <UsersTitle>Users Online</UsersTitle>
       <UsersList>{usersList}</UsersList>
-      <ChatHistoryContainer>
+      <ChatHistoryOverflow>
         <ChatHistory>{chats}</ChatHistory>
-      </ChatHistoryContainer>
+      </ChatHistoryOverflow>
     </Container>
   );
 });

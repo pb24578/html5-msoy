@@ -11,7 +11,7 @@ export interface Game {
 }
 
 const initialState: Game = {
-  room: { id: 0, socket: null },
+  room: { id: 1, socket: new WebSocket(`${SocketURI}/room/${1}`) },
 };
 
 const slice = createSlice({

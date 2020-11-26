@@ -43,8 +43,7 @@ const Utility = styled.div`
 const maxChars = 2096;
 
 export const Toolbar = React.memo(() => {
-  // const socket = useSelector(getRoomSocket);
-  const socket = new WebSocket('ws://localhost:5000');
+  const socket = useSelector(getRoomSocket);
   const [text, setText] = useState('');
 
   const onChangeText = (event: React.FormEvent<EventTarget>) => {
