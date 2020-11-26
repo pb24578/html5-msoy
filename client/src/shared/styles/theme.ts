@@ -11,3 +11,11 @@ export default {
 export const qAlphaTheme = {
   primary: 'rgba(40, 172, 222, 0.25)',
 };
+
+/**
+ * Themes for error messages.
+ */
+export const errorTheme = {
+  primary: '#FF0000',
+  secondary: '#282c2f',
+};

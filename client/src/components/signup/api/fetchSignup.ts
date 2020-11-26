@@ -6,7 +6,7 @@ interface Authentication {
 
 // eslint-disable-next-line max-len
 export const fetchSignup = async (username: string, email: string, password: string): Promise<Authentication> => {
-  const url = `${RestURI}/login`;
+  const url = `${RestURI}/signup`;
   const resp = await fetch(url, {
     method: 'POST',
     headers: {
@@ -18,7 +18,10 @@ export const fetchSignup = async (username: string, email: string, password: str
   });
 
   if (!resp.ok) {
-    throw new Error(await resp.text());
+    // return the first error thrown by the server
+    const error = await resp.json();
+    const errorList: string[] = Object.values(error);
+    throw new Error(errorList[0]);
   }
 
   const data = await resp.json();
