@@ -7,6 +7,7 @@ import routes from './shared/routes';
 import { Header } from './components/header';
 import { Game } from './components/game';
 import { Toolbar } from './components/toolbar';
+import { Login } from './components/login';
 import { Signup } from './components/signup';
 
 /**
@@ -55,6 +56,11 @@ const App = () => {
           <Toolbar />
         </Client>
         <Switch>
+          <Route path={routes.login.path}>
+            <Menu>
+              <Login />
+            </Menu>
+          </Route>
           <Route path={routes.signup.path}>
             <Menu>
               <Signup />

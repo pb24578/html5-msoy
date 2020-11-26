@@ -1,12 +1,17 @@
-import { RestURI } from '../../constants';
-import { User } from '../reducer';
+import { RestURI } from '../../../shared/constants';
 
-export const fetchLogin = async (email: string, password: string): Promise<User> => {
+interface Authentication {
+  token: string;
+}
+
+// eslint-disable-next-line max-len
+export const fetchSignup = async (username: string, email: string, password: string): Promise<Authentication> => {
   const url = `${RestURI}/login`;
   const resp = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'X-Username': username,
       'X-Email': email,
       'X-Password': password,
     },

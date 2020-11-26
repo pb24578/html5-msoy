@@ -50,7 +50,7 @@ export const Header = React.memo(() => (
       <Account>
         <AccountLink to="">Name</AccountLink>
         <AccountLink to="">About</AccountLink>
-        <AccountLink to={routes.signup.path}>Login</AccountLink>
+        <AccountLink to={routes.login.path}>Login</AccountLink>
         <AccountLink to={routes.signup.path}>Signup</AccountLink>
       </Account>
       <Tabs>

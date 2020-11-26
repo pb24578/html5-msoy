@@ -9,13 +9,13 @@ const Container = styled(FlexColumn)`
   background-color: ${theme.primary};
 `;
 
-const SignupTitle = styled.div`
+const LogonTitle = styled.div`
   margin-bottom: 8px;
   color: ${theme.secondary};
   font-size: 24px;
 `;
 
-const SignupForm = styled.form`
+const LogonForm = styled.form`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 16px;
@@ -28,7 +28,7 @@ const InputField = styled.input`
   padding: 8px;
 `;
 
-const SignupButton = styled.div`
+const LogonButton = styled.div`
   margin: 4px;
   padding: 6px;
   color: ${theme.secondary};
@@ -36,15 +36,9 @@ const SignupButton = styled.div`
   cursor: pointer;
 `;
 
-export const Signup = React.memo(() => {
-  const [username, setUsername] = useState('');
+export const Login = React.memo(() => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const onChangeUsername = (event: React.FormEvent<EventTarget>) => {
-    const { value } = event.target as HTMLInputElement;
-    setUsername(value);
-  };
 
   const onChangeEmail = (event: React.FormEvent<EventTarget>) => {
     const { value } = event.target as HTMLInputElement;
@@ -58,9 +52,8 @@ export const Signup = React.memo(() => {
 
   return (
     <Container>
-      <SignupTitle>Don&apos;t have an account? Signup</SignupTitle>
-      <SignupForm>
-        <InputField placeholder="Type your username here" onChange={onChangeUsername} type="text" value={username} />
+      <LogonTitle>Already have an account? Logon</LogonTitle>
+      <LogonForm>
         <InputField placeholder="Type your email here" onChange={onChangeEmail} type="email" value={email} />
         <InputField
           placeholder="Type your password here"
@@ -68,8 +61,8 @@ export const Signup = React.memo(() => {
           type="password"
           value={password}
         />
-        <SignupButton>Signup</SignupButton>
-      </SignupForm>
+        <LogonButton>Logon</LogonButton>
+      </LogonForm>
     </Container>
   );
 });
