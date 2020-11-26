@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js-legacy';
 
 /**
  * The HTML id of the DOM element that will contain the PIXI app.
