@@ -28,5 +28,7 @@ export const fetchSignup = async (username: string, email: string, password: str
   }
 
   const data = await resp.json();
+
+  console.log(data);
   return data;
 };
