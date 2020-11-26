@@ -6,12 +6,12 @@ export interface Session {
 
 export interface User {
   session: Session;
-  email: string | null;
+  displayName: string | null;
 }
 
 const initialState: User = {
   session: { token: null },
-  email: null,
+  displayName: null,
 };
 
 const slice = createSlice({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import theme from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
@@ -36,20 +36,68 @@ const LogonButton = styled.div`
   cursor: pointer;
 `;
 
-export const Signup = React.memo(() => (
-  <Container>
-    <SignupTitle>Already have an account? Logon</SignupTitle>
-    <SignupForm>
-      <InputField placeholder="Type your email here" type="email" />
-      <InputField placeholder="Type your password here" type="password" />
-      <LogonButton>Logon</LogonButton>
-    </SignupForm>
-    <SignupTitle>Don&apos;t have an account? Signup</SignupTitle>
-    <SignupForm>
-      <InputField placeholder="Type your username here" type="text" />
-      <InputField placeholder="Type your email here" type="email" />
-      <InputField placeholder="Type your password here" type="password" />
-      <LogonButton>Signup</LogonButton>
-    </SignupForm>
-  </Container>
-));
+export const Signup = React.memo(() => {
+  const [logonEmail, setLogonEmail] = useState('');
+  const [logonPassword, setLogonPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+
+  const onChangeLogonEmail = (event: React.FormEvent<EventTarget>) => {
+    const { value } = event.target as HTMLInputElement;
+    setLogonEmail(value);
+  };
+
+  const onChangeLogonPassword = (event: React.FormEvent<EventTarget>) => {
+    const { value } = event.target as HTMLInputElement;
+    setLogonPassword(value);
+  };
+
+  const onChangeUsername = (event: React.FormEvent<EventTarget>) => {
+    const { value } = event.target as HTMLInputElement;
+    setUsername(value);
+  };
+
+  const onChangeSignupEmail = (event: React.FormEvent<EventTarget>) => {
+    const { value } = event.target as HTMLInputElement;
+    setSignupEmail(value);
+  };
+
+  const onChangeSignupPassword = (event: React.FormEvent<EventTarget>) => {
+    const { value } = event.target as HTMLInputElement;
+    setSignupPassword(value);
+  };
+
+  return (
+    <Container>
+      <SignupTitle>Already have an account? Logon</SignupTitle>
+      <SignupForm>
+        <InputField placeholder="Type your email here" onChange={onChangeLogonEmail} type="email" value={logonEmail} />
+        <InputField
+          placeholder="Type your password here"
+          onChange={onChangeLogonPassword}
+          type="password"
+          value={logonPassword}
+        />
+        <LogonButton>Logon</LogonButton>
+      </SignupForm>
+      <SignupTitle>Don&apos;t have an account? Signup</SignupTitle>
+      <SignupForm>
+        <InputField placeholder="Type your username here" onChange={onChangeUsername} type="text" value={username} />
+        <InputField
+          placeholder="Type your email here"
+          onChange={onChangeSignupEmail}
+          type="email"
+          value={signupEmail}
+        />
+        <InputField
+          placeholder="Type your password here"
+          onChange={onChangeSignupPassword}
+          type="password"
+          value={signupPassword}
+        />
+        <LogonButton>Signup</LogonButton>
+      </SignupForm>
+    </Container>
+  );
+});
