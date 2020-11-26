@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { socket } from '../../sockets/room';
+import { useLocation } from 'react-router-dom';
 import { FlexRow } from '../../shared/styles/flex';
-import app, { appDOMId } from '../../shared/pixi';
+import { resizePixiApp, appDOMId } from '../../shared/pixi';
 import { Chat } from './chat';
 
 const Container = styled(FlexRow)`
@@ -11,17 +11,32 @@ const Container = styled(FlexRow)`
 
 const ChatContainer = styled.div`
   flex: 0.25;
+  width: 25%;
 `;
 
-const GameClient = styled.div`
+const GameContainer = styled.div`
   flex: 0.75;
+  width: 75%;
 `;
 
-export const Game = React.memo(() => (
-  <Container>
-    <ChatContainer>
-      <Chat />
-    </ChatContainer>
-    <GameClient id={appDOMId} />
-  </Container>
-));
+export const Game = React.memo(() => {
+  const location = useLocation();
+
+  /**
+   * If the route location changes, then resize the game client.
+   */
+  useEffect(() => {
+    resizePixiApp();
+  }, [location]);
+
+  return (
+    <Container>
+      <ChatContainer>
+        <Chat />
+      </ChatContainer>
+      <GameContainer>
+        <div id={appDOMId} />
+      </GameContainer>
+    </Container>
+  );
+});

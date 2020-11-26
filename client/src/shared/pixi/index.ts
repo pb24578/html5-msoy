@@ -5,4 +5,16 @@ import * as PIXI from 'pixi.js-legacy';
  */
 export const appDOMId: string = 'game-client';
 
-export default new PIXI.Application();
+const app = new PIXI.Application();
+
+/**
+ * Resizes the Pixi App to the parent's dimensions.
+ */
+export const resizePixiApp = () => {
+  const parent = app.view.parentElement;
+  if (parent) {
+    app.renderer.resize(parent.clientWidth, parent.clientHeight);
+  }
+};
+
+export default app;

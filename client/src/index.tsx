@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 import App from './App';
-import app, { appDOMId } from './shared/pixi';
+import app, { appDOMId, resizePixiApp } from './shared/pixi';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -10,4 +11,8 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-document.getElementById(appDOMId)?.append(app.view);
+const pixiContainer = document.getElementById(appDOMId);
+if (pixiContainer) {
+  pixiContainer.append(app.view);
+  resizePixiApp();
+}

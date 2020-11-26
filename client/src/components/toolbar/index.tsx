@@ -38,12 +38,19 @@ const Utility = styled.div`
   cursor: pointer;
 `;
 
+/**
+ * The maximum number of characters that a user can send on the chat.
+ */
+const maxChars = 2096;
+
 export const Toolbar = React.memo(() => {
   const [text, setText] = useState('');
 
   const onChangeText = (event: React.FormEvent<EventTarget>) => {
     const { value } = event.target as HTMLInputElement;
-    setText(value);
+    if (value.length <= maxChars) {
+      setText(value);
+    }
   };
 
   const onKeyPress = (event: React.KeyboardEvent<EventTarget>) => {

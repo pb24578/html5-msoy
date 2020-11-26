@@ -66,8 +66,12 @@ class RoomConsumer(AsyncWebsocketConsumer):
         message = json_data['message']
 
         # prevent blank messages from being sent
-        if not bool(message):
+        if not bool(message) or message.isspace():
             return
+
+        # strip off too many characters
+        max_chars = 2096
+        message = message[0: max_chars]
 
         await self.channel_layer.group_send(
             self.room_group_name,
