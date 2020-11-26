@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { socket } from '../../sockets/room';
 import theme from '../../shared/styles/theme';
-import { ChatMessage } from '../../shared/types/room';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
+import { getRoomSocket } from '../game/selectors';
+import { ChatMessage } from '../chat/types';
 
 const Container = styled(FlexRow)`
   align-items: center;
@@ -42,6 +43,8 @@ const Utility = styled.div`
 const maxChars = 2096;
 
 export const Toolbar = React.memo(() => {
+  // const socket = useSelector(getRoomSocket);
+  const socket = new WebSocket('ws://localhost:5000');
   const [text, setText] = useState('');
 
   const onChangeText = (event: React.FormEvent<EventTarget>) => {
@@ -59,6 +62,7 @@ export const Toolbar = React.memo(() => {
   };
 
   const onSendMessage = () => {
+    if (!socket) return;
     const message: ChatMessage = {
       message: text,
     };

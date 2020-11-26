@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { socket } from '../../sockets/room';
 import theme, { qAlphaTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
-import { isChatMessage, isUsersList } from '../../shared/types/room';
+import { getRoomSocket } from '../game/selectors';
+import { isChatMessage, isUsersList } from './types';
 
 const Container = styled(FlexColumn)`
   height: 100%;
@@ -73,11 +74,14 @@ const MessageSender = styled.div`
 export const Chat = React.memo(() => {
   const [usersList, setUsersList] = useState([] as React.ReactElement[]);
   const [chats, setChats] = useState([] as React.ReactElement[]);
+  // const socket = useSelector(getRoomSocket);
+  const socket = new WebSocket('ws://localhost:5000')
 
   /**
    * Listen to chat messages from other users when this component mounts.
    */
   useEffect(() => {
+    if (!socket) return;
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (isChatMessage(data)) {
@@ -93,7 +97,7 @@ export const Chat = React.memo(() => {
         setUsersList(usersList);
       }
     };
-  }, []);
+  }, [socket]);
 
   return (
     <Container>

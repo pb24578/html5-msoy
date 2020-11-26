@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { FlexRow } from '../../shared/styles/flex';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
-import { Chat } from './chat';
+import { Chat } from '../chat';
 
 const Container = styled(FlexRow)`
   padding: 8px;
@@ -14,7 +14,7 @@ const ChatContainer = styled.div`
   width: 25%;
 `;
 
-const GameContainer = styled.div`
+const PixiAppContainer = styled.div`
   flex: 0.75;
   width: 75%;
 `;
@@ -34,9 +34,9 @@ export const Game = React.memo(() => {
       <ChatContainer>
         <Chat />
       </ChatContainer>
-      <GameContainer>
+      <PixiAppContainer>
         <div id={appDOMId} />
-      </GameContainer>
+      </PixiAppContainer>
     </Container>
   );
 });
