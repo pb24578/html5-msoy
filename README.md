@@ -17,3 +17,5 @@ HTML5 Msoy has two different environments: staging and production.
 4. Execute cd into the scripts directory and execute ```bash production.sh``` to run the web app for production.  
 5. Now view your web app is running on port 80.
     - The port can be configured in deploy-client.sh
+
+To see the production processes running, execute ```pm2 list```. To end any of those processes, execute ```pm2 delete <name>```.
