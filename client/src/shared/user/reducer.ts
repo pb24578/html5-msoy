@@ -5,13 +5,19 @@ export interface Session {
 }
 
 export interface User {
+  id: number;
   session: Session;
-  displayName: string | null;
+  displayName: string;
+  username: string;
+  email: string;
 }
 
 const initialState: User = {
+  id: 0,
   session: { token: null },
-  displayName: null,
+  displayName: '',
+  username: '',
+  email: '',
 };
 
 const slice = createSlice({
