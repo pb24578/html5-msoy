@@ -55,6 +55,7 @@ const Message = styled.div<MessageProps>`
   padding: 8px;
   width: 80%;
   word-wrap: break-word;
+  overflow-wrap: anywhere;
   border-radius: 6px;
   background-color: ${({ backgroundColor }) => backgroundColor};
 `;
