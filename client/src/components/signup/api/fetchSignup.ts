@@ -7,13 +7,16 @@ interface Authentication {
 // eslint-disable-next-line max-len
 export const fetchSignup = async (username: string, email: string, password: string): Promise<Authentication> => {
   const url = `${RestURI}/signup`;
+  const body = {
+    username,
+    email,
+    password,
+  };
   const resp = await fetch(url, {
+    body: JSON.stringify(body),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Username': username,
-      'X-Email': email,
-      'X-Password': password,
     },
   });
 
