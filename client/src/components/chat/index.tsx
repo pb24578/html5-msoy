@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import theme, { qAlphaTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
 import { getRoomSocket } from '../game/selectors';
-import { isChatMessage, isUsersList } from './types';
+import { isChatMessage, isChatParticipants } from './types';
 
 const Container = styled(FlexColumn)`
   height: 100%;
@@ -27,7 +27,7 @@ const UsersList = styled(FlexColumn)`
   background-color: ${qAlphaTheme.primary};
 `;
 
-const User = styled.div`
+const Participant = styled.div`
   margin: 2px;
 `;
 
@@ -72,7 +72,7 @@ const MessageSender = styled.div`
 `;
 
 export const Chat = React.memo(() => {
-  const [usersList, setUsersList] = useState([] as React.ReactElement[]);
+  const [participantList, setParticipantList] = useState([] as React.ReactElement[]);
   const [chats, setChats] = useState([] as React.ReactElement[]);
   const socket = useSelector(getRoomSocket);
 
@@ -91,9 +91,11 @@ export const Chat = React.memo(() => {
           </Message>,
         );
         setChats([...chats]);
-      } else if (isUsersList(data)) {
-        const usersList = data.users.map((user) => <User key={user}>{user}</User>);
-        setUsersList(usersList);
+      } else if (isChatParticipants(data)) {
+        const participantList = data.participants.map((participant) => (
+          <Participant key={participant}>{participant}</Participant>
+        ));
+        setParticipantList(participantList);
       }
     };
   }, [socket]);
@@ -101,7 +103,7 @@ export const Chat = React.memo(() => {
   return (
     <Container>
       <UsersTitle>Users Online</UsersTitle>
-      <UsersList>{usersList}</UsersList>
+      <UsersList>{participantList}</UsersList>
       <ChatHistoryOverflow>
         <ChatHistory>{chats}</ChatHistory>
       </ChatHistoryOverflow>

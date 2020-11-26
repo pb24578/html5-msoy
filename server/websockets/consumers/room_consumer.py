@@ -32,14 +32,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.user = f'Random User #{random.randint(0, 1000)}'
         users.append(self.user)
 
-        # send the updated list of users to the all of users in this room
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'send_data',
-                'data': {'users': users}
-            }
-        )
+        await self.group_send_participants()
 
     async def disconnect(self, close_code):
         """
@@ -54,7 +47,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         users = self.rooms[self.room_id]
         users.remove(self.user)
 
-        await self.group_send_users_list()
+        await self.group_send_participants()
 
     async def receive(self, text_data):
         """
@@ -81,9 +74,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    async def group_send_users_list(self):
+    async def group_send_participants(self):
         """
-        Send the updated list of users to all of the users in this room.
+        Send the updated list of participants to all of the users in this room.
         """
 
         users = self.rooms[self.room_id]
@@ -92,7 +85,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'send_data',
-                'data': {'users': users}
+                'data': {'participants': users}
             }
         )
 

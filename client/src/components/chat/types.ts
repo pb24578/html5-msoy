@@ -1,8 +1,8 @@
-export interface UsersList {
-  users: string[];
+export interface ChatParticipants {
+  participants: string[];
 }
 
-export const isUsersList = (object: any): object is UsersList => 'users' in object;
+export const isChatParticipants = (object: any): object is ChatParticipants => 'participants' in object;
 
 export interface ChatMessage {
   message: string;
