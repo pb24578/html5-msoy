@@ -6,6 +6,8 @@ Install the server dependencies by running ```pip install -r requirements``` in 
 # Run HTML5 Msoy
 HTML5 Msoy has two different environments: staging and production.
 
+Before continuing, modify the connection settings in the constants.ts file to your server's settings.
+
 ### Staging (Development)
 1. To run the client for staging (development), execute ```yarn start```
 2. To run server for staging (development), execute ```python manage.py runserver```.
@@ -15,7 +17,8 @@ HTML5 Msoy has two different environments: staging and production.
 2. In the client directory, execute ```yarn run build``` to build the React app.  
 3. Use the Python virtual environment that installed your server's pip requirements.  
 4. Execute cd into the scripts directory and execute ```bash production.sh``` to run the web app for production.  
-5. Now view your web app is running on port 80.
-    - The port can be configured in deploy-client.sh
+5. Now view your web app running on port 80.
+    - The ports can be configured in deploy-client.sh and deploy-server.sh
+    - If you configure the ports in either script, make sure to edit the port in constants.ts
 
 To see the production processes running, execute ```pm2 list```. To end any of those processes, execute ```pm2 delete <name>```.
