@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from ..models import User
 from ..forms import SignupForm
+from ..serializers import UserSerializer
 
 
 class SignupView(APIView):
@@ -19,7 +20,9 @@ class SignupView(APIView):
         username = signup_form.cleaned_data['username']
         email = signup_form.cleaned_data['email']
         password = signup_form.cleaned_data['password']
-
         user = User.objects.create(username=username, email=email, password=password)
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({ "token": token.key })
+        Token.objects.get_or_create(user=user)
+
+        # return the serialized user data
+        user_serializer = UserSerializer(user)
+        return Response(user_serializer.data)
