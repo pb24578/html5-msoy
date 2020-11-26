@@ -4,11 +4,15 @@ from ..models import User
 
 class SignupForm(forms.Form):
     username = forms.CharField(required=True, min_length=4, error_messages={
-        "min_length": "The username is not long enough."
+        "required": "The username field is blank.",
+        "min_length": "The username is not long enough.",
     })
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=True, error_messages={
+        "required": "The email field is blank.",
+    })
     password = forms.CharField(required=True, min_length=4, error_messages={
-        "min_length": "The password is not strong enough."
+        "required": "The password field is blank.",
+        "min_length": "The password is not strong enough.",
     })
 
     def clean_username(self):
