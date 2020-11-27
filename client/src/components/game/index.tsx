@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
+import { LocalStorage } from '../../shared/constants';
 import { FlexRow } from '../../shared/styles/flex';
 import { getToken } from '../../shared/user/selectors';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
@@ -31,7 +32,14 @@ export const Game = React.memo(() => {
    * When the component mounts or the user logs in, establish the new connection with the room.
    */
   useEffect(() => {
-    connectToRoom(1);
+    if (localStorage.getItem(LocalStorage.Session)) {
+      // wait until the user is authenticated to connect to this room
+      if (token) {
+        connectToRoom(1);
+      }
+    } else {
+      connectToRoom(1);
+    }
   }, [token]);
 
   /**
