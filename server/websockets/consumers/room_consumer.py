@@ -47,6 +47,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
             user_id = await sync_to_async(get_user_id)()
             username = await sync_to_async(get_username)()
+            self.user = {"id": user_id, "display_name": username, "channel_name": self.channel_name}
 
             # disconnect the previous user's connection if it's trying to connect multiple times to this room
             for participant in participants:
@@ -63,8 +64,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         }
                     )
                     return
-
-            self.user = {"id": user_id, "display_name": username, "channel_name": self.channel_name}
         except:
             self.user = {"id": 0, "display_name": "Anonymous", "channel_name": self.channel_name}
 
