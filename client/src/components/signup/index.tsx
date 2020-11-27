@@ -66,7 +66,7 @@ export const Signup = React.memo(() => {
 
   const onSignup = async () => {
     try {
-      const user = await signup(username, email, password).promise;
+      await signup(username, email, password).promise;
     } catch (error) {
       setError(error);
     }

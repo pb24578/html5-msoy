@@ -60,7 +60,7 @@ export const Login = React.memo(() => {
 
   const onLogin = async () => {
     try {
-      const user = await login(email, password).promise;
+      await login(email, password).promise;
     } catch (error) {
       setError(error);
     }
