@@ -27,7 +27,7 @@ export const Game = React.memo(() => {
   const token = useSelector(getToken);
 
   /**
-   * When the component mounts or the user logs in, establish the connection with the room.
+   * When the component mounts or the user logs in, establish the new connection with the room.
    */
   useEffect(() => {
     connectToRoom(1);
