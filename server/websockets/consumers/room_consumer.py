@@ -50,7 +50,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
             # prevent this user from connecting if it's already connected to this room
             for participant in participants:
-                if participant["id"] == user_id:
+                if participant["id"] == user_id and participant["channel_name"] != self.channel_name:
                     await self.channel_layer.send(
                         participant["channel_name"],
                         {
