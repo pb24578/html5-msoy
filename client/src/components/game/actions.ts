@@ -1,7 +1,7 @@
 import { createAsyncAction } from 'async-selector-kit';
 import { IState } from '../../store';
 import { SocketURI } from '../../shared/constants';
-import { Room } from './types';
+import { Authenticate, Room } from './types';
 import { actions, initialState } from './reducer';
 
 const { setRoom } = actions;
@@ -38,8 +38,13 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
          * send the user's token to authenticate the use in the room.
          */
         const state = store.getState() as IState;
-        const authentication = { token: state.user.session.token };
-        socket.send(JSON.stringify(authentication));
+        const authenticate: Authenticate = {
+          type: 'authenticate',
+          payload: {
+            token: state.user.session.token,
+          },
+        };
+        socket.send(JSON.stringify(authenticate));
       }
 
       const room: Room = {

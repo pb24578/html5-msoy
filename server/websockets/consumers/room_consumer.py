@@ -22,9 +22,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-    async def handle_connection(self, token):
+    async def authenticate(self, token):
         """
-        Handles a new connection in the room.
+        Authenticates a new connection in the room.
         """
 
         # initialize this room's list of users if it hasn't already been
@@ -54,7 +54,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             self.user = {"id": user_id, "displayName": username}
         except:
             self.user = {"id": 0, "displayName": "Anonymous"}
-
+        
         # append this user into the room's users list
         participants.append(self.user)
 
@@ -88,13 +88,20 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         json_data = json.loads(text_data)
 
+        # check if the data has an invalid format
+        if not 'type' in json_data or not 'payload' in json_data:
+            return
+
+        type = json_data['type']
+        payload = json_data['payload']
+
         # handle this new connection that has been established
-        if 'token' in json_data:
-            await self.handle_connection(json_data['token'])
+        if type == 'authenticate':
+            await self.authenticate(payload['token'])
 
         # send a message to the users in this room
-        if 'message' in json_data:
-            message = json_data['message']
+        if type == 'message':
+            message = payload['message']
 
             # prevent blank messages from being sent
             if not bool(message) or message.isspace():
@@ -107,8 +114,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'send_data',
-                    'data': {'displayName': self.user['displayName'], 'message': message}
+                    'type': 'message',
+                    'payload': {'displayName': self.user['displayName'], 'message': message}
                 }
             )
 
@@ -122,15 +129,13 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'send_data',
-                'data': {'participants': participants}
+                'type': 'participants',
+                'payload': {'participants': participants}
             }
         )
 
-    async def send_data(self, event):
-        """
-        Sends a data back to the user(s) connected in this room.
-        """
+    async def participants(self, event):
+        await self.send(text_data=json.dumps(event))
 
-        data = event['data']
-        await self.send(text_data=json.dumps(data))
+    async def message(self, event):
+        await self.send(text_data=json.dumps(event))

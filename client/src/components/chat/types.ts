@@ -4,18 +4,29 @@ interface Participant {
 }
 
 export interface ChatParticipants {
-  participants: Participant[];
+  type: string;
+  payload: {
+    participants: Participant[];
+  };
 }
 
-export const isChatParticipants = (object: any): object is ChatParticipants => 'participants' in object;
+export const isChatParticipants = (object: any): object is ChatParticipants =>
+  'type' in object && object.type === 'participants';
 
 export interface SendChatMessage {
-  message: string;
+  type: string;
+  payload: {
+    message: string;
+  };
 }
 
 export interface ReceiveChatMessage {
-  displayName: string;
-  message: string;
+  type: string;
+  payload: {
+    displayName: string;
+    message: string;
+  };
 }
 
-export const isReceiveChatMessage = (object: any): object is ReceiveChatMessage => 'message' in object;
+export const isReceiveChatMessage = (object: any): object is ReceiveChatMessage =>
+  'type' in object && object.type === 'message';

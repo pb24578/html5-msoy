@@ -83,19 +83,22 @@ export const Chat = React.memo(() => {
     if (!socket) return;
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (isReceiveChatMessage(data)) {
-        chats.unshift(
-          <Message key={chats.length} backgroundColor="#5FC7FF">
-            {data.message}
-            <MessageSender>{data.displayName}</MessageSender>
-          </Message>,
-        );
-        setChats([...chats]);
-      } else if (isChatParticipants(data)) {
-        const participantList = data.participants.map((participant) => (
+
+      if (isChatParticipants(data)) {
+        const participantList = data.payload.participants.map((participant) => (
           <Participant key={participant.id}>{participant.displayName}</Participant>
         ));
         setParticipantList(participantList);
+      }
+
+      if (isReceiveChatMessage(data)) {
+        chats.unshift(
+          <Message key={chats.length} backgroundColor="#5FC7FF">
+            {data.payload.message}
+            <MessageSender>{data.payload.displayName}</MessageSender>
+          </Message>,
+        );
+        setChats([...chats]);
       }
     };
   }, [socket]);

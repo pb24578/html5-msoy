@@ -64,7 +64,10 @@ export const Toolbar = React.memo(() => {
   const onSendMessage = () => {
     if (!socket) return;
     const message: SendChatMessage = {
-      message: textMessage,
+      type: 'message',
+      payload: {
+        message: textMessage,
+      },
     };
     socket.send(JSON.stringify(message));
     setMessage('');
