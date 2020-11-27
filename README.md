@@ -22,3 +22,12 @@ Before continuing, modify the connection settings in the constants.ts file to yo
     - If you configure the ports in either script, make sure to edit the port in constants.ts
 
 To see the production processes running, execute ```pm2 list```. To end any of those processes, execute ```pm2 delete <name>```.
+
+# To Do
+Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
+- Make screen height and width equal to the width and height of the pixi app screen.
+- Make world height equal to the height of the pixi app screen.
+- Make world width equal to the width of the background the user uploads.
+- Disable wheel.
+- Set clamp to true, clamp both x and y so the user cannot view passed it.
+
