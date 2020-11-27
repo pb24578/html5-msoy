@@ -58,9 +58,14 @@ export const Header = React.memo(() => {
 
   if (token) {
     accountLinks = (
-      <AccountLink to={routes.index.path} onClick={() => logout()}>
-        Logout
+      <>
+        <AccountLink to={routes.index.path}>
+          {displayName}
+        </AccountLink>
+        <AccountLink to={routes.index.path} onClick={() => logout()}>
+          Logout
       </AccountLink>
+      </>
     );
   }
 
