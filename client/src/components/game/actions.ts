@@ -46,6 +46,7 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
         id,
         socket,
       };
+
       store.dispatch(setRoom(room));
     };
   },

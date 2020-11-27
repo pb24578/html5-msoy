@@ -1,8 +1,11 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from rest_framework.authtoken.models import Token
+import enum
 import json
 
+class CloseCode(enum.Enum):
+    AlreadyConnected = 1
 
 class RoomConsumer(AsyncWebsocketConsumer):
     rooms = dict()
@@ -27,6 +30,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         # initialize this room's list of users if it hasn't already been
         if self.room_id not in self.rooms:
             self.rooms[self.room_id] = []
+        participants = self.rooms[self.room_id]
 
         # attempt to receive the user based on its token
         try:
@@ -40,12 +44,18 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
             user_id = await sync_to_async(get_user_id)()
             username = await sync_to_async(get_username)()
+
+            # prevent this user from connecting if it's already connected to this room
+            for participant in participants:
+                if participant["id"] == user_id:
+                    await self.disconnect(CloseCode.AlreadyConnected)
+                    return
+
             self.user = {"id": user_id, "displayName": username}
         except:
-            self.user = {"id": 0, "displayName": 'Anonymous'}
+            self.user = {"id": 0, "displayName": "Anonymous"}
 
         # append this user into the room's users list
-        participants = self.rooms[self.room_id]
         participants.append(self.user)
 
         await self.group_send_participants()
@@ -60,8 +70,13 @@ class RoomConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+        await self.close()
+
         participants = self.rooms[self.room_id]
-        participants.remove(self.user)
+        try:
+            participants.remove(self.user)
+        except:
+            pass
 
         await self.group_send_participants()
 
