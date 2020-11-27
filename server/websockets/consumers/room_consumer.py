@@ -108,7 +108,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                 return
 
             # strip off too many characters
-            max_chars = 2096
+            max_chars = 256
             message = message[0: max_chars]
 
             await self.channel_layer.group_send(

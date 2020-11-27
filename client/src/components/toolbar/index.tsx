@@ -41,7 +41,7 @@ const Utility = styled.div`
 /**
  * The maximum number of characters that a user can send on the chat.
  */
-const maxChars = 2096;
+const maxChars = 256;
 
 export const Toolbar = React.memo(() => {
   const socket = useSelector(getRoomSocket);
