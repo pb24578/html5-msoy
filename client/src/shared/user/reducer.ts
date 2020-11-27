@@ -21,11 +21,15 @@ const initialState: User = {
 };
 
 const slice = createSlice({
-  name: 'Session',
+  name: 'User',
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<string>) => {
-      state.session.token = action.payload;
+    setUser: (state, action: PayloadAction<User>) => {
+      state.id = action.payload.id;
+      state.session = action.payload.session;
+      state.displayName = action.payload.displayName;
+      state.username = action.payload.username;
+      state.email = action.payload.email;
     },
   },
 });

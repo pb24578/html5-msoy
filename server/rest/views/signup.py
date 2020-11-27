@@ -12,7 +12,6 @@ class SignupView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        print(request.data)
         signup_form = SignupForm(request.data)
         if not signup_form.is_valid():
             return Response(signup_form.errors, status.HTTP_412_PRECONDITION_FAILED)

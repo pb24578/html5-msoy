@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import theme from '../../shared/styles/theme';
+import theme, { errorTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
+import { errorLogin, login } from './actions';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
@@ -36,9 +38,27 @@ const LogonButton = styled.div`
   cursor: pointer;
 `;
 
+const Error = styled.div`
+  color: ${errorTheme.secondary};
+  font-weight: bold;
+`;
+
 export const Login = React.memo(() => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const didMount = useRef(false);
+  const [error, setError] = useState<Error>();
+  const loginError: Error = useSelector(errorLogin);
+
+  /**
+   * Update the error message only if the login error changes.
+   */
+  useEffect(() => {
+    if (loginError && didMount.current) {
+      setError(loginError);
+    }
+    didMount.current = true;
+  }, [loginError]);
 
   const onChangeEmail = (event: React.FormEvent<EventTarget>) => {
     const { value } = event.target as HTMLInputElement;
@@ -61,8 +81,9 @@ export const Login = React.memo(() => {
           type="password"
           value={password}
         />
-        <LogonButton>Logon</LogonButton>
+        <LogonButton onClick={() => login(email, password)}>Logon</LogonButton>
       </LogonForm>
+      {error && <Error>{error.message}</Error>}
     </Container>
   );
 });

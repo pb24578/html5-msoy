@@ -1,10 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
 import { AppName } from '../../shared/constants';
 import theme from '../../shared/styles/theme';
 import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
+import { getDisplayName, getToken } from '../../shared/user/selectors';
 
 const Container = styled(FlexRow)``;
 
@@ -42,25 +44,34 @@ const TabLink = styled(FlexCenter)`
   cursor: pointer;
 `;
 
-export const Header = React.memo(() => (
-  <Container>
-    <Logo>{AppName}</Logo>
-    <Spacing />
-    <Navigation>
-      <Account>
-        <AccountLink to="">Name</AccountLink>
-        <AccountLink to="">About</AccountLink>
-        <AccountLink to={routes.login.path}>Login</AccountLink>
-        <AccountLink to={routes.signup.path}>Signup</AccountLink>
-      </Account>
-      <Tabs>
-        <TabLink>Me</TabLink>
-        <TabLink>Stuff</TabLink>
-        <TabLink>Games</TabLink>
-        <TabLink>Rooms</TabLink>
-        <TabLink>Groups</TabLink>
-        <TabLink>Shop</TabLink>
-      </Tabs>
-    </Navigation>
-  </Container>
-));
+export const Header = React.memo(() => {
+  const token = useSelector(getToken);
+  const displayName = useSelector(getDisplayName);
+
+  return (
+    <Container>
+      <Logo>{AppName}</Logo>
+      <Spacing />
+      <Navigation>
+        <Account>
+          {token && <AccountLink to="">{displayName}</AccountLink>}
+          <AccountLink to="">About</AccountLink>
+          {!token && (
+            <>
+              <AccountLink to={routes.login.path}>Login</AccountLink>
+              <AccountLink to={routes.signup.path}>Signup</AccountLink>
+            </>
+          )}
+        </Account>
+        <Tabs>
+          <TabLink>Me</TabLink>
+          <TabLink>Stuff</TabLink>
+          <TabLink>Games</TabLink>
+          <TabLink>Rooms</TabLink>
+          <TabLink>Groups</TabLink>
+          <TabLink>Shop</TabLink>
+        </Tabs>
+      </Navigation>
+    </Container>
+  );
+});
