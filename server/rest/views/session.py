@@ -4,6 +4,7 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from ..serializers import UserSerializer
+import humps
 
 
 class SessionView(APIView):
@@ -19,7 +20,7 @@ class SessionView(APIView):
 
         # return the serialized user data
         user_serializer = UserSerializer(token.user)
-        return Response(user_serializer.data)
+        return Response(humps.camelize(user_serializer.data))
 
     def delete(self, request):
         logout(request)

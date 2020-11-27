@@ -2,10 +2,13 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from rest_framework.authtoken.models import Token
 import enum
+import humps
 import json
+
 
 class CloseCode(enum.Enum):
     AlreadyConnected = 1
+
 
 class RoomConsumer(AsyncWebsocketConsumer):
     rooms = dict()
@@ -48,13 +51,22 @@ class RoomConsumer(AsyncWebsocketConsumer):
             # prevent this user from connecting if it's already connected to this room
             for participant in participants:
                 if participant["id"] == user_id:
-                    await self.disconnect(CloseCode.AlreadyConnected)
+                    await self.channel_layer.send(
+                        participant["channel_name"],
+                        {
+                            'type': 'exit',
+                            'payload': {
+                                "sender": "Server",
+                                "reason": "You've been kicked out of the server because you're connected somewhere else!"
+                            }
+                        }
+                    )
                     return
 
-            self.user = {"id": user_id, "displayName": username}
+            self.user = {"id": user_id, "display_name": username, "channel_name": self.channel_name}
         except:
-            self.user = {"id": 0, "displayName": "Anonymous"}
-        
+            self.user = {"id": 0, "display_name": "Anonymous", "channel_name": self.channel_name}
+
         # append this user into the room's users list
         participants.append(self.user)
 
@@ -115,7 +127,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'message',
-                    'payload': {'displayName': self.user['displayName'], 'message': message}
+                    'payload': {'sender': self.user['display_name'], 'message': message}
                 }
             )
 
@@ -135,7 +147,10 @@ class RoomConsumer(AsyncWebsocketConsumer):
         )
 
     async def participants(self, event):
-        await self.send(text_data=json.dumps(event))
+        await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def message(self, event):
-        await self.send(text_data=json.dumps(event))
+        await self.send(text_data=json.dumps(humps.camelize(event)))
+
+    async def exit(self, event):
+        await self.send(text_data=json.dumps(humps.camelize(event)))

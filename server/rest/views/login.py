@@ -4,6 +4,7 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from ..models import User
 from ..serializers import UserSerializer
+import humps
 
 
 class LoginView(APIView):
@@ -35,4 +36,4 @@ class LoginView(APIView):
 
         # return the serialized user data
         user_serializer = UserSerializer(user)
-        return Response(user_serializer.data)
+        return Response(humps.camelize(user_serializer.data))

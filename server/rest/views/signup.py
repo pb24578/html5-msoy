@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from ..models import User
 from ..forms import SignupForm
 from ..serializers import UserSerializer
+import humps
 
 
 class SignupView(APIView):
@@ -26,4 +27,4 @@ class SignupView(APIView):
 
         # return the serialized user data
         user_serializer = UserSerializer(user)
-        return Response(user_serializer.data)
+        return Response(humps.camelize(user_serializer.data))
