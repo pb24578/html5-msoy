@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import theme, { errorTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
-import { errorSignup, signup } from './actions';
+import { signup } from './actions';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
@@ -47,19 +47,7 @@ export const Signup = React.memo(() => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const didMount = useRef(false);
   const [error, setError] = useState<Error>();
-  const signupError: Error = useSelector(errorSignup);
-
-  /**
-   * Update the error message only if the sign up error changes.
-   */
-  useEffect(() => {
-    if (signupError && didMount.current) {
-      setError(signupError);
-    }
-    didMount.current = true;
-  }, [signupError]);
 
   const onChangeUsername = (event: React.FormEvent<EventTarget>) => {
     const { value } = event.target as HTMLInputElement;
@@ -76,6 +64,14 @@ export const Signup = React.memo(() => {
     setPassword(value);
   };
 
+  const onSignup = async () => {
+    try {
+      const user = await signup(username, email, password).promise;
+    } catch (error) {
+      setError(error);
+    }
+  };
+
   return (
     <Container>
       <SignupTitle>Don&apos;t have an account? Signup</SignupTitle>
@@ -88,7 +84,7 @@ export const Signup = React.memo(() => {
           type="password"
           value={password}
         />
-        <SignupButton onClick={() => signup(username, email, password)}>Signup</SignupButton>
+        <SignupButton onClick={onSignup}>Signup</SignupButton>
       </SignupForm>
       {error && <Error>{error.message}</Error>}
     </Container>

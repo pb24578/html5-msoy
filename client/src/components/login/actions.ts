@@ -9,5 +9,6 @@ export const [login, loadingLogin, errorLogin] = createAsyncAction({
   async: (store, status) => async (email: string, password: string) => {
     const user = await fetchLogin(email, password);
     store.dispatch(setUser(user));
+    return user;
   },
 });
