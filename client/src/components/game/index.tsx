@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { FlexRow } from '../../shared/styles/flex';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
 import { Chat } from '../chat';
+import { connectToRoom } from './actions';
 
 const Container = styled(FlexRow)`
   padding: 8px;
@@ -21,6 +22,13 @@ const PixiAppContainer = styled.div`
 
 export const Game = React.memo(() => {
   const location = useLocation();
+
+  /**
+   * When the component mounts, establish the connection with the room.
+   */
+  useEffect(() => {
+    connectToRoom(1);
+  }, []);
 
   /**
    * If the route location changes, then resize the game client.

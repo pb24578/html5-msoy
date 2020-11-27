@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import theme from '../../shared/styles/theme';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
-import { getToken } from '../../shared/user/selectors';
 import { getRoomSocket } from '../game/selectors';
-import { ChatMessage } from '../chat/types';
+import { SendChatMessage } from '../chat/types';
 
 const Container = styled(FlexRow)`
   align-items: center;
@@ -45,13 +44,12 @@ const maxChars = 2096;
 
 export const Toolbar = React.memo(() => {
   const socket = useSelector(getRoomSocket);
-  const token = useSelector(getToken);
-  const [text, setText] = useState('');
+  const [textMessage, setMessage] = useState('');
 
   const onChangeText = (event: React.FormEvent<EventTarget>) => {
     const { value } = event.target as HTMLInputElement;
     if (value.length <= maxChars) {
-      setText(value);
+      setMessage(value);
     }
   };
 
@@ -64,18 +62,22 @@ export const Toolbar = React.memo(() => {
 
   const onSendMessage = () => {
     if (!socket) return;
-    const message: ChatMessage = {
-      token,
-      message: text,
+    const message: SendChatMessage = {
+      message: textMessage,
     };
     socket.send(JSON.stringify(message));
-    setText('');
+    setMessage('');
   };
 
   return (
     <Container>
       <ChatBox>
-        <ChatTextField onChange={onChangeText} onKeyPress={onKeyPress} placeholder="Type here to chat" value={text} />
+        <ChatTextField
+          onChange={onChangeText}
+          onKeyPress={onKeyPress}
+          placeholder="Type here to chat"
+          value={textMessage}
+        />
         <SendButton onClick={onSendMessage}>Send</SendButton>
       </ChatBox>
       <Utilities>

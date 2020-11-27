@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import theme, { qAlphaTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
 import { getRoomSocket } from '../game/selectors';
-import { isChatMessage, isChatParticipants } from './types';
+import { isReceiveChatMessage, isChatParticipants } from './types';
 
 const Container = styled(FlexColumn)`
   height: 100%;
@@ -83,17 +83,17 @@ export const Chat = React.memo(() => {
     if (!socket) return;
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (isChatMessage(data)) {
+      if (isReceiveChatMessage(data)) {
         chats.unshift(
           <Message key={chats.length} backgroundColor="#5FC7FF">
             {data.message}
-            <MessageSender>Anonymous</MessageSender>
+            <MessageSender>{data.displayName}</MessageSender>
           </Message>,
         );
         setChats([...chats]);
       } else if (isChatParticipants(data)) {
         const participantList = data.participants.map((participant) => (
-          <Participant key={participant}>{participant}</Participant>
+          <Participant key={participant.id}>{participant.displayName}</Participant>
         ));
         setParticipantList(participantList);
       }
