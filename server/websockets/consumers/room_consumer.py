@@ -1,13 +1,8 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from rest_framework.authtoken.models import Token
-import enum
 import humps
 import json
-
-
-class CloseCode(enum.Enum):
-    AlreadyConnected = 1
 
 
 class RoomConsumer(AsyncWebsocketConsumer):
@@ -47,7 +42,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
             user_id = await sync_to_async(get_user_id)()
             username = await sync_to_async(get_username)()
-            self.user = {"id": user_id, "display_name": username, "channel_name": self.channel_name}
+            self.user = {"id": user_id, "display_name": username,
+                         "channel_name": self.channel_name}
 
             # disconnect the previous user's connection if it's trying to connect multiple times to this room
             for participant in participants:
@@ -63,7 +59,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         }
                     )
         except:
-            self.user = {"id": 0, "display_name": "Anonymous", "channel_name": self.channel_name}
+            self.user = {"id": 0, "display_name": "Anonymous",
+                         "channel_name": self.channel_name}
 
         # append this user into the room's users list
         participants.append(self.user)
