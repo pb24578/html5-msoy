@@ -43,7 +43,14 @@ export const Game = React.memo(() => {
   }, [token]);
 
   /**
-   * If the route location changes, then resize the game client.
+   * Resize the Pixi App container whenever the window size changes.
+   */
+  window.onresize = () => {
+    resizePixiApp();
+  };
+
+  /**
+   * Resize the Pixi App container whenever the route location changes.
    */
   useEffect(() => {
     resizePixiApp();

@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { FlexRow, FlexColumn } from './shared/styles/flex';
-import { resizePixiApp } from './shared/pixi';
 import routes from './shared/routes';
 import { loadSession } from './shared/user/actions';
 import { Header } from './components/header';
@@ -40,14 +39,6 @@ const Menu = styled.div`
 `;
 
 const App = () => {
-  /**
-   * Resize the Pixi App container and other DOM
-   * elements whenever the window size changes.
-   */
-  window.onresize = () => {
-    resizePixiApp();
-  };
-
   /**
    * Load the local session, this will only work if a
    * session exists in the local storage.
