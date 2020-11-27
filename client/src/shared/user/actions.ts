@@ -24,8 +24,8 @@ export const [loadSession, loadingSession, errorLoadSession] = createAsyncAction
       if (isSession(session) && session.token) {
         // a session exists in the local storage, so load the user using the provided session
         const user = await fetchSession(session.token);
-        store.dispatch(setUser(user));
         localStorage.setItem(LocalStorage.Session, JSON.stringify(user.session));
+        store.dispatch(setUser(user));
         return user;
       }
     }
