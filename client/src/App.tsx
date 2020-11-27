@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { FlexRow, FlexColumn } from './shared/styles/flex';
 import { resizePixiApp } from './shared/pixi';
 import routes from './shared/routes';
+import { loadUserSession } from './shared/user/actions';
 import { Header } from './components/header';
 import { Game } from './components/game';
 import { Toolbar } from './components/toolbar';
@@ -46,6 +47,12 @@ const App = () => {
   window.onresize = () => {
     resizePixiApp();
   };
+
+  /**
+   * Load the local session, this will only work if a
+   * session exists in the local storage.
+   */
+  loadUserSession();
 
   return (
     <BrowserRouter>

@@ -4,6 +4,8 @@ export interface Session {
   token: Token;
 }
 
+export const isSession = (object: any): object is Session => 'token' in object;
+
 export interface User {
   id: number;
   session: Session;

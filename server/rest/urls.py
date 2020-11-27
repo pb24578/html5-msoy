@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
+    path('session', views.SessionView.as_view()),
     path('login', views.LoginView.as_view()),
     path('signup', views.SignupView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
