@@ -9,7 +9,9 @@ import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
 import { logout } from '../../shared/user/actions';
 import { getDisplayName, getToken } from '../../shared/user/selectors';
 
-const Container = styled(FlexRow)``;
+const Container = styled(FlexRow)`
+  height: 10vh;
+`;
 
 const Logo = styled(FlexRow)`
   flex: 0.2;

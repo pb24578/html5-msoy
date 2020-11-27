@@ -10,6 +10,7 @@ import { connectToRoom } from './actions';
 
 const Container = styled(FlexRow)`
   padding: 8px;
+  height: 80vh;
 `;
 
 const ChatContainer = styled.div`
@@ -45,9 +46,7 @@ export const Game = React.memo(() => {
       <ChatContainer>
         <Chat />
       </ChatContainer>
-      <PixiAppContainer>
-        <div id={appDOMId} />
-      </PixiAppContainer>
+      <PixiAppContainer id={appDOMId} />
     </Container>
   );
 });
