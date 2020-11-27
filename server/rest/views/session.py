@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.views import APIView
@@ -20,3 +20,7 @@ class SessionView(APIView):
         # return the serialized user data
         user_serializer = UserSerializer(token.user)
         return Response(user_serializer.data)
+
+    def delete(self, request):
+        logout(request)
+        return Response()

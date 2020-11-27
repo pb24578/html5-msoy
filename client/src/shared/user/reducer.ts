@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { User } from './types';
 
-const initialState: User = {
+export const initialState: User = {
   id: 0,
   session: { token: null },
   displayName: '',

@@ -1,7 +1,7 @@
 import { LocalStorage, RestURI } from '../../constants';
 import { User } from '../types';
 
-export const fetchUser = async (token: string): Promise<User> => {
+export const fetchSession = async (token: string): Promise<User> => {
   const url = `${RestURI}/session`;
   const body = {
     token,
