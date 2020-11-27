@@ -18,7 +18,7 @@ class LoginView(APIView):
         )
 
     def post(self, request):
-        email = request.data['email']
+        email = request.data['email'].lower()
         password = request.data['password']
 
         # receive the user with the matching email
