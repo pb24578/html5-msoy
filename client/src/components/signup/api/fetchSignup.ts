@@ -1,5 +1,5 @@
 import { RestURI } from '../../../shared/constants';
-import { User } from '../../../shared/user/reducer';
+import { User } from '../../../shared/user/types';
 
 // eslint-disable-next-line max-len
 export const fetchSignup = async (username: string, email: string, password: string): Promise<User> => {

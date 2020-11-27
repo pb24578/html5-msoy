@@ -1,3 +1,5 @@
+import { Token } from '../../shared/user/types';
+
 export interface ChatParticipants {
   participants: string[];
 }
@@ -10,6 +12,7 @@ export interface ChatParticipants {
 export const isChatParticipants = (object: any): object is ChatParticipants => 'participants' in object;
 
 export interface ChatMessage {
+  token: Token;
   message: string;
 }
 

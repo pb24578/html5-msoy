@@ -1,5 +1,5 @@
 import { RestURI } from '../../../shared/constants';
-import { User } from '../../../shared/user/reducer';
+import { User } from '../../../shared/user/types';
 
 export const fetchLogin = async (email: string, password: string): Promise<User> => {
   const url = `${RestURI}/login`;

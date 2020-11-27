@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import theme from '../../shared/styles/theme';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
+import { getToken } from '../../shared/user/selectors';
 import { getRoomSocket } from '../game/selectors';
 import { ChatMessage } from '../chat/types';
 
@@ -44,6 +45,7 @@ const maxChars = 2096;
 
 export const Toolbar = React.memo(() => {
   const socket = useSelector(getRoomSocket);
+  const token = useSelector(getToken);
   const [text, setText] = useState('');
 
   const onChangeText = (event: React.FormEvent<EventTarget>) => {
@@ -63,6 +65,7 @@ export const Toolbar = React.memo(() => {
   const onSendMessage = () => {
     if (!socket) return;
     const message: ChatMessage = {
+      token,
       message: text,
     };
     socket.send(JSON.stringify(message));
