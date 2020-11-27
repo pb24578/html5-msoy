@@ -52,6 +52,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             # disconnect the previous user's connection if it's trying to connect multiple times to this room
             for participant in participants:
                 if participant["id"] == user_id and participant["channel_name"] != self.channel_name:
+                    print(participant, self.channel_name)
                     await self.remove_participant(participant)
                     await self.channel_layer.send(
                         participant["channel_name"],
