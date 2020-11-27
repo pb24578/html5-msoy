@@ -62,7 +62,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             }
                         }
                     )
-                    return
         except:
             self.user = {"id": 0, "display_name": "Anonymous", "channel_name": self.channel_name}
 
