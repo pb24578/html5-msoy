@@ -10,16 +10,12 @@ import humps
 class SessionView(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
-        token = request.data['token']
-
-        try:
-            token = Token.objects.get(key=token)
-        except:
-            return Response({"invalid": "The token is invalid"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    def get(self, request):
+        if request.user.is_anonymous:
+            return Response({"invalid": "The token is invalid"}, status=status.HTTP_404_NOT_FOUND)
 
         # return the serialized user data
-        user_serializer = UserSerializer(token.user)
+        user_serializer = UserSerializer(request.user)
         return Response(humps.camelize(user_serializer.data))
 
     def delete(self, request):

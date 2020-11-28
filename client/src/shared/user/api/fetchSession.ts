@@ -3,14 +3,11 @@ import { User } from '../types';
 
 export const fetchSession = async (token: string): Promise<User> => {
   const url = `${RestURI}/session`;
-  const body = {
-    token,
-  };
   const resp = await fetch(url, {
-    body: JSON.stringify(body),
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Token ${token}`,
     },
   });
 
