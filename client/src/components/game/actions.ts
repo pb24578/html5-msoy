@@ -35,7 +35,7 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
       if (socket) {
         /**
          * Once the web socket connection has been established,
-         * send the user's token to authenticate the use in the room.
+         * send the user's token to authenticate the user in the room.
          */
         const state = store.getState() as IState;
         const authenticate: Authenticate = {
