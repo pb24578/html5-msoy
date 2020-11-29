@@ -31,3 +31,4 @@ Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
 - Disable wheel.
 - Set clamp to true, clamp both x and y so the user cannot view passed it.
 
+https://django-channels-presence.readthedocs.io/en/latest/index.html Use Django Channels Presence to keep track of players in rooms.
