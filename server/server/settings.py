@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '74.91.124.141', 'html5whirled.tk']
 
 INSTALLED_APPS = [
     'channels',
+    'channels_presence',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest',
+    'websockets',
 ]
 
 REST_FRAMEWORK = {

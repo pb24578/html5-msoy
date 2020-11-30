@@ -1,49 +1,45 @@
+from os import sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
+from channels_presence.models import Room, Presence
 import humps
 import json
 
 
 class RoomConsumer(AsyncWebsocketConsumer):
-    rooms = dict()
-
     async def connect(self):
         self.group_id = self.scope['url_route']['kwargs']['id']
         self.group_name = 'room_%s' % str(self.group_id)
 
-        # initialize this room's list of users if it hasn't already been
-        if self.group_id not in self.rooms:
-            self.rooms[self.group_id] = []
-        participants = self.rooms[self.group_id]
+        # add this user to the room
+        self.room = await sync_to_async(Room.objects.add)(self.group_name, self.channel_name, user=self.scope['user'])
 
-        def get_user():
-            user = self.scope['user']
-            return {"id": user.id, "display_name": user.username, "channel_name": self.channel_name}
+        # receive all of the users in this room
+        presences = await sync_to_async(Presence.objects.filter)(room=self.room)
 
-        # attempt to receive the user based on its token
-        try:
-            self.user = await sync_to_async(get_user)()
+        def get_old_channel_name():
+            for presence in presences:
+                if presence.user == self.scope['user'] and presence.channel_name != self.channel_name:
+                    # this user is already connected to this room, so return the old channel name
+                    return presence.channel_name
+            return None
 
-            # disconnect the previous user's connection if it's trying to connect multiple times to this room
-            for participant in participants:
-                if participant["id"] == self.user["id"]:
-                    await self.channel_layer.send(
-                        participant["channel_name"],
-                        {
-                            'type': 'kick',
-                            'payload': {
-                                "sender": "Server",
-                                "reason": "You've been kicked out of the server because you connected somewhere else."
-                            }
-                        }
-                    )
-        except Exception as e:
-            self.user = {"id": 0, "display_name": "Anonymous", "channel_name": self.channel_name}
+        # if the user is already connected to this room, then kick out the previous channel
+        old_channel_name = await sync_to_async(get_old_channel_name)()
+        if bool(old_channel_name):
+            await sync_to_async(Room.objects.remove)(self.group_name, old_channel_name)
+            await self.channel_layer.send(
+                old_channel_name,
+                {
+                    'type': 'kick',
+                    'payload': {
+                        "sender": "Server",
+                        "reason": "You've been kicked out of the server because you connected somewhere else."
+                    }
+                }
+            )
 
-        # append this user into the room's users list
-        participants.append(self.user)
-
-        # join this room
+        # join the group channel
         await self.channel_layer.group_add(
             self.group_name,
             self.channel_name
@@ -58,16 +54,20 @@ class RoomConsumer(AsyncWebsocketConsumer):
         Disconnects the user session from the room.
         """
 
+        # leave the group channel
         await self.channel_layer.group_discard(
             self.group_name,
             self.channel_name
         )
 
-        participants = self.rooms[self.group_id]
-        try:
-            participants.remove(self.user)
-        except:
-            pass
+        # remove the user from this room
+        await sync_to_async(Room.objects.remove)(self.group_name, self.channel_name)
+
+        def prune_room():
+            if not bool(self.room.get_users().count()):
+                # there are no more users in this room, so delete it
+                self.room.delete()
+        await sync_to_async(prune_room)()
 
         await self.close()
 
@@ -100,11 +100,15 @@ class RoomConsumer(AsyncWebsocketConsumer):
             max_chars = 256
             message = message[0: max_chars]
 
+            def get_display_name():
+                return self.scope['user'].username
+            display_name = await sync_to_async(get_display_name)()
+
             await self.channel_layer.group_send(
                 self.group_name,
                 {
                     'type': 'message',
-                    'payload': {'sender': self.user['display_name'], 'message': message}
+                    'payload': {'sender': display_name, 'message': message}
                 }
             )
 
@@ -113,7 +117,16 @@ class RoomConsumer(AsyncWebsocketConsumer):
         Send the updated list of participants to all of the users in this room.
         """
 
-        participants = self.rooms[self.group_id]
+        def get_participants():
+            presences = Presence.objects.filter(room=self.room)
+
+            participants = []
+            for presence in presences:
+                user = presence.user
+                participant = {"id": user.id, "displayName": user.username}
+                participants.append(participant)
+            return participants
+        participants = await sync_to_async(get_participants)()
 
         await self.channel_layer.group_send(
             self.group_name,
