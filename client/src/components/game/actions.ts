@@ -33,14 +33,12 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
        * Establish a new connection to this room.
        */
       const socket = new WebSocket(`${SocketURI}/room/${id}?token=${token}`);
-      socket.onopen = () => {
-        const room: Room = {
-          id,
-          socket,
-        };
-
-        store.dispatch(setRoom(room));
+      const room: Room = {
+        id,
+        socket,
       };
+
+      store.dispatch(setRoom(room));
     },
   },
   [getToken],

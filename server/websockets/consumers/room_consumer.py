@@ -8,13 +8,13 @@ class RoomConsumer(AsyncWebsocketConsumer):
     rooms = dict()
 
     async def connect(self):
-        self.room_id = self.scope['url_route']['kwargs']['id']
-        self.room_group_name = 'room_%s' % str(self.room_id)
+        self.group_id = self.scope['url_route']['kwargs']['id']
+        self.group_name = 'room_%s' % str(self.group_id)
 
         # initialize this room's list of users if it hasn't already been
-        if self.room_id not in self.rooms:
-            self.rooms[self.room_id] = []
-        participants = self.rooms[self.room_id]
+        if self.group_id not in self.rooms:
+            self.rooms[self.group_id] = []
+        participants = self.rooms[self.group_id]
 
         def get_user():
             user = self.scope['user']
@@ -38,15 +38,14 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         }
                     )
         except Exception as e:
-            self.user = {"id": 0, "display_name": "Anonymous",
-                         "channel_name": self.channel_name}
+            self.user = {"id": 0, "display_name": "Anonymous", "channel_name": self.channel_name}
 
         # append this user into the room's users list
         participants.append(self.user)
 
         # join this room
         await self.channel_layer.group_add(
-            self.room_group_name,
+            self.group_name,
             self.channel_name
         )
 
@@ -60,11 +59,11 @@ class RoomConsumer(AsyncWebsocketConsumer):
         """
 
         await self.channel_layer.group_discard(
-            self.room_group_name,
+            self.group_name,
             self.channel_name
         )
 
-        participants = self.rooms[self.room_id]
+        participants = self.rooms[self.group_id]
         try:
             participants.remove(self.user)
         except:
@@ -102,7 +101,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             message = message[0: max_chars]
 
             await self.channel_layer.group_send(
-                self.room_group_name,
+                self.group_name,
                 {
                     'type': 'message',
                     'payload': {'sender': self.user['display_name'], 'message': message}
@@ -114,10 +113,10 @@ class RoomConsumer(AsyncWebsocketConsumer):
         Send the updated list of participants to all of the users in this room.
         """
 
-        participants = self.rooms[self.room_id]
+        participants = self.rooms[self.group_id]
 
         await self.channel_layer.group_send(
-            self.room_group_name,
+            self.group_name,
             {
                 'type': 'participants',
                 'payload': {'participants': participants}
