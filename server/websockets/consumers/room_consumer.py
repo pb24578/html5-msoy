@@ -119,7 +119,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         def get_participants():
             presences = Presence.objects.filter(room=self.room)
-
             participants = []
             for presence in presences:
                 user = presence.user
