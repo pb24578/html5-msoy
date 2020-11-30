@@ -1,6 +1,7 @@
 import { createAsyncAction } from 'async-selector-kit';
 import { IState } from '../../store';
 import { SocketURI } from '../../shared/constants';
+import { getToken } from '../../shared/user/selectors';
 import { Authenticate, Room } from './types';
 import { actions, initialState } from './reducer';
 
@@ -19,40 +20,28 @@ export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFrom
   },
 });
 
-export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createAsyncAction({
-  id: 'connect-to-room',
-  async: (store, status) => async (id: number) => {
-    /**
-     * Disconnect from the previous room.
-     */
-    disconnectFromRoom();
+export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createAsyncAction(
+  {
+    id: 'connect-to-room',
+    async: (store, status, token) => async (id: number) => {
+      /**
+       * Disconnect from the previous room.
+       */
+      disconnectFromRoom();
 
-    /**
-     * Establish a new connection to this room.
-     */
-    const socket = new WebSocket(`${SocketURI}/room/${id}`);
-    socket.onopen = () => {
-      if (socket) {
-        /**
-         * Once the web socket connection has been established,
-         * send the user's token to authenticate the user in the room.
-         */
-        const state = store.getState() as IState;
-        const authenticate: Authenticate = {
-          type: 'authenticate',
-          payload: {
-            token: state.user.session.token,
-          },
+      /**
+       * Establish a new connection to this room.
+       */
+      const socket = new WebSocket(`${SocketURI}/room/${id}?token=${token}`);
+      socket.onopen = () => {
+        const room: Room = {
+          id,
+          socket,
         };
-        socket.send(JSON.stringify(authenticate));
-      }
 
-      const room: Room = {
-        id,
-        socket,
+        store.dispatch(setRoom(room));
       };
-
-      store.dispatch(setRoom(room));
-    };
+    },
   },
-});
+  [getToken],
+);

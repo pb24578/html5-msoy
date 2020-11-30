@@ -1,6 +1,6 @@
 from django.urls import path
-from .consumers import room_consumer
+from .consumers import RoomConsumer
 
 websocket_urlpatterns = [
-    path('room/<int:id>', room_consumer.RoomConsumer)
+    path('room/<int:id>', RoomConsumer)
 ]
