@@ -1,6 +1,14 @@
 import { RestURI } from '../../../shared/constants';
 import { User } from '../../../shared/user/types';
 
+/**
+ * Returns a user that logged-in using the provided credentials.
+ * The credentials must be correct for it to return a user or
+ * it'll throw an error instead.
+ *
+ * @param email The email to authenticate
+ * @param password The password to authenticate
+ */
 export const fetchLogin = async (email: string, password: string): Promise<User> => {
   const url = `${RestURI}/login`;
   const body = {

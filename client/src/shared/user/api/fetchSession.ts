@@ -1,6 +1,11 @@
 import { LocalStorage, RestURI } from '../../constants';
 import { User } from '../types';
 
+/**
+ * Returns a user if the user has a valid session
+ *
+ * @param token The auth token to receive the session from
+ */
 export const fetchSession = async (token: string): Promise<User> => {
   const url = `${RestURI}/session`;
   const resp = await fetch(url, {
