@@ -14,17 +14,14 @@ class RoomConsumer(AsyncWebsocketConsumer):
         # add this user to the room
         self.room = await sync_to_async(Room.objects.add)(self.group_name, self.channel_name, user=self.scope['user'])
 
-        # receive all of the users in this room
-        presences = await sync_to_async(Presence.objects.filter)(room=self.room)
-
         def get_old_channel_name():
             if self.scope['user'].is_anonymous:
                 return None
 
-            for presence in presences:
-                if presence.user == self.scope['user'] and presence.channel_name != self.channel_name:
-                    # this user is already connected to this room, so return the old channel name
-                    return presence.channel_name
+            presence = Presence.objects.filter(room=self.room, user=self.scope['user']).first()
+            if presence and presence.channel_name != self.channel_name:
+                # this user is already connected to this room, so return the old channel name
+                return presence.channel_name
             return None
 
         # if the user is already connected to this room, then kick out the previous channel
