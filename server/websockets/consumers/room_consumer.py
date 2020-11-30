@@ -27,7 +27,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
         # if the user is already connected to this room, then kick out the previous channel
         old_channel_name = await sync_to_async(get_old_channel_name)()
         if bool(old_channel_name):
-            await sync_to_async(Room.objects.remove)(self.group_name, old_channel_name)
             await self.channel_layer.send(
                 old_channel_name,
                 {
