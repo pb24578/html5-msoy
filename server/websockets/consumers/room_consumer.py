@@ -30,7 +30,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     await self.channel_layer.send(
                         participant["channel_name"],
                         {
-                            'type': 'exit',
+                            'type': 'kick',
                             'payload': {
                                 "sender": "Server",
                                 "reason": "You've been kicked out of the server because you connected somewhere else."
@@ -129,5 +129,5 @@ class RoomConsumer(AsyncWebsocketConsumer):
     async def message(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
-    async def exit(self, event):
+    async def kick(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))

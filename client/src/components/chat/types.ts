@@ -31,7 +31,7 @@ export interface ReceiveChatMessage {
 export const isReceiveChatMessage = (object: any): object is ReceiveChatMessage =>
   'type' in object && object.type === 'message';
 
-export interface Exit {
+export interface Kick {
   type: string;
   payload: {
     sender: string;
@@ -39,4 +39,4 @@ export interface Exit {
   };
 }
 
-export const isExit = (object: any): object is Exit => 'type' in object && object.type === 'exit';
+export const isKick = (object: any): object is Kick => 'type' in object && object.type === 'kick';

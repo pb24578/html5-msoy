@@ -5,7 +5,7 @@ import theme, { errorTheme, qAlphaTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
 import { disconnectFromRoom } from '../game/actions';
 import { getRoomSocket } from '../game/selectors';
-import { isChatParticipants, isReceiveChatMessage, isExit } from './types';
+import { isChatParticipants, isReceiveChatMessage, isKick } from './types';
 
 const Container = styled(FlexColumn)`
   height: 100%;
@@ -102,7 +102,7 @@ export const Chat = React.memo(() => {
         setChats([...chats]);
       }
 
-      if (isExit(data)) {
+      if (isKick(data)) {
         chats.unshift(
           <Message key={chats.length} backgroundColor={errorTheme.primary}>
             {data.payload.reason}
