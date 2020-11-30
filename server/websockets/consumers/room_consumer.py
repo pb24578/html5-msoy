@@ -18,6 +18,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
         presences = await sync_to_async(Presence.objects.filter)(room=self.room)
 
         def get_old_channel_name():
+            if self.scope['user'].is_anonymous:
+                return None
+
             for presence in presences:
                 if presence.user == self.scope['user'] and presence.channel_name != self.channel_name:
                     # this user is already connected to this room, so return the old channel name
@@ -121,7 +124,12 @@ class RoomConsumer(AsyncWebsocketConsumer):
             participants = []
             for presence in presences:
                 user = presence.user
-                participant = {"id": user.id, "displayName": user.username}
+
+                # format the participant's data
+                participant = {"id": 0, "displayName": "Anonymous"}
+                if user and not user.is_anonymous:
+                    participant = {"id": user.id, "displayName": user.username}
+                
                 participants.append(participant)
             return participants
         participants = await sync_to_async(get_participants)()
