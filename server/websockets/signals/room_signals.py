@@ -6,18 +6,18 @@ channel_layer = get_channel_layer()
 
 
 participants_changed = Signal(
-    providing_args=["room", "added", "removed"]
+    providing_args=["channel_room", "added", "removed"]
 )
 
 
 @receiver(participants_changed)
-def broadcast_participants(sender, room, **kwargs):
+def broadcast_participants(sender, channel_room, **kwargs):
     """
     Sends the updated list of participants to all of the users in this room.
     """
 
     participants = []
-    for participant in room.get_participants():
+    for participant in channel_room.get_participants():
         user = participant.user
 
         # format the participant's data
@@ -29,7 +29,7 @@ def broadcast_participants(sender, room, **kwargs):
 
     # broadcast a signal with all of the participants
     async_to_sync(channel_layer.group_send)(
-        room.channel_name,
+        channel_room.channel_name,
         {
             'type': 'participants',
             'payload': {'participants': participants}

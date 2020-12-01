@@ -1,2 +1,2 @@
+from .channel_room import ChannelRoom
 from .participant import Participant
-from .room import Room

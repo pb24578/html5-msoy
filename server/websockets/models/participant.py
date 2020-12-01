@@ -3,7 +3,7 @@ from rest.models import User
 
 
 class Participant(models.Model):
-    room = models.ForeignKey("Room", on_delete=models.CASCADE)
+    channel_room = models.ForeignKey("ChannelRoom", on_delete=models.CASCADE)
     channel_name = models.CharField(
         max_length=255, help_text="Reply channel for connection that is present"
     )
@@ -13,4 +13,4 @@ class Participant(models.Model):
         return self.channel_name
 
     class Meta:
-        unique_together = [("room", "channel_name")]
+        unique_together = [("channel_room", "channel_name")]

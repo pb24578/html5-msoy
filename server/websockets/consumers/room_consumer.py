@@ -1,6 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
-from ..models import Room
+from ..models import ChannelRoom
 import humps
 import json
 
@@ -14,15 +14,15 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.group_id = self.scope['url_route']['kwargs']['id']
         self.group_name = str(self.group_id)
 
-        # add this user to the room
-        self.room = await sync_to_async(Room.objects.add)(self.group_name, self.channel_name, user=self.scope['user'])
+        # add this user to the channel's room
+        self.channel_room = await sync_to_async(ChannelRoom.objects.add)(self.group_name, self.channel_name, user=self.scope['user'])
 
         # prune duplicate participants of this user
         def prune_duplicate_participants():
             if self.scope['user'].is_anonymous:
                 return
             
-            participants = self.room.get_duplicate_participants(self.channel_name, user=self.scope['user'])
+            participants = self.channel_room.get_duplicate_participants(self.channel_name, user=self.scope['user'])
             for participant in participants:
                 async_to_sync(self.channel_layer.send)(
                     participant.channel_name,
@@ -43,7 +43,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         Disconnects the user session from the room.
         """
 
-        await sync_to_async(Room.objects.remove)(self.group_name, self.channel_name)
+        await sync_to_async(ChannelRoom.objects.remove)(self.group_name, self.channel_name)
 
         await self.close()
 

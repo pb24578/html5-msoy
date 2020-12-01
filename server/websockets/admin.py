@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Participant, Room
+from .models import ChannelRoom, Participant
 
-admin.site.register(Room)
+admin.site.register(ChannelRoom)
 admin.site.register(Participant)

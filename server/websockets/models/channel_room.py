@@ -2,33 +2,33 @@ from django.db import models
 from django.contrib.auth.models import AnonymousUser
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from rest.models import User
+from rest.models import Room, User
 from .participant import Participant
 from ..signals import participants_changed
 
 channel_layer = get_channel_layer()
 
 
-class RoomManager(models.Manager):
+class ChannelRoomManager(models.Manager):
     def add(self, room_channel_name, user_channel_name, user=None):
-        room, created = Room.objects.get_or_create(channel_name=room_channel_name)
-        room.add_participant(user_channel_name, user)
-        return room
+        channel_room, created = ChannelRoom.objects.get_or_create(channel_name=room_channel_name)
+        channel_room.add_participant(user_channel_name, user)
+        return channel_room
 
     def remove(self, room_channel_name, user_channel_name):
         try:
-            room = Room.objects.get(channel_name=room_channel_name)
-        except Room.DoesNotExist:
+            channel_room = ChannelRoom.objects.get(channel_name=room_channel_name)
+        except ChannelRoom.DoesNotExist:
             return
-        room.remove_participant(user_channel_name)
+        channel_room.remove_participant(user_channel_name)
 
 
-class Room(models.Model):
+class ChannelRoom(models.Model):
     channel_name = models.CharField(
         max_length=255, unique=True, help_text="Group channel name for this room"
     )
 
-    objects = RoomManager()
+    objects = ChannelRoomManager()
 
     def __str__(self):
         return self.channel_name
@@ -40,7 +40,7 @@ class Room(models.Model):
             authed_user = None
         
         participant, created = Participant.objects.get_or_create(
-            room=self, channel_name=channel_name, user=authed_user
+            channel_room=self, channel_name=channel_name, user=authed_user
         )
 
         if created:
@@ -50,7 +50,7 @@ class Room(models.Model):
     def remove_participant(self, channel_name=None, participant=None):
         if participant is None:
             try:
-                participant = Participant.objects.get(room=self, channel_name=channel_name)
+                participant = Participant.objects.get(channel_room=self, channel_name=channel_name)
             except Participant.DoesNotExist:
                 return
 
@@ -66,13 +66,13 @@ class Room(models.Model):
         return self.participant_set.filter(user=None).count()
 
     def get_participants(self):
-        return Participant.objects.filter(room=self).distinct()
+        return Participant.objects.filter(channel_room=self).distinct()
 
     def get_duplicate_participants(self, channel_name, user=None):
         if not user or user.is_anonymous:
             return
 
-        return Participant.objects.filter(room=self, user=user).exclude(channel_name=channel_name)
+        return Participant.objects.filter(channel_room=self, user=user).exclude(channel_name=channel_name)
 
     def prune_room(self):
         """
@@ -86,7 +86,7 @@ class Room(models.Model):
     def broadcast_changed(self, added=False, removed=False):
         participants_changed.send(
             sender=self.__class__,
-            room=self,
+            channel_room=self,
             added=added,
             removed=removed
         )
