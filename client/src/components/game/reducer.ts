@@ -14,7 +14,7 @@ const slice = createSlice({
   name: 'Game',
   initialState,
   reducers: {
-    setError: (state, action: PayloadAction<GameError>) => {
+    setGameError: (state, action: PayloadAction<GameError>) => {
       state.error = action.payload;
     },
     setParticipants: (state, action: PayloadAction<Participant[]>) => {

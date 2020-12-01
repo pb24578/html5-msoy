@@ -11,12 +11,12 @@ import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { isReceiveChatMessage } from '../chat/types';
 import { actions } from './reducer';
-import { getError, getRoomSocket } from './selectors';
+import { getGameError, getRoomSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
 import { isConnectionError, isReceiveParticipants } from './types';
 
 const { addMessage } = chatActions;
-const { setError, setParticipants } = actions;
+const { setGameError, setParticipants } = actions;
 
 const Container = styled(FlexRow)`
   padding: 8px;
@@ -45,7 +45,7 @@ const Error = styled.div`
 export const Game = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const error = useSelector(getError);
+  const error = useSelector(getGameError);
   const { id: paramRoomId } = useParams<RoomsRoutesProps>();
   const { rootRoomId, session } = useSelector(getUser);
   const { token } = session;
@@ -85,7 +85,7 @@ export const Game = React.memo(() => {
 
       if (isConnectionError(data)) {
         disconnectFromRoom();
-        dispatch(setError(data.payload));
+        dispatch(setGameError(data.payload));
       }
     };
   }, [socket]);
