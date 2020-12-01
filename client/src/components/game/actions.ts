@@ -14,6 +14,7 @@ export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFrom
     const state = store.getState() as IState;
     const { socket } = state.game.room;
     if (socket) {
+      socket.onclose = null;
       socket.close();
     }
     store.dispatch(setRoom(initialState.room));
@@ -35,6 +36,7 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
       const socket = new WebSocket(`${SocketURI}/room/${id}?token=${token}`);
       const room: Room = {
         id,
+        participants: [],
         socket,
       };
 

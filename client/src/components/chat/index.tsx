@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { ThemeContext } from 'styled-components';
 import { FlexColumn } from '../../shared/styles/flex';
-import { disconnectFromRoom } from '../game/actions';
-import { getRoomSocket } from '../game/selectors';
-import { isChatParticipants, isReceiveChatMessage, isKick } from './types';
+import { getMessages, getParticipants } from './selectors';
 
 const Container = styled(FlexColumn)`
   height: 100%;
@@ -72,55 +70,30 @@ const MessageSender = styled.div`
 `;
 
 export const Chat = React.memo(() => {
-  const [participantList, setParticipantList] = useState([] as React.ReactElement[]);
-  const [chats, setChats] = useState([] as React.ReactElement[]);
-  const socket = useSelector(getRoomSocket);
+  const messages = useSelector(getMessages);
+  const participants = useSelector(getParticipants);
   const theme = useContext(ThemeContext);
-
-  /**
-   * Listen to chat messages from other users when this component mounts.
-   */
-  useEffect(() => {
-    if (!socket) return;
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      if (isChatParticipants(data)) {
-        const participantList = data.payload.participants.map((participant, index) => (
-          <Participant key={index}>{participant.displayName}</Participant>
-        ));
-        setParticipantList(participantList);
-      }
-
-      if (isReceiveChatMessage(data)) {
-        chats.unshift(
-          <Message key={chats.length} backgroundColor={theme.darkerColors.primary}>
-            {data.payload.message}
-            <MessageSender>{data.payload.sender}</MessageSender>
-          </Message>,
-        );
-        setChats([...chats]);
-      }
-
-      if (isKick(data)) {
-        chats.unshift(
-          <Message key={chats.length} backgroundColor={theme.errorColors.primary}>
-            {data.payload.reason}
-            <MessageSender>{data.payload.sender}</MessageSender>
-          </Message>,
-        );
-        setChats([...chats]);
-        disconnectFromRoom();
-      }
-    };
-  }, [socket]);
 
   return (
     <Container>
       <UsersTitle>Users Online</UsersTitle>
-      <UsersList>{participantList}</UsersList>
+      <UsersList>
+        {participants.map((participant, index) => (
+          <Participant key={index}>{participant.displayName}</Participant>
+        ))}
+      </UsersList>
       <ChatHistoryOverflow>
-        <ChatHistory>{chats}</ChatHistory>
+        <ChatHistory>
+          {messages.reduceRight((elements, message, index) => {
+            elements.push(
+              <Message key={index} backgroundColor={theme.darkerColors.primary}>
+                {message.message}
+                <MessageSender>{message.sender}</MessageSender>
+              </Message>,
+            );
+            return elements;
+          }, [] as React.ReactElement[])}
+        </ChatHistory>
       </ChatHistoryOverflow>
     </Container>
   );
