@@ -10,6 +10,7 @@ import { Game } from './components/game';
 import { Toolbar } from './components/toolbar';
 import { Login } from './components/login';
 import { Signup } from './components/signup';
+import { Profile } from './components/profile';
 
 /**
  * The client component will take the entire screen
@@ -64,6 +65,11 @@ const App = () => {
             <Route path={routes.signup.path}>
               <Menu>
                 <Signup />
+              </Menu>
+            </Route>
+            <Route path={`${routes.profiles.path}${routes.profiles.params}`}>
+              <Menu>
+                <Profile />
               </Menu>
             </Route>
           </Switch>

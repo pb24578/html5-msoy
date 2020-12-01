@@ -8,4 +8,8 @@ export default {
   signup: {
     path: '/signup',
   },
+  profiles: {
+    path: '/profiles',
+    params: '/:id',
+  },
 };

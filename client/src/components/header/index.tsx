@@ -6,7 +6,7 @@ import routes from '../../shared/routes';
 import { AppName } from '../../shared/constants';
 import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
 import { logout } from '../../shared/user/actions';
-import { getDisplayName, getToken } from '../../shared/user/selectors';
+import { getDisplayName, getToken, getUserId } from '../../shared/user/selectors';
 
 const Container = styled(FlexRow)`
   height: 10vh;
@@ -32,7 +32,7 @@ const Account = styled(FlexRow)`
 
 const AccountLink = styled(Link)`
   padding: 0px 16px;
-  cursor: pointer;
+  text-decoration: none;
 `;
 
 const Tabs = styled(FlexRow)``;
@@ -48,6 +48,7 @@ const TabLink = styled(FlexCenter)`
 
 export const Header = React.memo(() => {
   const token = useSelector(getToken);
+  const userId = useSelector(getUserId);
   const displayName = useSelector(getDisplayName);
 
   let accountLinks: React.ReactElement = (
@@ -60,7 +61,7 @@ export const Header = React.memo(() => {
   if (token) {
     accountLinks = (
       <>
-        <AccountLink to={routes.index.path}>{displayName}</AccountLink>
+        <AccountLink to={`${routes.profiles.path}/${userId}`}>{displayName}</AccountLink>
         <AccountLink to={routes.index.path} onClick={() => logout()}>
           Logout
         </AccountLink>
@@ -74,7 +75,7 @@ export const Header = React.memo(() => {
       <Spacing />
       <Navigation>
         <Account>
-          <AccountLink to="">About</AccountLink>
+          <AccountLink to={routes.index.path}>About</AccountLink>
           {accountLinks}
         </Account>
         <Tabs>
