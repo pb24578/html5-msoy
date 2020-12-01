@@ -1,8 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
-from django.dispatch import receiver
 from ..models import Room
-from ..signals import participants_changed
 import humps
 import json
 
