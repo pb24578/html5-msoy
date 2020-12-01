@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
-import { getDisplayName } from '../../shared/user/selectors';
+import { getUser } from '../../shared/user/selectors';
 import { FlexRow, FlexColumn } from '../../shared/styles/flex';
 
 const Container = styled(FlexColumn)`
@@ -24,7 +24,7 @@ const ProfileLink = styled(Link)`
 `;
 
 export const Profile = React.memo(() => {
-  const displayName = useSelector(getDisplayName);
+  const { displayName } = useSelector(getUser);
 
   return (
     <Container>

@@ -1,8 +1,8 @@
 import { createAsyncAction } from 'async-selector-kit';
 import { IState } from '../../store';
 import { SocketURI } from '../../shared/constants';
-import { getToken } from '../../shared/user/selectors';
-import { Authenticate, Room } from './types';
+import { getSession } from '../../shared/user/selectors';
+import { Room } from './types';
 import { actions, initialState } from './reducer';
 
 const { setRoom } = actions;
@@ -23,7 +23,7 @@ export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFrom
 export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createAsyncAction(
   {
     id: 'connect-to-room',
-    async: (store, status, token) => async (id: number) => {
+    async: (store, status, { token }) => async (id: number) => {
       /**
        * Disconnect from the previous room.
        */
@@ -41,5 +41,5 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
       store.dispatch(setRoom(room));
     },
   },
-  [getToken],
+  [getSession],
 );

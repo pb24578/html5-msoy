@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { LocalStorage } from '../../shared/constants';
 import { FlexRow } from '../../shared/styles/flex';
-import { getToken } from '../../shared/user/selectors';
+import { getSession } from '../../shared/user/selectors';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
 import { Chat } from '../chat';
 import { connectToRoom } from './actions';
@@ -26,7 +26,7 @@ const PixiAppContainer = styled.div`
 
 export const Game = React.memo(() => {
   const location = useLocation();
-  const token = useSelector(getToken);
+  const { token } = useSelector(getSession);
 
   /**
    * When the component mounts or the user logs in, establish the new connection with the room.
