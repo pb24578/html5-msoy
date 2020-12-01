@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from ..models import User
+from ..models import Room, User
 from ..forms import SignupForm
 from ..serializers import UserSerializer
 import humps
@@ -24,6 +24,9 @@ class SignupView(APIView):
         user = User.objects.create_user(username=username, email=email, password=password)
         Token.objects.get_or_create(user=user)
         login(request, user)
+
+        # initialize this user's root room
+        Room.objects.create(root=True, user=user)
 
         # return the serialized user data
         user_serializer = UserSerializer(user)

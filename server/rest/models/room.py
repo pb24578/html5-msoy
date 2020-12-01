@@ -3,6 +3,7 @@ from .user import User
 
 
 class Room(models.Model):
+    root = models.BooleanField(default=False)
     name = models.CharField(default="Home", max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
