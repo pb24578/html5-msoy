@@ -5,11 +5,15 @@ export default {
   login: {
     path: '/login',
   },
-  signup: {
-    path: '/signup',
-  },
   profiles: {
     path: '/profiles',
     params: '/:id',
+  },
+  rooms: {
+    path: '/rooms',
+    params: ':id',
+  },
+  signup: {
+    path: '/signup',
   },
 };

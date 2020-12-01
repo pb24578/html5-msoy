@@ -16,6 +16,7 @@ const slice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.id = action.payload.id;
+      state.rootRoomId = action.payload.rootRoomId;
       state.session = action.payload.session;
       state.displayName = action.payload.displayName;
       state.username = action.payload.username;
