@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { useLocation, useParams } from 'react-router-dom';
-import { RoomsRoutesProps } from '../../shared/routes';
+import styled, { ThemeContext } from 'styled-components';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import routes, { RoomsRoutesProps } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
 import { FlexCenter, FlexRow } from '../../shared/styles/flex';
 import { getUser } from '../../shared/user/selectors';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
-import { isReceiveChatMessage } from '../chat/types';
+import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { actions } from './reducer';
 import { getGameError, getRoomSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
@@ -45,12 +45,17 @@ const Error = styled.div`
 export const Game = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
   const error = useSelector(getGameError);
-  const { id: paramRoomId } = useParams<RoomsRoutesProps>();
   const { rootRoomId, session } = useSelector(getUser);
   const { token } = session;
   const socket = useSelector(getRoomSocket);
+  const theme = useContext(ThemeContext);
+
+  // receive the room id that the user is connecting to
+  const { id: paramRoomId } = useParams<RoomsRoutesProps>();
   const useRoomId = paramRoomId ? Number(paramRoomId) : rootRoomId;
+  const safeRoomId = rootRoomId || 1;
   const roomId = useRoomId || 1;
 
   /**
@@ -72,6 +77,7 @@ export const Game = React.memo(() => {
    */
   useEffect(() => {
     if (!socket) return;
+
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
@@ -87,6 +93,16 @@ export const Game = React.memo(() => {
         disconnectFromRoom();
         dispatch(setGameError(data.payload));
       }
+    };
+
+    socket.onclose = () => {
+      const errorMessage: ChatMessage = {
+        sender: 'Server',
+        message: 'There was an issue connecting to the room. The server will now redirect you elsewhere.',
+        backgroundColor: theme.warningColors.primary,
+      };
+      dispatch(addMessage(errorMessage));
+      history.push(`${routes.rooms.path}/${safeRoomId}`);
     };
   }, [socket]);
 

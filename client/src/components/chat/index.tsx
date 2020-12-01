@@ -85,8 +85,9 @@ export const Chat = React.memo(() => {
       <ChatHistoryOverflow>
         <ChatHistory>
           {messages.reduceRight((elements, message, index) => {
+            const backgroundColor = message.backgroundColor || theme.darkerColors.primary;
             elements.push(
-              <Message key={index} backgroundColor={theme.darkerColors.primary}>
+              <Message key={index} backgroundColor={backgroundColor}>
                 {message.message}
                 <MessageSender>{message.sender}</MessageSender>
               </Message>,

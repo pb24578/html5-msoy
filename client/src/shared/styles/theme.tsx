@@ -18,6 +18,9 @@ const mainTheme = {
     primary: '#FF0000',
     secondary: '#282c2f',
   },
+  warningColors: {
+    primary: '#FFC10C',
+  },
 };
 
 interface ThemeProps {

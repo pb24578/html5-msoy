@@ -20,6 +20,7 @@ export interface ReceiveChatMessage {
 export interface ChatMessage {
   sender: string;
   message: string;
+  backgroundColor?: string;
 }
 
 export const isReceiveChatMessage = (object: any): object is ReceiveChatMessage =>
