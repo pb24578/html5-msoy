@@ -23,8 +23,8 @@ const ChatTextField = styled.input`
 const SendButton = styled(FlexCenter)`
   flex: 0.2;
   padding: 6px;
-  color: ${(props) => props.theme.main.colors.secondary};
-  background-color: ${(props) => props.theme.main.colors.primary};
+  color: ${(props) => props.theme.colors.secondary};
+  background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
 `;
 

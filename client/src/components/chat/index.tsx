@@ -24,7 +24,7 @@ const UsersList = styled(FlexColumn)`
   max-width: 200px;
   overflow-y: auto;
   overflow-x: auto;
-  background-color: ${(props) => props.theme.main.alphaColors.primary};
+  background-color: ${(props) => props.theme.alphaColors.primary};
 `;
 
 const Participant = styled.div`
@@ -67,7 +67,7 @@ const MessageSender = styled.div`
   left: 4px;
   padding: 4px 8px;
   border-radius: 8px;
-  background-color: ${(props) => props.theme.main.colors.secondary};
+  background-color: ${(props) => props.theme.colors.secondary};
   font-size: 12px;
 `;
 
@@ -94,7 +94,7 @@ export const Chat = React.memo(() => {
 
       if (isReceiveChatMessage(data)) {
         chats.unshift(
-          <Message key={chats.length} backgroundColor={theme.main.darkerColors.primary}>
+          <Message key={chats.length} backgroundColor={theme.darkerColors.primary}>
             {data.payload.message}
             <MessageSender>{data.payload.sender}</MessageSender>
           </Message>,
@@ -104,7 +104,7 @@ export const Chat = React.memo(() => {
 
       if (isKick(data)) {
         chats.unshift(
-          <Message key={chats.length} backgroundColor={theme.main.errorColors.primary}>
+          <Message key={chats.length} backgroundColor={theme.errorColors.primary}>
             {data.payload.reason}
             <MessageSender>{data.payload.sender}</MessageSender>
           </Message>,

@@ -6,12 +6,12 @@ import { signup } from './actions';
 const Container = styled(FlexColumn)`
   padding: 8px;
   height: 100%;
-  background-color: ${(props) => props.theme.main.colors.primary};
+  background-color: ${(props) => props.theme.colors.primary};
 `;
 
 const SignupTitle = styled.div`
   margin-bottom: 8px;
-  color: ${(props) => props.theme.main.colors.secondary};
+  color: ${(props) => props.theme.colors.secondary};
   font-size: 24px;
 `;
 
@@ -31,13 +31,13 @@ const InputField = styled.input`
 const SignupButton = styled.div`
   margin: 4px;
   padding: 6px;
-  color: ${(props) => props.theme.main.colors.secondary};
-  background-color: ${(props) => props.theme.main.colors.teritary};
+  color: ${(props) => props.theme.colors.secondary};
+  background-color: ${(props) => props.theme.colors.teritary};
   cursor: pointer;
 `;
 
 const Error = styled.div`
-  color: ${(props) => props.theme.main.errorColors.secondary};
+  color: ${(props) => props.theme.errorColors.secondary};
   font-weight: bold;
 `;
 

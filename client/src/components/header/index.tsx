@@ -41,8 +41,8 @@ const TabLink = styled(FlexCenter)`
   margin: 0px 16px;
   padding: 6px;
   width: 64px;
-  color: ${(props) => props.theme.main.colors.secondary};
-  background-color: ${(props) => props.theme.main.colors.primary};
+  color: ${(props) => props.theme.colors.secondary};
+  background-color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
 `;
 
