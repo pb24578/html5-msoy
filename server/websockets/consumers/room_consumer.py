@@ -128,8 +128,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                 # format the participant's data
                 participant = {"id": 0, "display_name": "Anonymous"}
                 if user and not user.is_anonymous:
-                    participant = {"id": user.id,
-                                   "display_name": user.username}
+                    participant = {"id": user.id, "display_name": user.username}
 
                 participants.append(participant)
             return participants
