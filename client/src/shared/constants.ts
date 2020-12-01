@@ -1,12 +1,14 @@
+const hostName = window.location.hostname;
+
 /**
  * The URI for the REST API.
  */
-export const RestURI = 'http://127.0.0.1:8000';
+export const RestURI = `http://${hostName}:8000`;
 
 /**
  * The URI for the web-socket connections.
  */
-export const SocketURI = 'ws://127.0.0.1:8000';
+export const SocketURI = `ws://${hostName}:8000`;
 
 /**
  * The application name, can be changed and will render a different
