@@ -9,7 +9,7 @@ import json
 class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.group_id = self.scope['url_route']['kwargs']['id']
-        self.group_name = 'room_%s' % str(self.group_id)
+        self.group_name = str(self.group_id)
 
         # add this user to the room
         self.room = await sync_to_async(Room.objects.add)(self.group_name, self.channel_name, user=self.scope['user'])
@@ -63,7 +63,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await sync_to_async(Room.objects.remove)(self.group_name, self.channel_name)
 
         def prune_room():
-            if not bool(self.room.get_users().count()):
+            total_users = self.room.get_users().count() + self.room.get_anonymous_count()
+            if total_users == 0:
                 # there are no more users in this room, so delete it
                 self.room.delete()
         await sync_to_async(prune_room)()
@@ -100,6 +101,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
             message = message[0: max_chars]
 
             def get_display_name():
+                if self.scope['user'].is_anonymous:
+                    return 'Anonymous'
                 return self.scope['user'].username
             display_name = await sync_to_async(get_display_name)()
 
@@ -123,10 +126,11 @@ class RoomConsumer(AsyncWebsocketConsumer):
                 user = presence.user
 
                 # format the participant's data
-                participant = {"id": 0, "displayName": "Anonymous"}
+                participant = {"id": 0, "display_name": "Anonymous"}
                 if user and not user.is_anonymous:
-                    participant = {"id": user.id, "displayName": user.username}
-                
+                    participant = {"id": user.id,
+                                   "display_name": user.username}
+
                 participants.append(participant)
             return participants
         participants = await sync_to_async(get_participants)()
