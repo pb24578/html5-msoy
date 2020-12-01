@@ -11,9 +11,13 @@ export default {
   },
   rooms: {
     path: '/rooms',
-    params: ':id',
+    params: '/:id',
   },
   signup: {
     path: '/signup',
   },
 };
+
+export interface RoomsRoutesProps {
+  id?: string;
+}

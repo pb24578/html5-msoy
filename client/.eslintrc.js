@@ -31,6 +31,7 @@ module.exports = {
     'react/prop-types': 'off',
     'react/require-default-props': 0,
     'react/jsx-one-expression-per-line': 0,
+    'react/no-array-index-key': 0,
     'no-unused-vars': 'off',
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',

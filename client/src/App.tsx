@@ -47,15 +47,22 @@ const App = () => {
    */
   loadSession();
 
+  const client = (
+    <Client>
+      <Game />
+      <Toolbar />
+    </Client>
+  );
+
   return (
     <BrowserRouter>
       <Theme>
         <Header />
         <FlexRow>
-          <Client>
-            <Game />
-            <Toolbar />
-          </Client>
+          <Switch>
+            <Route path={routes.index.path}>{client}</Route>
+            <Route path={`${routes.rooms.path}${routes.rooms.params}`}>{client}</Route>
+          </Switch>
           <Switch>
             <Route path={routes.login.path}>
               <Menu>

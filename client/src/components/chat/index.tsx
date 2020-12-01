@@ -86,8 +86,8 @@ export const Chat = React.memo(() => {
       const data = JSON.parse(event.data);
 
       if (isChatParticipants(data)) {
-        const participantList = data.payload.participants.map((participant) => (
-          <Participant key={participant.id}>{participant.displayName}</Participant>
+        const participantList = data.payload.participants.map((participant, index) => (
+          <Participant key={index}>{participant.displayName}</Participant>
         ));
         setParticipantList(participantList);
       }

@@ -6,7 +6,7 @@ import routes from '../../shared/routes';
 import { AppName } from '../../shared/constants';
 import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
 import { logout } from '../../shared/user/actions';
-import { getUser, getSession } from '../../shared/user/selectors';
+import { getUser } from '../../shared/user/selectors';
 
 const Container = styled(FlexRow)`
   height: 10vh;
@@ -47,8 +47,8 @@ const TabLink = styled(FlexCenter)`
 `;
 
 export const Header = React.memo(() => {
-  const { token } = useSelector(getSession);
-  const { displayName, id: userId } = useSelector(getUser);
+  const { displayName, id: userId, session } = useSelector(getUser);
+  const { token } = session;
 
   let accountLinks: React.ReactElement = (
     <>

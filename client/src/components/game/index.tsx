@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import { RoomsRoutesProps } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
 import { FlexRow } from '../../shared/styles/flex';
-import { getSession } from '../../shared/user/selectors';
+import { getUser } from '../../shared/user/selectors';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
 import { Chat } from '../chat';
 import { connectToRoom } from './actions';
@@ -26,21 +27,26 @@ const PixiAppContainer = styled.div`
 
 export const Game = React.memo(() => {
   const location = useLocation();
-  const { token } = useSelector(getSession);
+  const { id: roomId } = useParams<RoomsRoutesProps>();
+  const { rootRoomId, session } = useSelector(getUser);
+  const { token } = session;
 
   /**
    * When the component mounts or the user logs in, establish the new connection with the room.
    */
   useEffect(() => {
+    const useRoomId = roomId ? Number(roomId) : rootRoomId;
+    const connectRoomId = useRoomId || 1;
+
     if (localStorage.getItem(LocalStorage.Session)) {
-      // wait until the user is authenticated to connect to this room
+      // wait until the user is authenticated to connect to the room in the URL
       if (token) {
-        connectToRoom(1);
+        connectToRoom(connectRoomId);
       }
     } else {
-      connectToRoom(1);
+      connectToRoom(connectRoomId);
     }
-  }, [token]);
+  }, [rootRoomId, roomId]);
 
   /**
    * Resize the Pixi App container whenever the window size changes.
