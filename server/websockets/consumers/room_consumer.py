@@ -77,9 +77,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             message = message[0: max_chars]
 
             def get_display_name():
-                if self.scope['user'].is_anonymous:
-                    return 'Anonymous'
-                return self.scope['user'].username
+                return 'Anonymous' if self.scope['user'].is_anonymous else self.scope['user'].username
             display_name = await sync_to_async(get_display_name)()
 
             await self.channel_layer.group_send(
