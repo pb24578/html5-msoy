@@ -10,7 +10,7 @@ class Participant(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.channel_name
+        return f"{str(self.user)} -> {str(self.channel_room)}"
 
     class Meta:
         unique_together = [("channel_room", "channel_name")]
