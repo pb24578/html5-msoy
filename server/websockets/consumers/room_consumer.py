@@ -1,12 +1,18 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
+from django.dispatch import receiver
 from ..models import Room
+from ..signals import participants_changed
 import humps
 import json
 
 
 class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        """
+        Authenticates the user that is attempting to connect to this room.
+        """
+
         self.group_id = self.scope['url_route']['kwargs']['id']
         self.group_name = str(self.group_id)
 
@@ -15,6 +21,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         # prune duplicate participants of this user
         def prune_duplicate_participants():
+            if self.scope['user'].is_anonymous:
+                return
+            
             participants = self.room.get_duplicate_participants(self.channel_name, user=self.scope['user'])
             for participant in participants:
                 async_to_sync(self.channel_layer.send)(
@@ -31,26 +40,14 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        await self.group_send_participants()
-
     async def disconnect(self, close_code):
         """
         Disconnects the user session from the room.
         """
 
-        # remove the user from this room
         await sync_to_async(Room.objects.remove)(self.group_name, self.channel_name)
 
-        def prune_room():
-            total_users = self.room.get_users().count() + self.room.get_anonymous_count()
-            if total_users == 0:
-                # there are no more users in this room, so delete it
-                self.room.delete()
-        await sync_to_async(prune_room)()
-
         await self.close()
-
-        await self.group_send_participants()
 
     async def receive(self, text_data):
         """
@@ -92,34 +89,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     'payload': {'sender': display_name, 'message': message}
                 }
             )
-
-    async def group_send_participants(self):
-        """
-        Send the updated list of participants to all of the users in this room.
-        """
-
-        def get_participants():
-            participants = self.room.get_participants()
-            all_participants = []
-            for participant in participants:
-                user = participant.user
-
-                # format the participant's data
-                participant = {"id": 0, "display_name": "Anonymous"}
-                if user and user.is_authenticated:
-                    participant = {"id": user.id, "display_name": user.username}
-
-                all_participants.append(participant)
-            return all_participants
-        participants = await sync_to_async(get_participants)()
-
-        await self.channel_layer.group_send(
-            self.group_name,
-            {
-                'type': 'participants',
-                'payload': {'participants': participants}
-            }
-        )
 
     async def participants(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))

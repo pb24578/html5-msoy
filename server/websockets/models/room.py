@@ -4,6 +4,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from rest.models import User
 from .participant import Participant
+from ..signals import participants_changed
 
 channel_layer = get_channel_layer()
 
@@ -43,6 +44,7 @@ class Room(models.Model):
 
         if created:
             async_to_sync(channel_layer.group_add)(self.channel_name, channel_name)
+            self.broadcast_changed(added=True)
 
     def remove_participant(self, channel_name=None, participant=None):
         if participant is None:
@@ -53,6 +55,7 @@ class Room(models.Model):
 
         async_to_sync(channel_layer.group_discard)(self.channel_name, participant.channel_name)
         participant.delete()
+        self.broadcast_changed(removed=True)
         self.prune_room()
 
     def get_users(self):
@@ -75,6 +78,14 @@ class Room(models.Model):
         If no more participants exist in this room, then delete it.
         """
 
-        users_count = self.get_users().count()
-        if users_count == 0:
+        participants_count = self.get_participants().count()
+        if participants_count == 0:
             self.delete()
+
+    def broadcast_changed(self, added=False, removed=False):
+        participants_changed.send(
+            sender=self.__class__,
+            room=self,
+            added=added,
+            removed=removed
+        )
