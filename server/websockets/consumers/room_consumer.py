@@ -1,5 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
+from rest.models import Room
 from ..models import ChannelRoom
 import humps
 import json
@@ -13,6 +14,18 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         self.group_id = self.scope['url_route']['kwargs']['id']
         self.group_name = str(self.group_id)
+
+        # validate that this room exists
+        def is_room_exist():
+            try:
+                Room.objects.get(id=self.group_id)
+            except Room.DoesNotExist:
+                return False
+            return True
+        room_exists = await sync_to_async(is_room_exist)()
+        if not room_exists:
+            await self.close()
+            return
 
         # add this user to the channel's room
         self.channel_room = await sync_to_async(ChannelRoom.objects.add)(
