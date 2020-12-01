@@ -15,7 +15,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.group_name = str(self.group_id)
 
         # add this user to the channel's room
-        self.channel_room = await sync_to_async(ChannelRoom.objects.add)(self.group_name, self.channel_name, user=self.scope['user'])
+        self.channel_room = await sync_to_async(ChannelRoom.objects.add)(
+            self.group_id, self.group_name, self.channel_name, user=self.scope['user']
+        )
 
         # prune duplicate participants of this user
         def prune_duplicate_participants():

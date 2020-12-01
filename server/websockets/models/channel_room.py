@@ -10,9 +10,13 @@ channel_layer = get_channel_layer()
 
 
 class ChannelRoomManager(models.Manager):
-    def add(self, room_channel_name, user_channel_name, user=None):
-        channel_room, created = ChannelRoom.objects.get_or_create(channel_name=room_channel_name)
-        channel_room.add_participant(user_channel_name, user)
+    def add(self, room_id, room_channel_name, user_channel_name, user=None):
+        try:
+            room = Room.objects.get(id=room_id)
+            channel_room, created = ChannelRoom.objects.get_or_create(channel_name=room_channel_name, room=room)
+            channel_room.add_participant(user_channel_name, user)
+        except:
+            return
         return channel_room
 
     def remove(self, room_channel_name, user_channel_name):
@@ -27,11 +31,12 @@ class ChannelRoom(models.Model):
     channel_name = models.CharField(
         max_length=255, unique=True, help_text="Group channel name for this room"
     )
+    room = models.ForeignKey(Room, default=1, on_delete=models.CASCADE)
 
     objects = ChannelRoomManager()
 
     def __str__(self):
-        return self.channel_name
+        return str(self.room)
 
     def add_participant(self, channel_name, user=None):
         if user and user.is_authenticated:
