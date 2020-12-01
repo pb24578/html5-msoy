@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import theme from '../../shared/styles/theme';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
 import { getRoomSocket } from '../game/selectors';
 import { SendChatMessage } from '../chat/types';
@@ -24,8 +23,8 @@ const ChatTextField = styled.input`
 const SendButton = styled(FlexCenter)`
   flex: 0.2;
   padding: 6px;
-  color: ${theme.secondary};
-  background-color: ${theme.primary};
+  color: ${(props) => props.theme.main.colors.secondary};
+  background-color: ${(props) => props.theme.main.colors.primary};
   cursor: pointer;
 `;
 

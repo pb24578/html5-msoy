@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import theme, { errorTheme, qAlphaTheme } from '../../shared/styles/theme';
+import styled, { ThemeContext } from 'styled-components';
 import { FlexColumn } from '../../shared/styles/flex';
 import { disconnectFromRoom } from '../game/actions';
 import { getRoomSocket } from '../game/selectors';
@@ -25,7 +24,7 @@ const UsersList = styled(FlexColumn)`
   max-width: 200px;
   overflow-y: auto;
   overflow-x: auto;
-  background-color: ${qAlphaTheme.primary};
+  background-color: ${(props) => props.theme.main.alphaColors.primary};
 `;
 
 const Participant = styled.div`
@@ -68,7 +67,7 @@ const MessageSender = styled.div`
   left: 4px;
   padding: 4px 8px;
   border-radius: 8px;
-  background-color: ${theme.secondary};
+  background-color: ${(props) => props.theme.main.colors.secondary};
   font-size: 12px;
 `;
 
@@ -76,6 +75,7 @@ export const Chat = React.memo(() => {
   const [participantList, setParticipantList] = useState([] as React.ReactElement[]);
   const [chats, setChats] = useState([] as React.ReactElement[]);
   const socket = useSelector(getRoomSocket);
+  const theme = useContext(ThemeContext);
 
   /**
    * Listen to chat messages from other users when this component mounts.
@@ -94,7 +94,7 @@ export const Chat = React.memo(() => {
 
       if (isReceiveChatMessage(data)) {
         chats.unshift(
-          <Message key={chats.length} backgroundColor="#5FC7FF">
+          <Message key={chats.length} backgroundColor={theme.main.darkerColors.primary}>
             {data.payload.message}
             <MessageSender>{data.payload.sender}</MessageSender>
           </Message>,
@@ -104,7 +104,7 @@ export const Chat = React.memo(() => {
 
       if (isKick(data)) {
         chats.unshift(
-          <Message key={chats.length} backgroundColor={errorTheme.primary}>
+          <Message key={chats.length} backgroundColor={theme.main.errorColors.primary}>
             {data.payload.reason}
             <MessageSender>{data.payload.sender}</MessageSender>
           </Message>,

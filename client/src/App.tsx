@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
+import Theme from './shared/styles/theme';
 import { FlexRow, FlexColumn } from './shared/styles/flex';
 import routes from './shared/routes';
 import { loadSession } from './shared/user/actions';
@@ -47,25 +48,27 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Header />
-      <FlexRow>
-        <Client>
-          <Game />
-          <Toolbar />
-        </Client>
-        <Switch>
-          <Route path={routes.login.path}>
-            <Menu>
-              <Login />
-            </Menu>
-          </Route>
-          <Route path={routes.signup.path}>
-            <Menu>
-              <Signup />
-            </Menu>
-          </Route>
-        </Switch>
-      </FlexRow>
+      <Theme>
+        <Header />
+        <FlexRow>
+          <Client>
+            <Game />
+            <Toolbar />
+          </Client>
+          <Switch>
+            <Route path={routes.login.path}>
+              <Menu>
+                <Login />
+              </Menu>
+            </Route>
+            <Route path={routes.signup.path}>
+              <Menu>
+                <Signup />
+              </Menu>
+            </Route>
+          </Switch>
+        </FlexRow>
+      </Theme>
     </BrowserRouter>
   );
 };

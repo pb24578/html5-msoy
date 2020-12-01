@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import theme, { errorTheme } from '../../shared/styles/theme';
 import { FlexColumn } from '../../shared/styles/flex';
 import { signup } from './actions';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
   height: 100%;
-  background-color: ${theme.primary};
+  background-color: ${(props) => props.theme.main.colors.primary};
 `;
 
 const SignupTitle = styled.div`
   margin-bottom: 8px;
-  color: ${theme.secondary};
+  color: ${(props) => props.theme.main.colors.secondary};
   font-size: 24px;
 `;
 
@@ -33,13 +31,13 @@ const InputField = styled.input`
 const SignupButton = styled.div`
   margin: 4px;
   padding: 6px;
-  color: ${theme.secondary};
-  background-color: ${theme.teritary};
+  color: ${(props) => props.theme.main.colors.secondary};
+  background-color: ${(props) => props.theme.main.colors.teritary};
   cursor: pointer;
 `;
 
 const Error = styled.div`
-  color: ${errorTheme.secondary};
+  color: ${(props) => props.theme.main.errorColors.secondary};
   font-weight: bold;
 `;
 

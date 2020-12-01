@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
 import { AppName } from '../../shared/constants';
-import theme from '../../shared/styles/theme';
 import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
 import { logout } from '../../shared/user/actions';
 import { getDisplayName, getToken } from '../../shared/user/selectors';
@@ -42,8 +41,8 @@ const TabLink = styled(FlexCenter)`
   margin: 0px 16px;
   padding: 6px;
   width: 64px;
-  color: ${theme.secondary};
-  background-color: ${theme.primary};
+  color: ${(props) => props.theme.main.colors.secondary};
+  background-color: ${(props) => props.theme.main.colors.primary};
   cursor: pointer;
 `;
 
