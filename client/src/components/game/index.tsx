@@ -27,26 +27,25 @@ const PixiAppContainer = styled.div`
 
 export const Game = React.memo(() => {
   const location = useLocation();
-  const { id: roomId } = useParams<RoomsRoutesProps>();
+  const { id: paramRoomId } = useParams<RoomsRoutesProps>();
   const { rootRoomId, session } = useSelector(getUser);
   const { token } = session;
+  const useRoomId = paramRoomId ? Number(paramRoomId) : rootRoomId;
+  const roomId = useRoomId || 1;
 
   /**
    * When the component mounts or the user logs in, establish the new connection with the room.
    */
   useEffect(() => {
-    const useRoomId = roomId ? Number(roomId) : rootRoomId;
-    const connectRoomId = useRoomId || 1;
-
     if (localStorage.getItem(LocalStorage.Session)) {
       // wait until the user is authenticated to connect to the room in the URL
       if (token) {
-        connectToRoom(connectRoomId);
+        connectToRoom(roomId);
       }
     } else {
-      connectToRoom(connectRoomId);
+      connectToRoom(roomId);
     }
-  }, [rootRoomId, roomId]);
+  }, [roomId, token]);
 
   /**
    * Resize the Pixi App container whenever the window size changes.

@@ -60,8 +60,8 @@ const App = () => {
         <Header />
         <FlexRow>
           <Switch>
-            <Route path={routes.index.path}>{client}</Route>
             <Route path={`${routes.rooms.path}${routes.rooms.params}`}>{client}</Route>
+            <Route path={routes.index.path}>{client}</Route>
           </Switch>
           <Switch>
             <Route path={routes.login.path}>
