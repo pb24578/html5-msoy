@@ -38,6 +38,7 @@ class Room(models.Model):
             authed_user = user
         else:
             authed_user = None
+        
         participant, created = Participant.objects.get_or_create(
             room=self, channel_name=channel_name, user=authed_user
         )
