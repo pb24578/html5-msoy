@@ -3,6 +3,7 @@ import { User } from './types';
 
 export const initialState: User = {
   id: 0,
+  rootRoomId: 0,
   session: { token: null },
   displayName: '',
   username: '',
