@@ -1,11 +1,17 @@
+export interface Game {
+  room: Room;
+  error: GameError | null;
+}
+
 export interface Room {
   id: number;
   participants: Participant[];
   socket: WebSocket | null;
 }
 
-export interface Game {
-  room: Room;
+export interface GameError {
+  sender: string;
+  reason: string;
 }
 
 export interface ConnectionError {
@@ -17,7 +23,7 @@ export interface ConnectionError {
 }
 
 export const isConnectionError = (object: any): object is ConnectionError =>
-  'type' in object && object.type === 'client.error';
+  'type' in object && object.type === 'connection.error';
 
 export interface Participant {
   id: number;

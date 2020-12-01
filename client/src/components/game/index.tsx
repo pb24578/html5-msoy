@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useLocation, useParams } from 'react-router-dom';
 import { RoomsRoutesProps } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
-import { FlexRow } from '../../shared/styles/flex';
+import { FlexCenter, FlexRow } from '../../shared/styles/flex';
 import { getUser } from '../../shared/user/selectors';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { isReceiveChatMessage } from '../chat/types';
 import { actions } from './reducer';
-import { getRoomSocket } from './selectors';
+import { getError, getRoomSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
-import { ConnectionError, isConnectionError, isReceiveParticipants } from './types';
+import { isConnectionError, isReceiveParticipants } from './types';
 
 const { addMessage } = chatActions;
-const { setParticipants } = actions;
+const { setError, setParticipants } = actions;
 
 const Container = styled(FlexRow)`
   padding: 8px;
@@ -33,16 +33,25 @@ const PixiAppContainer = styled.div`
   width: 75%;
 `;
 
+const ErrorContainer = styled(FlexCenter)`
+  width: 100%;
+`;
+
+const Error = styled.div`
+  color: ${(props) => props.theme.errorColors.secondary};
+  font-weight: bold;
+`;
+
 export const Game = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const error = useSelector(getError);
   const { id: paramRoomId } = useParams<RoomsRoutesProps>();
   const { rootRoomId, session } = useSelector(getUser);
   const { token } = session;
   const socket = useSelector(getRoomSocket);
   const useRoomId = paramRoomId ? Number(paramRoomId) : rootRoomId;
   const roomId = useRoomId || 1;
-  const [error, setError] = useState<ConnectionError>();
 
   /**
    * When the component mounts or the user logs in, establish the new connection with the room.
@@ -75,11 +84,18 @@ export const Game = React.memo(() => {
       }
 
       if (isConnectionError(data)) {
-        setError(data);
         disconnectFromRoom();
+        dispatch(setError(data.payload));
       }
     };
   }, [socket]);
+
+  /**
+   * Resize the Pixi App container whenever the route location changes.
+   */
+  useEffect(() => {
+    resizePixiApp();
+  }, [location]);
 
   /**
    * Resize the Pixi App container whenever the window size changes.
@@ -88,12 +104,15 @@ export const Game = React.memo(() => {
     resizePixiApp();
   };
 
-  /**
-   * Resize the Pixi App container whenever the route location changes.
-   */
-  useEffect(() => {
-    resizePixiApp();
-  }, [location]);
+  if (error) {
+    return (
+      <Container>
+        <ErrorContainer>
+          <Error>{error.reason}</Error>
+        </ErrorContainer>
+      </Container>
+    );
+  }
 
   return (
     <Container>
