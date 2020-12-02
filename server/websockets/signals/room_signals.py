@@ -22,7 +22,10 @@ def broadcast_participants(sender, channel_room, **kwargs):
         user = participant.user
 
         # format the participant's data
-        participant = {'id': get_id(user), 'display_name': get_display_name(user)}
+        participant = {
+            'id': get_id(user),
+            'display_name': get_display_name(user)
+        }
         participants.append(participant)
 
     # broadcast a signal with all of the participants
