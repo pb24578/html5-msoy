@@ -1,4 +1,7 @@
-export default {
+import { createMatchSelector } from 'connected-react-router';
+import { match } from 'react-router-dom';
+
+const routes = {
   index: {
     pathname: '/',
   },
@@ -21,6 +24,10 @@ export default {
   },
 };
 
-export interface RoomsRoutesProps {
-  id?: string;
-}
+export default routes;
+
+export type RoomsMatch = match<{ id?: string }> | null;
+export const getRoomsMatch = createMatchSelector(`${routes.rooms.pathname}${routes.rooms.params}`);
+
+export type ProfilesMatch = match<{ id?: string }> | null;
+export const getProfilesMatch = createMatchSelector(`${routes.profiles.pathname}${routes.profiles.params}`);

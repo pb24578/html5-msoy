@@ -2,8 +2,8 @@ import React, { useContext, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
-import { useLocation, useParams } from 'react-router-dom';
-import routes, { RoomsRoutesProps } from '../../shared/routes';
+import { useLocation } from 'react-router-dom';
+import routes, { getRoomsMatch, RoomsMatch } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
 import { FlexCenter, FlexRow } from '../../shared/styles/flex';
 import { getUser } from '../../shared/user/selectors';
@@ -53,7 +53,8 @@ export const Game = React.memo(() => {
   const theme = useContext(ThemeContext);
 
   // receive the room id that the user is connecting to
-  const { id: paramRoomId } = useParams<RoomsRoutesProps>();
+  const roomsMatch: RoomsMatch = useSelector(getRoomsMatch);
+  const paramRoomId = roomsMatch?.params.id;
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
 
   /**

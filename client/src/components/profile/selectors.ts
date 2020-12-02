@@ -1,28 +1,15 @@
-import { createSelector, createAsyncSelectorResults } from 'async-selector-kit';
-import { IState } from '../../store';
-import routes from '../../shared/routes';
-
-const getLocation = (state: IState) => state.router.location;
-
-/**
- * Return the profile id from the URL parameters.
- */
-const getProfileId = createSelector([getLocation], (location) => {
-  const profileId = location.pathname.replace(routes.profiles.pathname, '').replace('/', '');
-  if (profileId && !Number.isNaN(profileId)) {
-    return Number(profileId);
-  }
-  return null;
-});
+import { createAsyncSelectorResults } from 'async-selector-kit';
+import { getProfilesMatch, ProfilesMatch } from '../../shared/routes';
 
 export const [fetchProfile] = createAsyncSelectorResults(
   {
     id: 'fetch-profile',
-    async: async (profileId) => {
-      if (!profileId) return null;
-      return null;
+    async: async (profilesMatch: ProfilesMatch) => {
+      if (!profilesMatch || !profilesMatch.params || !profilesMatch.params.id) return null;
+      const profileId = Number(profilesMatch.params.id);
+      return profileId;
     },
     defaultValue: null,
   },
-  [getProfileId],
+  [getProfilesMatch],
 );
