@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { createRef, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { ThemeContext } from 'styled-components';
 import { FlexColumn } from '../../shared/styles/flex';
@@ -74,6 +74,21 @@ export const Chat = React.memo(() => {
   const participants = useSelector(getParticipants);
   const theme = useContext(ThemeContext);
 
+  /**
+   * Scroll to the bottom of the chat if the chat is anchored to the bottom.
+   */
+  const chatRef = createRef<HTMLDivElement>();
+  useEffect(() => {
+    if (chatRef && chatRef.current) {
+      const ref = chatRef.current;
+      const recentMessageRef = ref.children[0];
+      const offsetMultiplier = 3;
+      if (recentMessageRef && ref.scrollTop >= -recentMessageRef.scrollHeight * offsetMultiplier) {
+        ref.scrollTop = 0;
+      }
+    }
+  }, [messages]);
+
   return (
     <Container>
       <UsersTitle>Users Online</UsersTitle>
@@ -83,7 +98,7 @@ export const Chat = React.memo(() => {
         ))}
       </UsersList>
       <ChatHistoryOverflow>
-        <ChatHistory>
+        <ChatHistory ref={chatRef}>
           {messages.reduceRight((elements, message, index) => {
             const backgroundColor = message.backgroundColor || theme.darkerColors.primary;
             elements.push(
