@@ -16,7 +16,10 @@ class SignupForm(forms.Form):
     })
 
     def clean_username(self):
-        username = self.data['username']
+        username = self.data['username'].strip()
+
+        if not username.isalnum():
+            raise forms.ValidationError(f"Invalid username, please use only alpha-numeric characters.")
 
         account_exists = User.objects.filter(username__iexact=username).exists()
         if account_exists:
@@ -25,7 +28,7 @@ class SignupForm(forms.Form):
         return username
 
     def clean_email(self):
-        email = self.data['email'].lower()
+        email = self.data['email'].strip().lower()
 
         account_exists = User.objects.filter(email=email).exists()
         if account_exists:
