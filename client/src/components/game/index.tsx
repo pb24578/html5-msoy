@@ -11,7 +11,7 @@ import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { actions } from './reducer';
-import { getGameError, getRoomSocket } from './selectors';
+import { getGameError, getRoomId, getRoomSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
 import { isConnectionError, isReceiveParticipants } from './types';
 
@@ -47,14 +47,14 @@ export const Game = React.memo(() => {
   const location = useLocation();
   const history = useHistory();
   const error = useSelector(getGameError);
-  const { rootRoomId, session } = useSelector(getUser);
+  const { redirectRoomId, session } = useSelector(getUser);
+  const currentRoomId = useSelector(getRoomId);
   const socket = useSelector(getRoomSocket);
   const theme = useContext(ThemeContext);
 
   // receive the room id that the user is connecting to
   const { id: paramRoomId } = useParams<RoomsRoutesProps>();
-  const useRoomId = paramRoomId ? Number(paramRoomId) : rootRoomId;
-  const roomId = useRoomId || 1;
+  const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
 
   /**
    * When the user moves between rooms, establish a new connection with the room.
@@ -62,7 +62,7 @@ export const Game = React.memo(() => {
    */
   const didMount = useRef(false);
   useEffect(() => {
-    if (didMount.current) {
+    if (didMount.current && currentRoomId !== roomId) {
       const isRoomPath = Boolean(paramRoomId);
       const isIndexPath = location.pathname === routes.index.path;
       if (isRoomPath || isIndexPath) {
@@ -70,7 +70,7 @@ export const Game = React.memo(() => {
       }
     }
     didMount.current = true;
-  }, [roomId]);
+  }, [location]);
 
   /**
    * When the user logs in, establish a new connection with the room.

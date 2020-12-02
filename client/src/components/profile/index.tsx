@@ -24,13 +24,13 @@ const ProfileLink = styled(Link)`
 `;
 
 export const Profile = React.memo(() => {
-  const { displayName, rootRoomId } = useSelector(getUser);
+  const { displayName, redirectRoomId } = useSelector(getUser);
 
   return (
     <Container>
       <DisplayName>{displayName}</DisplayName>
       <FlexRow>
-        <ProfileLink to={`${routes.rooms.path}/${rootRoomId}`}>Visit Home</ProfileLink>
+        <ProfileLink to={`${routes.rooms.path}/${redirectRoomId}`}>Visit Home</ProfileLink>
       </FlexRow>
     </Container>
   );

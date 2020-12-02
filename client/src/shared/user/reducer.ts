@@ -3,7 +3,7 @@ import { User } from './types';
 
 export const initialState: User = {
   id: 0,
-  rootRoomId: 0,
+  redirectRoomId: 1,
   session: { token: null },
   displayName: '',
   username: '',
@@ -16,7 +16,7 @@ const slice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.id = action.payload.id;
-      state.rootRoomId = action.payload.rootRoomId;
+      state.redirectRoomId = action.payload.redirectRoomId;
       state.session = action.payload.session;
       state.displayName = action.payload.displayName;
       state.username = action.payload.username;
