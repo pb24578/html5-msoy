@@ -1,22 +1,22 @@
 export default {
   index: {
-    path: '/',
+    pathname: '/',
   },
   about: {
-    path: '/about',
+    pathname: '/about',
   },
   login: {
-    path: '/login',
+    pathname: '/login',
   },
   signup: {
-    path: '/signup',
+    pathname: '/signup',
   },
   profiles: {
-    path: '/profiles',
+    pathname: '/profiles',
     params: '/:id',
   },
   rooms: {
-    path: '/rooms',
+    pathname: '/rooms',
     params: '/:id',
   },
 };

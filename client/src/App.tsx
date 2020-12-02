@@ -62,21 +62,21 @@ const App = () => {
         <Header />
         <FlexRow>
           <Switch>
-            <Route path={`${routes.rooms.path}${routes.rooms.params}`}>{client}</Route>
-            <Route path={routes.index.path}>{client}</Route>
+            <Route path={`${routes.rooms.pathname}${routes.rooms.params}`}>{client}</Route>
+            <Route path={routes.index.pathname}>{client}</Route>
           </Switch>
           <Switch>
-            <Route path={routes.login.path}>
+            <Route path={routes.login.pathname}>
               <Menu>
                 <Login />
               </Menu>
             </Route>
-            <Route path={routes.signup.path}>
+            <Route path={routes.signup.pathname}>
               <Menu>
                 <Signup />
               </Menu>
             </Route>
-            <Route path={`${routes.profiles.path}${routes.profiles.params}`}>
+            <Route path={`${routes.profiles.pathname}${routes.profiles.params}`}>
               <Menu>
                 <Profile />
               </Menu>

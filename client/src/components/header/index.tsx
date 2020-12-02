@@ -52,16 +52,16 @@ export const Header = React.memo(() => {
 
   let accountLinks: React.ReactElement = (
     <>
-      <AccountLink to={routes.login.path}>Login</AccountLink>
-      <AccountLink to={routes.signup.path}>Signup</AccountLink>
+      <AccountLink to={routes.login.pathname}>Login</AccountLink>
+      <AccountLink to={routes.signup.pathname}>Signup</AccountLink>
     </>
   );
 
   if (token) {
     accountLinks = (
       <>
-        <AccountLink to={`${routes.profiles.path}/${userId}`}>{displayName}</AccountLink>
-        <AccountLink to={routes.index.path} onClick={() => logout()}>
+        <AccountLink to={`${routes.profiles.pathname}/${userId}`}>{displayName}</AccountLink>
+        <AccountLink to={routes.index.pathname} onClick={() => logout()}>
           Logout
         </AccountLink>
       </>
@@ -74,7 +74,7 @@ export const Header = React.memo(() => {
       <Spacing />
       <Navigation>
         <Account>
-          <AccountLink to={routes.about.path}>About</AccountLink>
+          <AccountLink to={routes.about.pathname}>About</AccountLink>
           {accountLinks}
         </Account>
         <Tabs>

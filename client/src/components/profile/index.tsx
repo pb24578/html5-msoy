@@ -32,7 +32,7 @@ export const Profile = React.memo(() => {
     <Container>
       <DisplayName>{displayName}</DisplayName>
       <FlexRow>
-        <ProfileLink to={`${routes.rooms.path}/${redirectRoomId}`}>Visit Home</ProfileLink>
+        <ProfileLink to={`${routes.rooms.pathname}/${redirectRoomId}`}>Visit Home</ProfileLink>
       </FlexRow>
     </Container>
   );

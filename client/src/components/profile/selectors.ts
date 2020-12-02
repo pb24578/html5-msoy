@@ -8,7 +8,7 @@ const getLocation = (state: IState) => state.router.location;
  * Return the profile id from the URL parameters.
  */
 const getProfileId = createSelector([getLocation], (location) => {
-  const profileId = location.pathname.replace(routes.profiles.path, '').replace('/', '');
+  const profileId = location.pathname.replace(routes.profiles.pathname, '').replace('/', '');
   if (profileId && !Number.isNaN(profileId)) {
     return Number(profileId);
   }

@@ -64,7 +64,7 @@ export const Game = React.memo(() => {
   useEffect(() => {
     if (didMount.current && currentRoomId !== roomId) {
       const isRoomPath = Boolean(paramRoomId);
-      const isIndexPath = location.pathname === routes.index.path;
+      const isIndexPath = location.pathname === routes.index.pathname;
       if (isRoomPath || isIndexPath) {
         connectToRoom(roomId);
       }
@@ -116,7 +116,7 @@ export const Game = React.memo(() => {
         backgroundColor: theme.warningColors.primary,
       };
       dispatch(addMessage(errorMessage));
-      dispatch(replace(routes.index.path));
+      dispatch(replace(routes.index.pathname));
     };
   }, [socket]);
 
