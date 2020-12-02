@@ -62,6 +62,11 @@ export const Game = React.memo(() => {
    * When the component mounts or the user logs in, establish the new connection with the room.
    */
   useEffect(() => {
+    if (!(location.pathname === routes.index.path || paramRoomId)) {
+      // only change the room connection if the user is moving between rooms
+      return;
+    }
+
     if (localStorage.getItem(LocalStorage.Session)) {
       // wait until the user is authenticated to connect to the room in the URL
       if (token) {

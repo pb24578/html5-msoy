@@ -74,7 +74,7 @@ export const Header = React.memo(() => {
       <Spacing />
       <Navigation>
         <Account>
-          <AccountLink to={routes.index.path}>About</AccountLink>
+          <AccountLink to={routes.about.path}>About</AccountLink>
           {accountLinks}
         </Account>
         <Tabs>

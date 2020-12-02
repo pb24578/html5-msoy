@@ -2,8 +2,14 @@ export default {
   index: {
     path: '/',
   },
+  about: {
+    path: '/about',
+  },
   login: {
     path: '/login',
+  },
+  signup: {
+    path: '/signup',
   },
   profiles: {
     path: '/profiles',
@@ -12,9 +18,6 @@ export default {
   rooms: {
     path: '/rooms',
     params: '/:id',
-  },
-  signup: {
-    path: '/signup',
   },
 };
 
