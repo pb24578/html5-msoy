@@ -21,9 +21,9 @@ def broadcast_participants(sender, channel_room, **kwargs):
         user = participant.user
 
         # format the participant's data
-        participant = {"id": 0, "display_name": "Anonymous"}
+        participant = {'id': 0, 'display_name': 'Anonymous'}
         if user and user.is_authenticated:
-            participant = {"id": user.id, "display_name": user.username}
+            participant = {'id': user.id, 'display_name': user.username}
 
         participants.append(participant)
 

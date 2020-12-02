@@ -44,8 +44,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     {
                         'type': 'connection.error',
                         'payload': {
-                            "sender": "Server",
-                            "reason": "You've been kicked out of the server because you connected somewhere else."
+                            'sender': 'Server',
+                            'reason': "You've been kicked out of the server because you connected somewhere else."
                         }
                     }
                 )

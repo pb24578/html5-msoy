@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AnonymousUser
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from rest.models import Room, User
