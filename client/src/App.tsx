@@ -10,6 +10,7 @@ import { loadSession } from './shared/user/actions';
 import { Header } from './components/header';
 import { Game } from './components/game';
 import { Toolbar } from './components/toolbar';
+import { About } from './components/about';
 import { Login } from './components/login';
 import { Signup } from './components/signup';
 import { Profile } from './components/profile';
@@ -67,6 +68,12 @@ const App = () => {
             <Route path={routes.index.pathname}>{client}</Route>
           </Switch>
           <Switch>
+            <Route path={routes.about.pathname}>
+              <Menu>
+                <MenuBar />
+                <About />
+              </Menu>
+            </Route>
             <Route path={routes.login.pathname}>
               <Menu>
                 <MenuBar />
