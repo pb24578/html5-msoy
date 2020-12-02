@@ -104,7 +104,7 @@ export const Chat = React.memo(() => {
             elements.push(
               <Message key={index} backgroundColor={backgroundColor}>
                 {message.message}
-                <MessageSender>{message.sender}</MessageSender>
+                <MessageSender>{message.sender.displayName}</MessageSender>
               </Message>,
             );
             return elements;

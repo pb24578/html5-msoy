@@ -1,6 +1,7 @@
 from django.dispatch import Signal, receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from rest.getters.user import get_display_name, get_id
 
 channel_layer = get_channel_layer()
 
@@ -21,10 +22,7 @@ def broadcast_participants(sender, channel_room, **kwargs):
         user = participant.user
 
         # format the participant's data
-        participant = {'id': 0, 'display_name': 'Anonymous'}
-        if user and user.is_authenticated:
-            participant = {'id': user.id, 'display_name': user.username}
-
+        participant = {'id': get_id(user), 'display_name': get_display_name(user)}
         participants.append(participant)
 
     # broadcast a signal with all of the participants

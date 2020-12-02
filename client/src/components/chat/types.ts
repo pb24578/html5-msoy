@@ -1,3 +1,5 @@
+import { Participant } from '../game/types';
+
 export interface Chat {
   messages: ChatMessage[];
 }
@@ -12,13 +14,13 @@ export interface SendChatMessage {
 export interface ReceiveChatMessage {
   type: string;
   payload: {
-    sender: string;
+    sender: Participant;
     message: string;
   };
 }
 
 export interface ChatMessage {
-  sender: string;
+  sender: Participant;
   message: string;
   backgroundColor?: string;
 }

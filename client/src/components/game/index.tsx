@@ -112,7 +112,10 @@ export const Game = React.memo(() => {
 
     socket.onclose = () => {
       const errorMessage: ChatMessage = {
-        sender: 'Server',
+        sender: {
+          id: 0,
+          displayName: 'Server',
+        },
         message: 'There was an issue connecting to the room. The server will redirect you elsewhere.',
         backgroundColor: theme.warningColors.primary,
       };

@@ -1,6 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
 from rest.models import Room
+from rest.getters.user import get_display_name, get_id
 from ..models import ChannelRoom
 import humps
 import json
@@ -89,15 +90,17 @@ class RoomConsumer(AsyncWebsocketConsumer):
             max_chars = 256
             message = message[0: max_chars]
 
-            def get_display_name():
-                return 'Anonymous' if self.scope['user'].is_anonymous else self.scope['user'].username
-            display_name = await sync_to_async(get_display_name)()
+            # receive the sender's information
+            sender = {
+                'id': await sync_to_async(get_id)(self.scope['user']),
+                'display_name': await sync_to_async(get_display_name)(self.scope['user']),
+            }
 
             await self.channel_layer.group_send(
                 self.group_name,
                 {
                     'type': 'message',
-                    'payload': {'sender': display_name, 'message': message}
+                    'payload': {'sender': sender, 'message': message}
                 }
             )
 
