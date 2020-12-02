@@ -4,7 +4,7 @@ import { Game, GameError, Participant, Room } from './types';
 export const initialState: Game = {
   error: null,
   room: {
-    id: 1,
+    id: 0,
     participants: [],
     socket: null,
   },

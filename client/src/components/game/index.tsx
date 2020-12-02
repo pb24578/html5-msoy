@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { ThemeContext } from 'styled-components';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
@@ -48,34 +48,43 @@ export const Game = React.memo(() => {
   const history = useHistory();
   const error = useSelector(getGameError);
   const { rootRoomId, session } = useSelector(getUser);
-  const { token } = session;
   const socket = useSelector(getRoomSocket);
   const theme = useContext(ThemeContext);
 
   // receive the room id that the user is connecting to
   const { id: paramRoomId } = useParams<RoomsRoutesProps>();
   const useRoomId = paramRoomId ? Number(paramRoomId) : rootRoomId;
-  const safeRoomId = rootRoomId || 1;
   const roomId = useRoomId || 1;
 
   /**
-   * When the component mounts or the user logs in, establish the new connection with the room.
+   * When the user moves between rooms, establish a new connection with the room.
+   * This only changes the room connection if the user is moving between rooms.
+   */
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (didMount.current) {
+      const isRoomPath = Boolean(paramRoomId);
+      const isIndexPath = location.pathname === routes.index.path;
+      if (isRoomPath || isIndexPath) {
+        connectToRoom(roomId);
+      }
+    }
+    didMount.current = true;
+  }, [roomId]);
+
+  /**
+   * When the user logs in, establish a new connection with the room.
    */
   useEffect(() => {
-    if (!(location.pathname === routes.index.path || paramRoomId)) {
-      // only change the room connection if the user is moving between rooms
-      return;
-    }
-
     if (localStorage.getItem(LocalStorage.Session)) {
       // wait until the user is authenticated to connect to the room in the URL
-      if (token) {
+      if (session.token) {
         connectToRoom(roomId);
       }
     } else {
       connectToRoom(roomId);
     }
-  }, [roomId, token]);
+  }, [session]);
 
   /**
    * Listen to messages when the socket is established.
@@ -107,7 +116,7 @@ export const Game = React.memo(() => {
         backgroundColor: theme.warningColors.primary,
       };
       dispatch(addMessage(errorMessage));
-      history.push(`${routes.rooms.path}/${safeRoomId}`);
+      history.push(routes.index.path);
     };
   }, [socket]);
 
