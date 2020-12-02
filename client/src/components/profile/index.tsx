@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
 import { getUser } from '../../shared/user/selectors';
 import { FlexRow, FlexColumn } from '../../shared/styles/flex';
+import { fetchProfile } from './selectors';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
@@ -24,6 +25,7 @@ const ProfileLink = styled(Link)`
 `;
 
 export const Profile = React.memo(() => {
+  const profile = useSelector(fetchProfile);
   const { displayName, redirectRoomId } = useSelector(getUser);
 
   return (

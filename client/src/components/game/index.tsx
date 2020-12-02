@@ -1,7 +1,8 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import routes, { RoomsRoutesProps } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
 import { FlexCenter, FlexRow } from '../../shared/styles/flex';
@@ -45,7 +46,6 @@ const Error = styled.div`
 export const Game = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const history = useHistory();
   const error = useSelector(getGameError);
   const { redirectRoomId, session } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
@@ -116,7 +116,7 @@ export const Game = React.memo(() => {
         backgroundColor: theme.warningColors.primary,
       };
       dispatch(addMessage(errorMessage));
-      history.push(routes.index.path);
+      dispatch(replace(routes.index.path));
     };
   }, [socket]);
 

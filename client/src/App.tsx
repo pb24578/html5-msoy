@@ -1,6 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import styled from 'styled-components';
+import { history } from './store';
 import Theme from './shared/styles/theme';
 import { FlexRow, FlexColumn } from './shared/styles/flex';
 import routes from './shared/routes';
@@ -55,7 +57,7 @@ const App = () => {
   );
 
   return (
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <Theme>
         <Header />
         <FlexRow>
@@ -82,7 +84,7 @@ const App = () => {
           </Switch>
         </FlexRow>
       </Theme>
-    </BrowserRouter>
+    </ConnectedRouter>
   );
 };
 
