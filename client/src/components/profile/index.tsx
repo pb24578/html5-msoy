@@ -9,7 +9,7 @@ import { fetchProfile } from './selectors';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
-  height: 100%;
+  height: 80vh;
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 

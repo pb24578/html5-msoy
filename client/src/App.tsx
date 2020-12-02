@@ -13,6 +13,7 @@ import { Toolbar } from './components/toolbar';
 import { Login } from './components/login';
 import { Signup } from './components/signup';
 import { Profile } from './components/profile';
+import { MenuBar } from './shared/menu-bar';
 
 /**
  * The client component will take the entire screen
@@ -68,16 +69,19 @@ const App = () => {
           <Switch>
             <Route path={routes.login.pathname}>
               <Menu>
+                <MenuBar />
                 <Login />
               </Menu>
             </Route>
             <Route path={routes.signup.pathname}>
               <Menu>
+                <MenuBar />
                 <Signup />
               </Menu>
             </Route>
             <Route path={`${routes.profiles.pathname}${routes.profiles.params}`}>
               <Menu>
+                <MenuBar />
                 <Profile />
               </Menu>
             </Route>
