@@ -11,10 +11,11 @@ const Container = styled(FlexColumn)`
 export const About = React.memo(() => (
   <Container>
     <h3>Thanks to these people for contributing :)</h3>
-    <p>Haze (Manager)</p>
+    <p>Haze (Project Manager)</p>
     <p>aaaa (Artist)</p>
     <p>Zahreik (Artist)</p>
     <p>Cactus (Server Provider)</p>
     <p>Snah (Unofficially Shadowsych&apos;s Test Dummy)</p>
+    <p>608 (Unofficially Shadowsych&apos;s Bug Hunter)</p>
   </Container>
 ));
