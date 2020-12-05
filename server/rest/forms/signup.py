@@ -3,9 +3,10 @@ from ..models import User
 
 
 class SignupForm(forms.Form):
-    username = forms.CharField(required=True, min_length=4, error_messages={
+    username = forms.CharField(required=True, min_length=4, max_length=16, error_messages={
         "required": "The username field is blank.",
         "min_length": "The username is not long enough.",
+        "max_length": "The username is too long."
     })
     email = forms.EmailField(required=True, error_messages={
         "required": "The email field is blank.",
