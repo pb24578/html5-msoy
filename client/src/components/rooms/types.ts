@@ -5,3 +5,9 @@ export interface Room {
   name: string;
   owner: Profile;
 }
+
+export interface Rooms {
+  active: Room[];
+  new: Room[];
+  featured: Room[];
+}

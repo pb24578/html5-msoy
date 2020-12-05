@@ -1,10 +1,10 @@
 import { RestURI } from '../../../shared/constants';
-import { Room } from '../types';
+import { Rooms } from '../types';
 
 /**
- * Returns the rooms that are popular or new.
+ * Returns the relevant rooms.
  */
-export const fetchRooms = async (): Promise<Room> => {
+export const fetchRooms = async (): Promise<Rooms> => {
   const url = `${RestURI}/rooms`;
   const resp = await fetch(url, {
     method: 'GET',
