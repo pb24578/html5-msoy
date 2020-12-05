@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
-import { getUser } from '../../shared/user/selectors';
 import { FlexRow, FlexColumn } from '../../shared/styles/flex';
-import { fetchProfile } from './selectors';
+import { getProfile, getProfileError } from './selectors';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
@@ -24,9 +23,34 @@ const ProfileLink = styled(Link)`
   text-decoration: none;
 `;
 
+const Loading = styled.div`
+  color: ${(props) => props.theme.colors.primary};
+  font-weight: bold;
+`;
+
+const Error = styled.div`
+  color: ${(props) => props.theme.errorColors.secondary};
+  font-weight: bold;
+`;
+
 export const Profile = React.memo(() => {
-  const profile = useSelector(fetchProfile);
-  const { displayName, redirectRoomId } = useSelector(getUser);
+  const profile = useSelector(getProfile);
+  const profileError: Error = useSelector(getProfileError);
+  if (!profile) {
+    if (profileError) {
+      return (
+        <Container>
+          <Error>{profileError.message}</Error>
+        </Container>
+      );
+    }
+    return (
+      <Container>
+        <Loading>Loading...</Loading>
+      </Container>
+    );
+  }
+  const { displayName, redirectRoomId } = profile;
 
   return (
     <Container>

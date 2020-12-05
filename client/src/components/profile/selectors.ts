@@ -1,13 +1,15 @@
 import { createAsyncSelectorResults } from 'async-selector-kit';
 import { getProfilesMatch, ProfilesMatch } from '../../shared/routes';
+import { fetchProfile } from './api';
 
-export const [fetchProfile] = createAsyncSelectorResults(
+export const [getProfile, isProfileLoading, getProfileError] = createAsyncSelectorResults(
   {
-    id: 'fetch-profile',
+    id: 'get-profile',
     async: async (profilesMatch: ProfilesMatch) => {
       if (!profilesMatch || !profilesMatch.params || !profilesMatch.params.id) return null;
       const profileId = Number(profilesMatch.params.id);
-      return profileId;
+      const profile = await fetchProfile(profileId);
+      return profile;
     },
     defaultValue: null,
   },

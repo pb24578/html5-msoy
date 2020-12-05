@@ -33,3 +33,26 @@ class UserSerializer(serializers.ModelSerializer):
         except:
             return
         return root_room.id
+
+class ProfileSerializer(serializers.ModelSerializer):
+    display_name = serializers.SerializerMethodField('get_display_name')
+    redirect_room_id = serializers.SerializerMethodField('get_redirect_room_id')
+
+    class Meta:
+        model = User
+        fields = ['id', 'display_name', 'redirect_room_id']
+
+    def get_display_name(self, obj):
+        try:
+            user = User.objects.get(id=obj.id)
+        except:
+            return
+        return user.username
+
+    def get_redirect_room_id(self, obj):
+        try:
+            root_room = Room.objects.get(user__id=obj.id, root=True)
+        except:
+            return
+        return root_room.id
+
