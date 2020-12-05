@@ -30,5 +30,3 @@ Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
 - Make world width equal to the width of the background the user uploads.
 - Disable wheel.
 - Set clamp to true, clamp both x and y so the user cannot view passed it.
-
-Use https://django-channels-presence.readthedocs.io/en/latest/index.html to keep track of players in rooms.
