@@ -44,11 +44,7 @@ export const Profile = React.memo(() => {
         </Container>
       );
     }
-    return (
-      <Container>
-        <Loading>Loading...</Loading>
-      </Container>
-    );
+    return <Container />;
   }
   const { displayName, redirectRoomId } = profile;
 
