@@ -116,7 +116,6 @@ export const Chat = React.memo(() => {
             const participant = message.sender;
             const { displayName } = message.sender;
             const onClick = () => openPopover(participant);
-
             elements.push(
               <Message key={index} backgroundColor={backgroundColor}>
                 {message.message}
