@@ -95,7 +95,12 @@ export const Chat = React.memo(() => {
     }
   }, [messages]);
 
-  const openPopover = (participant: Participant) => {
+  /**
+   * Opens a popover to view interactions to perform with a participant.
+   *
+   * @param participant The participant that this user wants to interact with.
+   */
+  const openInteractions = (participant: Participant) => {
     dispatch(push(`${routes.profiles.pathname}/${participant.id}`));
   };
 
@@ -104,7 +109,7 @@ export const Chat = React.memo(() => {
       <UsersTitle>Users Online</UsersTitle>
       <UsersList>
         {participants.map((participant, index) => (
-          <ChatParticipant key={index} onClick={() => openPopover(participant)}>
+          <ChatParticipant key={index} onClick={() => openInteractions(participant)}>
             {participant.displayName}
           </ChatParticipant>
         ))}
@@ -115,7 +120,7 @@ export const Chat = React.memo(() => {
             const backgroundColor = message.backgroundColor || theme.darkerColors.primary;
             const participant = message.sender;
             const { displayName } = message.sender;
-            const onClick = () => openPopover(participant);
+            const onClick = () => openInteractions(participant);
             elements.push(
               <Message key={index} backgroundColor={backgroundColor}>
                 {message.message}
