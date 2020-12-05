@@ -14,6 +14,7 @@ import { About } from './components/about';
 import { Login } from './components/login';
 import { Signup } from './components/signup';
 import { Profile } from './components/profile';
+import { Rooms } from './components/rooms';
 import { MenuBar } from './shared/menu-bar';
 
 /**
@@ -90,6 +91,12 @@ const App = () => {
               <Menu>
                 <MenuBar />
                 <Profile />
+              </Menu>
+            </Route>
+            <Route exact path={routes.rooms.pathname}>
+              <Menu>
+                <MenuBar />
+                <Rooms />
               </Menu>
             </Route>
           </Switch>

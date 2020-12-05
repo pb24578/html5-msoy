@@ -37,12 +37,16 @@ const AccountLink = styled(Link)`
 
 const Tabs = styled(FlexRow)``;
 
-const TabLink = styled(FlexCenter)`
+const TabLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0px 16px;
   padding: 6px;
   width: 64px;
   color: ${(props) => props.theme.colors.secondary};
   background-color: ${(props) => props.theme.colors.primary};
+  text-decoration: none;
   cursor: pointer;
 `;
 
@@ -78,12 +82,12 @@ export const Header = React.memo(() => {
           {accountLinks}
         </Account>
         <Tabs>
-          <TabLink>Me</TabLink>
-          <TabLink>Stuff</TabLink>
-          <TabLink>Games</TabLink>
-          <TabLink>Rooms</TabLink>
-          <TabLink>Groups</TabLink>
-          <TabLink>Shop</TabLink>
+          <TabLink to="#">Me</TabLink>
+          <TabLink to="#">Stuff</TabLink>
+          <TabLink to="#">Games</TabLink>
+          <TabLink to={routes.rooms.pathname}>Rooms</TabLink>
+          <TabLink to="#">Groups</TabLink>
+          <TabLink to="#">Shop</TabLink>
         </Tabs>
       </Navigation>
     </Container>
