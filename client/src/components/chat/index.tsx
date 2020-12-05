@@ -1,7 +1,10 @@
 import React, { createRef, useContext, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
+import routes from '../../shared/routes';
 import { FlexColumn } from '../../shared/styles/flex';
+import { Participant } from '../game/types';
 import { getMessages, getParticipants } from './selectors';
 
 const Container = styled(FlexColumn)`
@@ -25,8 +28,9 @@ const UsersList = styled(FlexColumn)`
   background-color: ${(props) => props.theme.alphaColors.primary};
 `;
 
-const Participant = styled.div`
+const ChatParticipant = styled.div`
   margin: 2px;
+  cursor: pointer;
 `;
 
 /**
@@ -67,9 +71,11 @@ const MessageSender = styled.div`
   border-radius: 8px;
   background-color: ${(props) => props.theme.colors.secondary};
   font-size: 12px;
+  cursor: pointer;
 `;
 
 export const Chat = React.memo(() => {
+  const dispatch = useDispatch();
   const messages = useSelector(getMessages);
   const participants = useSelector(getParticipants);
   const theme = useContext(ThemeContext);
@@ -89,22 +95,32 @@ export const Chat = React.memo(() => {
     }
   }, [messages]);
 
+  const openPopover = (participant: Participant) => {
+    dispatch(push(`${routes.profiles.pathname}/${participant.id}`));
+  };
+
   return (
     <Container>
       <UsersTitle>Users Online</UsersTitle>
       <UsersList>
         {participants.map((participant, index) => (
-          <Participant key={index}>{participant.displayName}</Participant>
+          <ChatParticipant key={index} onClick={() => openPopover(participant)}>
+            {participant.displayName}
+          </ChatParticipant>
         ))}
       </UsersList>
       <ChatHistoryOverflow>
         <ChatHistory ref={chatRef}>
           {messages.reduceRight((elements, message, index) => {
             const backgroundColor = message.backgroundColor || theme.darkerColors.primary;
+            const participant = message.sender;
+            const { displayName } = message.sender;
+            const onClick = () => openPopover(participant);
+
             elements.push(
               <Message key={index} backgroundColor={backgroundColor}>
                 {message.message}
-                <MessageSender>{message.sender.displayName}</MessageSender>
+                <MessageSender onClick={onClick}>{displayName}</MessageSender>
               </Message>,
             );
             return elements;
