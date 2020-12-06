@@ -45,6 +45,7 @@ const PixiAppContainer = styled.div`
 
 const ErrorContainer = styled(FlexCenter)`
   width: 100%;
+  height: 87.5vh;
 `;
 
 const Error = styled.div`
@@ -149,11 +150,9 @@ export const World = React.memo(() => {
 
   if (error) {
     return (
-      <Container>
-        <ErrorContainer>
-          <Error>{error.reason}</Error>
-        </ErrorContainer>
-      </Container>
+      <ErrorContainer>
+        <Error>{error.reason}</Error>
+      </ErrorContainer>
     );
   }
 

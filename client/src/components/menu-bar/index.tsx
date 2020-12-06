@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { replace } from 'connected-react-router';
 import { Close } from '@styled-icons/material';
-import routes from '../routes';
-import { FlexRow } from '../styles/flex';
-import { getRoomId } from '../../components/world/selectors';
+import routes from '../../shared/routes';
+import { FlexRow } from '../../shared/styles/flex';
+import { getRoomId } from '../world/selectors';
 
 const Container = styled(FlexRow)`
   align-items: center;

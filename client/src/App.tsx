@@ -14,7 +14,7 @@ import { Login } from './components/login';
 import { Signup } from './components/signup';
 import { Profile } from './components/profile';
 import { Rooms } from './components/rooms';
-import { MenuBar } from './shared/menu-bar';
+import { MenuBar } from './components/menu-bar';
 
 /**
  * The client component will take the entire screen
