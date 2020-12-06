@@ -3,6 +3,7 @@ import { Profile } from '../profile/types';
 export interface Room {
   id: number;
   name: string;
+  online: number;
   owner: Profile;
 }
 

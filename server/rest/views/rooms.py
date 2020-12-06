@@ -25,9 +25,9 @@ class RoomsView(APIView):
         new_rooms_serializer = RoomSerializer(rooms, many=True)
 
         return Response(
-            {
+            humps.camelize({
                 "active": active_rooms_serializer.data,
                 "new": new_rooms_serializer.data,
                 "featured": [],
-            }
+            })
         )
