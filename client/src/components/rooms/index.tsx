@@ -10,7 +10,7 @@ import { getRooms } from './selectors';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
-  height: 80vh;
+  height: 82.5vh;
   overflow-y: auto;
   background-color: ${(props) => props.theme.colors.secondary};
 `;

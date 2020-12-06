@@ -4,7 +4,7 @@ import { FlexColumn } from '../../shared/styles/flex';
 
 const Container = styled(FlexColumn)`
   padding: 8px;
-  height: 80vh;
+  height: 82.5vh;
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 

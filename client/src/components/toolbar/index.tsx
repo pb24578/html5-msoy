@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { VolumeUp, People, MeetingRoom } from '@styled-icons/material';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
 import { getRoomSocket } from '../world/selectors';
 import { SendChatMessage } from '../chat/types';
@@ -33,7 +34,10 @@ const Utilities = styled(FlexRow)`
 `;
 
 const Utility = styled.div`
-  margin: 0px 4px;
+  margin: 0px 8px;
+  width: 24px;
+  height: 24px;
+  color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
 `;
 
@@ -84,9 +88,15 @@ export const Toolbar = React.memo(() => {
         <SendButton onClick={onSendMessage}>Send</SendButton>
       </ChatBox>
       <Utilities>
-        <Utility>Volume</Utility>
-        <Utility>Friends</Utility>
-        <Utility>Room</Utility>
+        <Utility>
+          <VolumeUp />
+        </Utility>
+        <Utility>
+          <People />
+        </Utility>
+        <Utility>
+          <MeetingRoom />
+        </Utility>
       </Utilities>
     </Container>
   );

@@ -22,7 +22,7 @@ const UsersList = styled(FlexColumn)`
   flex: 0.15;
   margin-bottom: 8px;
   padding: 4px;
-  max-width: 50%;
+  max-width: 65%;
   overflow-y: auto;
   overflow-x: auto;
   background-color: ${(props) => props.theme.alphaColors.primary};
