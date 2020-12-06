@@ -29,10 +29,10 @@ export const MenuBar = React.memo(() => {
   const roomId = useSelector(getRoomId);
 
   /**
-   * When closing the menu bar, go to the room that the user is in right now.
+   * When closing the menu bar, go to the world that the user is in right now.
    */
   const onClickClose = () => {
-    dispatch(replace(`${routes.rooms.pathname}/${roomId}`));
+    dispatch(replace(`${routes.worlds.pathname}/${roomId}`));
   };
 
   return <Container>{roomId && <CloseIcon onClick={onClickClose} />}</Container>;
