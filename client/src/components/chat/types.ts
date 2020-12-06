@@ -1,4 +1,4 @@
-import { Participant } from '../game/types';
+import { Participant } from '../world/types';
 
 export interface Chat {
   messages: ChatMessage[];

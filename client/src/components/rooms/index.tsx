@@ -58,7 +58,7 @@ interface RoomComponentProps {
 const RoomComponent = (props: RoomComponentProps) => {
   const { room } = props;
   const dispatch = useDispatch();
-  const goToRoom = () => dispatch(replace(`${routes.rooms.pathname}/${room.id}`));
+  const goToRoom = () => dispatch(replace(`${routes.worlds.pathname}/${room.id}`));
   const goToOwnerProfile = () => dispatch(replace(`${routes.profiles.pathname}/${room.owner.id}`));
   return (
     <RoomDisplay>

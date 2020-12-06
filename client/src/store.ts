@@ -4,7 +4,7 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { applyMiddleware, createStore, combineReducers } from '@reduxjs/toolkit';
 
 import { reducer as ChatReducer } from './components/chat/reducer';
-import { reducer as GameReducer } from './components/game/reducer';
+import { reducer as WorldReducer } from './components/world/reducer';
 import { reducer as UserReducer } from './shared/user/reducer';
 
 export const history = createBrowserHistory();
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   AsyncSelectorKit: createReducer(),
   router: connectRouter(history),
   chat: ChatReducer,
-  game: GameReducer,
+  world: WorldReducer,
   user: UserReducer,
 });
 

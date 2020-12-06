@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import routes, { getRoomsMatch, RoomsMatch } from '../../shared/routes';
+import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
 import { FlexCenter, FlexRow } from '../../shared/styles/flex';
 import { getUser } from '../../shared/user/selectors';
@@ -12,12 +12,12 @@ import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { actions } from './reducer';
-import { getGameError, getRoomId, getRoomSocket } from './selectors';
+import { getWorldError, getRoomId, getRoomSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
 import { isConnectionError, isReceiveParticipants } from './types';
 
 const { addMessage } = chatActions;
-const { setGameError, setParticipants } = actions;
+const { setWorldError, setParticipants } = actions;
 
 const Container = styled(FlexRow)`
   padding: 8px;
@@ -43,18 +43,18 @@ const Error = styled.div`
   font-weight: bold;
 `;
 
-export const Game = React.memo(() => {
+export const World = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const error = useSelector(getGameError);
+  const error = useSelector(getWorldError);
   const { redirectRoomId, session } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
   const socket = useSelector(getRoomSocket);
   const theme = useContext(ThemeContext);
 
   // receive the room id that the user is connecting to
-  const roomsMatch: RoomsMatch = useSelector(getRoomsMatch);
-  const paramRoomId = roomsMatch?.params.id;
+  const worldsMatch: WorldsMatch = useSelector(getWorldsMatch);
+  const paramRoomId = worldsMatch?.params.id;
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
 
   /**
@@ -64,9 +64,9 @@ export const Game = React.memo(() => {
   const didMount = useRef(false);
   useEffect(() => {
     if (didMount.current && currentRoomId !== roomId) {
-      const isRoomPath = Boolean(paramRoomId);
+      const isWorldPath = Boolean(paramRoomId);
       const isIndexPath = location.pathname === routes.index.pathname;
-      if (isRoomPath || isIndexPath) {
+      if (isWorldPath || isIndexPath) {
         connectToRoom(roomId);
       }
     }
@@ -106,7 +106,7 @@ export const Game = React.memo(() => {
 
       if (isConnectionError(data)) {
         disconnectFromRoom();
-        dispatch(setGameError(data.payload));
+        dispatch(setWorldError(data.payload));
       }
     };
 

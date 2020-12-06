@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
 import routes from '../../shared/routes';
 import { FlexColumn } from '../../shared/styles/flex';
-import { Participant } from '../game/types';
+import { Participant } from '../world/types';
 import { getMessages, getParticipants } from './selectors';
 
 const Container = styled(FlexColumn)`

@@ -12,7 +12,7 @@ export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFrom
   id: 'disconnect-from-room',
   async: (store, status) => async () => {
     const state = store.getState() as IState;
-    const { socket } = state.game.room;
+    const { socket } = state.world.room;
     if (socket) {
       socket.onclose = null;
       socket.close();

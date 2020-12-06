@@ -8,7 +8,7 @@ import { FlexRow, FlexColumn } from './shared/styles/flex';
 import routes from './shared/routes';
 import { loadSession } from './shared/user/actions';
 import { Header } from './components/header';
-import { Game } from './components/game';
+import { World } from './components/world';
 import { Toolbar } from './components/toolbar';
 import { About } from './components/about';
 import { Login } from './components/login';
@@ -54,7 +54,7 @@ const App = () => {
 
   const client = (
     <Client>
-      <Game />
+      <World />
       <Toolbar />
     </Client>
   );
@@ -65,7 +65,7 @@ const App = () => {
         <Header />
         <FlexRow>
           <Switch>
-            <Route path={`${routes.rooms.pathname}${routes.rooms.params}`}>{client}</Route>
+            <Route path={`${routes.worlds.pathname}${routes.worlds.params}`}>{client}</Route>
             <Route path={routes.index.pathname}>{client}</Route>
           </Switch>
           <Switch>
@@ -93,7 +93,7 @@ const App = () => {
                 <Profile />
               </Menu>
             </Route>
-            <Route exact path={routes.rooms.pathname}>
+            <Route path={routes.rooms.pathname}>
               <Menu>
                 <MenuBar />
                 <Rooms />

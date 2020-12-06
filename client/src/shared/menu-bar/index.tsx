@@ -5,7 +5,7 @@ import { replace } from 'connected-react-router';
 import { Close } from '@styled-icons/material';
 import routes from '../routes';
 import { FlexRow } from '../styles/flex';
-import { getRoomId } from '../../components/game/selectors';
+import { getRoomId } from '../../components/world/selectors';
 
 const Container = styled(FlexRow)`
   align-items: center;

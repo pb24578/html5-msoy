@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
-import { getRoomSocket } from '../game/selectors';
+import { getRoomSocket } from '../world/selectors';
 import { SendChatMessage } from '../chat/types';
 
 const Container = styled(FlexRow)`

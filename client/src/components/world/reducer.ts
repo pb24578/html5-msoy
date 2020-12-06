@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Game, GameError, Participant, Room } from './types';
+import { World, WorldError, Participant, Room } from './types';
 
-export const initialState: Game = {
+export const initialState: World = {
   error: null,
   room: {
     id: 0,
@@ -11,10 +11,10 @@ export const initialState: Game = {
 };
 
 const slice = createSlice({
-  name: 'Game',
+  name: 'world',
   initialState,
   reducers: {
-    setGameError: (state, action: PayloadAction<GameError>) => {
+    setWorldError: (state, action: PayloadAction<WorldError>) => {
       state.error = action.payload;
     },
     setParticipants: (state, action: PayloadAction<Participant[]>) => {

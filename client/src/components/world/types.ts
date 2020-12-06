@@ -1,6 +1,6 @@
-export interface Game {
+export interface World {
   room: Room;
-  error: GameError | null;
+  error: WorldError | null;
 }
 
 export interface Room {
@@ -9,7 +9,7 @@ export interface Room {
   socket: WebSocket | null;
 }
 
-export interface GameError {
+export interface WorldError {
   sender: string;
   reason: string;
 }

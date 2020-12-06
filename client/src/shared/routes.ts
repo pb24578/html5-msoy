@@ -20,14 +20,17 @@ const routes = {
   },
   rooms: {
     pathname: '/rooms',
+  },
+  worlds: {
+    pathname: '/worlds',
     params: '/:id',
   },
 };
 
 export default routes;
 
-export type RoomsMatch = match<{ id?: string }> | null;
-export const getRoomsMatch = createMatchSelector(`${routes.rooms.pathname}${routes.rooms.params}`);
+export type WorldsMatch = match<{ id?: string }> | null;
+export const getWorldsMatch = createMatchSelector(`${routes.worlds.pathname}${routes.worlds.params}`);
 
 export type ProfilesMatch = match<{ id?: string }> | null;
 export const getProfilesMatch = createMatchSelector(`${routes.profiles.pathname}${routes.profiles.params}`);
