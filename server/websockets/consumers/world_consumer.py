@@ -7,10 +7,10 @@ import humps
 import json
 
 
-class RoomConsumer(AsyncWebsocketConsumer):
+class WorldConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         """
-        Authenticates the user that is attempting to connect to this room.
+        Authenticates the user that is attempting to connect to this world.
         """
 
         self.group_id = self.scope['url_route']['kwargs']['id']
@@ -56,7 +56,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         """
-        Disconnects the user session from the room.
+        Disconnects the user session from the world.
         """
 
         await sync_to_async(ChannelRoom.objects.remove)(self.group_name, self.channel_name)
@@ -65,8 +65,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         """
-        Handles a message sent in this room, and sends it to the
-        other users also connected in the room.
+        Handles a message sent in this world, and sends it to the
+        other users also connected in the world.
         """
 
         json_data = json.loads(text_data)

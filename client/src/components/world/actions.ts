@@ -31,9 +31,9 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
       disconnectFromRoom();
 
       /**
-       * Establish a new connection to this room.
+       * Establish a new connection to this world's room.
        */
-      const socket = new WebSocket(`${SocketURI}/room/${id}?token=${token}`);
+      const socket = new WebSocket(`${SocketURI}/worlds/${id}?token=${token}`);
       const room: Room = {
         id,
         participants: [],

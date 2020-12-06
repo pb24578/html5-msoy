@@ -1,6 +1,6 @@
 from django.urls import path
 from .models import ChannelRoom, Participant
-from .consumers import RoomConsumer
+from .consumers import WorldConsumer
 
 
 def on_startup():
@@ -16,5 +16,5 @@ def on_startup():
 on_startup()
 
 websocket_urlpatterns = [
-    path('room/<int:id>', RoomConsumer)
+    path('worlds/<int:id>', WorldConsumer)
 ]
