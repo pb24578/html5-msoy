@@ -10,6 +10,10 @@ channel_layer = get_channel_layer()
 
 class ChannelRoomManager(models.Manager):
     def add(self, room_id, room_channel_name, user_channel_name, user=None):
+        """
+        Creates a new room if it doesn't exist, then adds a new channel into the room.
+        """
+
         try:
             room = Room.objects.get(id=room_id)
             channel_room, created = ChannelRoom.objects.get_or_create(channel_name=room_channel_name, room=room)
@@ -19,6 +23,10 @@ class ChannelRoomManager(models.Manager):
         return channel_room
 
     def remove(self, room_channel_name, user_channel_name):
+        """
+        Removes a channel (using its channel name) from the room.
+        """
+
         try:
             channel_room = ChannelRoom.objects.get(channel_name=room_channel_name)
         except ChannelRoom.DoesNotExist:
@@ -38,6 +46,10 @@ class ChannelRoom(models.Model):
         return str(self.room)
 
     def add_participant(self, channel_name, user=None):
+        """
+        Adds a new channel into the room.
+        """
+
         if user and user.is_authenticated:
             authed_user = user
         else:
@@ -52,6 +64,10 @@ class ChannelRoom(models.Model):
             self.broadcast_changed(added=True)
 
     def remove_participant(self, channel_name=None, participant=None):
+        """
+        Removes an existing channel from the room.
+        """
+        
         if participant is None:
             try:
                 participant = Participant.objects.get(channel_room=self, channel_name=channel_name)
@@ -64,15 +80,31 @@ class ChannelRoom(models.Model):
         self.prune_room()
 
     def get_users(self):
+        """
+        Returns all of the authenticated users in this room. This does not include anonymous users.
+        """
+
         return User.objects.filter(participant__room=self).distinct()
 
     def get_anonymous_count(self):
+        """
+        Returns the number of anonymous users in this room.
+        """
+
         return self.participant_set.filter(user=None).count()
 
     def get_participants(self):
+        """
+        Returns all of the participants in this room.
+        """
+
         return Participant.objects.filter(channel_room=self).distinct()
 
     def get_duplicate_participants(self, channel_name, user=None):
+        """
+        Returns all of the participants in this room with the same user.
+        """
+
         if not user or user.is_anonymous:
             return
 
@@ -80,7 +112,7 @@ class ChannelRoom(models.Model):
 
     def prune_room(self):
         """
-        If no more participants exist in this room, then delete it.
+        Deletes the room if no more participants exist in this room.
         """
 
         participants_count = self.get_participants().count()
@@ -88,6 +120,11 @@ class ChannelRoom(models.Model):
             self.delete()
 
     def broadcast_changed(self, added=False, removed=False):
+        """
+        Broadcasts that the participants have changed to the entire room.
+        This should be called whenever participants are either added or removed from the room.
+        """
+
         participants_changed.send(
             sender=self.__class__,
             channel_room=self,
