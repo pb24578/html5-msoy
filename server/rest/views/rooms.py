@@ -14,13 +14,13 @@ class RoomsView(APIView):
     def get(self, request):
         max_rooms = 24
 
-        # receive the most active rooms in ascending order
+        # receive the most active rooms in descending order
         rooms = sorted(ChannelRoom.objects.all(), key=lambda r: r.get_participants().count(), reverse=True)
         rooms = rooms[:max_rooms]
         rooms = list(map(lambda r: r.room, rooms))
         active_rooms_serializer = RoomSerializer(rooms, many=True)
 
-        # receive the newest rooms in ascending order
+        # receive the newest rooms in descending order
         rooms = Room.objects.all().order_by('-id')[:max_rooms]
         new_rooms_serializer = RoomSerializer(rooms, many=True)
 
