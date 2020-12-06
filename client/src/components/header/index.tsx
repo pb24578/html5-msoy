@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
 import { AppName } from '../../shared/constants';
-import { FlexRow, FlexColumn, FlexCenter } from '../../shared/styles/flex';
+import { FlexRow, FlexColumn } from '../../shared/styles/flex';
 import { logout } from '../../shared/user/actions';
 import { getUser } from '../../shared/user/selectors';
 

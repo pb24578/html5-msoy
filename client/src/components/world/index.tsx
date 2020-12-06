@@ -5,12 +5,13 @@ import styled, { ThemeContext } from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
-import { FlexCenter, FlexRow } from '../../shared/styles/flex';
+import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
 import { getUser } from '../../shared/user/selectors';
 import { resizePixiApp, appDOMId } from '../../shared/pixi';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
+import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
 import { getWorldError, getRoomId, getRoomSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
@@ -19,8 +20,16 @@ import { isConnectionError, isReceiveParticipants } from './types';
 const { addMessage } = chatActions;
 const { setWorldError, setParticipants } = actions;
 
-const Container = styled(FlexRow)`
-  padding: 8px;
+const Container = styled(FlexColumn)`
+  padding-right: 8px;
+`;
+
+const ToolbarContainer = styled(FlexRow)`
+  align-items: flex-end;
+  height: 7.5vh;
+`;
+
+const GameContainer = styled(FlexRow)`
   height: 80vh;
 `;
 
@@ -150,10 +159,15 @@ export const World = React.memo(() => {
 
   return (
     <Container>
-      <ChatContainer>
-        <Chat />
-      </ChatContainer>
-      <PixiAppContainer id={appDOMId} />
+      <GameContainer>
+        <ChatContainer>
+          <Chat />
+        </ChatContainer>
+        <PixiAppContainer id={appDOMId} />
+      </GameContainer>
+      <ToolbarContainer>
+        <Toolbar />
+      </ToolbarContainer>
     </Container>
   );
 });

@@ -7,7 +7,7 @@ import { SendChatMessage } from '../chat/types';
 
 const Container = styled(FlexRow)`
   align-items: center;
-  height: 5vh;
+  width: 100%;
 `;
 
 const ChatBox = styled(FlexCenter)`

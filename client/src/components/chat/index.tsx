@@ -22,7 +22,7 @@ const UsersList = styled(FlexColumn)`
   flex: 0.15;
   margin-bottom: 8px;
   padding: 4px;
-  max-width: 200px;
+  max-width: 50%;
   overflow-y: auto;
   overflow-x: auto;
   background-color: ${(props) => props.theme.alphaColors.primary};
@@ -54,7 +54,7 @@ interface MessageProps {
 
 const Message = styled.div<MessageProps>`
   position: relative;
-  margin-bottom: 36px;
+  margin-bottom: 32px;
   padding: 8px;
   width: 80%;
   word-wrap: break-word;

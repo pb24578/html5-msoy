@@ -9,7 +9,6 @@ import routes from './shared/routes';
 import { loadSession } from './shared/user/actions';
 import { Header } from './components/header';
 import { World } from './components/world';
-import { Toolbar } from './components/toolbar';
 import { About } from './components/about';
 import { Login } from './components/login';
 import { Signup } from './components/signup';
@@ -52,21 +51,22 @@ const App = () => {
    */
   loadSession();
 
-  const client = (
-    <Client>
-      <World />
-      <Toolbar />
-    </Client>
-  );
-
   return (
     <ConnectedRouter history={history}>
       <Theme>
         <Header />
         <FlexRow>
           <Switch>
-            <Route path={`${routes.worlds.pathname}${routes.worlds.params}`}>{client}</Route>
-            <Route path={routes.index.pathname}>{client}</Route>
+            <Route path={`${routes.worlds.pathname}${routes.worlds.params}`}>
+              <Client>
+                <World />
+              </Client>
+            </Route>
+            <Route path={routes.index.pathname}>
+              <Client>
+                <World />
+              </Client>
+            </Route>
           </Switch>
           <Switch>
             <Route path={routes.about.pathname}>
