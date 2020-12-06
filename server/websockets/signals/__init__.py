@@ -1,1 +1,1 @@
-from .room_signals import participants_changed
+from .world_signals import participants_changed

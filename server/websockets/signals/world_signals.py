@@ -14,7 +14,7 @@ participants_changed = Signal(
 @receiver(participants_changed)
 def broadcast_participants(sender, channel_room, **kwargs):
     """
-    Sends the updated list of participants to all of the users in this room.
+    Sends the updated list of participants to all of the users in this world.
     """
 
     participants = []
