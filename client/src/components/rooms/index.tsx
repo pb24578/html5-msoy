@@ -16,7 +16,7 @@ const Container = styled(FlexColumn)`
 `;
 
 const RoomDisplayTitle = styled.div`
-  color: ${(props) => props.theme.colors.quarternary};
+  color: ${(props) => props.theme.colors.quaternary};
   font-size: 24px;
 `;
 
@@ -41,7 +41,7 @@ const RoomImage = styled.img`
 `;
 
 const RoomText = styled.div`
-  color: ${(props) => props.theme.colors.quarternary};
+  color: ${(props) => props.theme.colors.quaternary};
   font-size: 16px;
   margin: 2px 0px;
 `;

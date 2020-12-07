@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 
-const mainTheme = {
+export const MainTheme = {
   colors: {
     primary: '#28acde',
     secondary: '#ffffff',
@@ -29,7 +29,7 @@ interface ThemeProps {
 
 const Theme = (props: ThemeProps) => {
   const { children } = props;
-  return <ThemeProvider theme={mainTheme}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={MainTheme}>{children}</ThemeProvider>;
 };
 
 export default Theme;
