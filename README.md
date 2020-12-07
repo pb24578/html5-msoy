@@ -43,6 +43,6 @@ Execute entity code (such as Avatar, Toys, etc.) in a WebWorker. You can post me
 is very helpful if you want to execute code at certain frames of the Sprite.
 - Ex: Execute a post message each frame on the AnimatedSprite's onFrameChange function.
   - If we cap the frames of an AnimatedSprite to 30 frames per second, then as long as the postMessage doesn't take more than ~33.3ms to send, then it will run each frame on time
-  - Require the creator to use a settings.json for each state or action folder, and in this settings it will specify which frames to post message onto
+  - Require the creator to create a settings object in the index.js file, which will specify which frames to register and listen for
   - https://surma.dev/things/is-postmessage-slow/ this article shows a graph of about how long postMessage takes based on the data being sent
 - https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage
