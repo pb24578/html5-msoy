@@ -1,6 +1,13 @@
+import * as PIXI from 'pixi.js-legacy';
+
 export interface World {
-  room: Room;
   error: WorldError | null;
+  pixi: Pixi;
+  room: Room;
+}
+
+export interface Pixi {
+  app: PIXI.Application;
 }
 
 export interface Room {

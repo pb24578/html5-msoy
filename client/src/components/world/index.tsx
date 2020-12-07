@@ -7,19 +7,18 @@ import * as PIXI from 'pixi.js-legacy';
 import { Jovial, PixiBackground } from '../../assets';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
-import { isSessionLoaded, getUser } from '../../shared/user/selectors';
-import app, { resizePixiApp } from '../../shared/pixi';
+import { getUser, isSessionLoaded } from '../../shared/user/selectors';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
-import { getWorldError, getRoomId, getRoomSocket } from './selectors';
+import { getPixiApp, getRoomId, getRoomSocket, getWorldError } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
 import { isConnectionError, isReceiveParticipants } from './types';
 
 const { addMessage } = chatActions;
-const { setWorldError, setParticipants } = actions;
+const { resizePixiApp, setWorldError, setParticipants } = actions;
 
 const Container = styled(FlexColumn)`
   padding-right: 8px;
@@ -58,6 +57,7 @@ export const World = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
   const error = useSelector(getWorldError);
+  const app = useSelector(getPixiApp);
   const sessionLoaded = useSelector(isSessionLoaded);
   const { displayName, redirectRoomId } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
@@ -79,7 +79,7 @@ export const World = React.memo(() => {
     if (!pixiRef.current || !sessionLoaded) return;
     pixiRef.current.append(app.view);
     app.stage.removeChildren();
-    resizePixiApp();
+    dispatch(resizePixiApp());
 
     // create the app's container
     const container = new PIXI.Container();
@@ -174,14 +174,14 @@ export const World = React.memo(() => {
    * Resize the Pixi App container whenever the route location changes.
    */
   useEffect(() => {
-    resizePixiApp();
+    dispatch(resizePixiApp());
   }, [location]);
 
   /**
    * Resize the Pixi App container whenever the window size changes.
    */
   window.onresize = () => {
-    resizePixiApp();
+    dispatch(resizePixiApp());
   };
 
   if (error) {
