@@ -70,7 +70,7 @@ export const World = React.memo(() => {
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
 
   /**
-   * Create a reference to the Pixi App container. Once the reference
+   * Creates a reference to the Pixi App container. Once the reference
    * has been created, then set the Pixi app's view to the container,
    * reset the Pixi app, and add this room's content onto the app.
    */
