@@ -5,7 +5,7 @@ export const initialState: User = {
   id: 0,
   redirectRoomId: 1,
   session: { token: null },
-  displayName: '',
+  displayName: 'Anonymous',
   username: '',
   email: '',
 };
