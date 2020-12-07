@@ -35,3 +35,8 @@ Compress sprite sheet images before uploading it to the server. Look at this Sta
 https://stackoverflow.com/questions/33077804/losslessly-compressing-images-on-django example
 to see how it's done in Django. This will significantly help improve load times whenever loading
 the sprite sheets. 
+
+Execute entity code (such as Avatar, Toys, etc.) in a WebWorker. You can post messages and receive messages from the main thread to the web worker and vice versa, which
+is very helpful if you want to execute code at certain frames of the Sprite.
+- Ex: Execute a post message each frame on the AnimatedSprite's onFrameChange function.
+- https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage
