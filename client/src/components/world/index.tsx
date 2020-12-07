@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
 import { useLocation } from 'react-router-dom';
+import * as PIXI from 'pixi.js-legacy';
+import { PixiBackground } from '../../assets';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
@@ -69,13 +71,34 @@ export const World = React.memo(() => {
 
   /**
    * Create a reference to the Pixi App container. Once the reference
-   * has been created, then add the Pixi app's view to the container.
+   * has been created, then set the Pixi app's view to the container
+   * and reset the Pixi app.
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
     if (pixiRef.current) {
       pixiRef.current.append(app.view);
+      app.stage.removeChildren();
       resizePixiApp();
+
+      // create the app's container
+      const container = new PIXI.Container();
+      app.stage.addChild(container);
+
+      // add the container's background
+      const background = PIXI.Sprite.from(PixiBackground);
+      background.width = app.screen.width;
+      background.height = app.screen.height;
+      container.addChild(background);
+
+      // add an example sprite onto the middle of the container
+      const sprite = PIXI.Sprite.from('https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png');
+      sprite.width = 84;
+      sprite.height = 84;
+      sprite.x = background.width / 2;
+      sprite.y = background.height / 2;
+      sprite.anchor.set(0.5);
+      container.addChild(sprite);
     }
   }, [pixiRef.current]);
 

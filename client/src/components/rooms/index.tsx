@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { replace } from 'connected-react-router';
 import styled from 'styled-components';
+import { PixiBackground } from '../../assets';
 import routes from '../../shared/routes';
 import { FlexColumn, FlexCenter, FlexRow } from '../../shared/styles/flex';
 import { chunkArray } from '../../shared/utils';
@@ -62,10 +63,7 @@ const RoomComponent = (props: RoomComponentProps) => {
   const goToOwnerProfile = () => dispatch(replace(`${routes.profiles.pathname}/${room.owner.id}`));
   return (
     <RoomDisplay>
-      <RoomImage
-        onClick={goToRoom}
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Solid_black.svg/240px-Solid_black.svg.png"
-      />
+      <RoomImage onClick={goToRoom} src={PixiBackground} />
       <RoomText>{room.name}</RoomText>
       <FlexCenter>
         <RoomText>Owner:&nbsp;</RoomText>
