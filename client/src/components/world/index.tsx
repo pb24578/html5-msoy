@@ -4,11 +4,10 @@ import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import * as PIXI from 'pixi.js-legacy';
-import { PixiBackground } from '../../assets';
+import { Jovial, PixiBackground } from '../../assets';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
-import { LocalStorage } from '../../shared/constants';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
-import { getUser } from '../../shared/user/selectors';
+import { isSessionLoaded, getUser } from '../../shared/user/selectors';
 import app, { resizePixiApp } from '../../shared/pixi';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
@@ -59,7 +58,8 @@ export const World = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
   const error = useSelector(getWorldError);
-  const { redirectRoomId, session } = useSelector(getUser);
+  const sessionLoaded = useSelector(isSessionLoaded);
+  const { displayName, redirectRoomId } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
   const socket = useSelector(getRoomSocket);
   const theme = useContext(ThemeContext);
@@ -76,31 +76,37 @@ export const World = React.memo(() => {
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
-    if (pixiRef.current) {
-      pixiRef.current.append(app.view);
-      app.stage.removeChildren();
-      resizePixiApp();
+    if (!pixiRef.current || !sessionLoaded) return;
+    pixiRef.current.append(app.view);
+    app.stage.removeChildren();
+    resizePixiApp();
 
-      // create the app's container
-      const container = new PIXI.Container();
-      app.stage.addChild(container);
+    // create the app's container
+    const container = new PIXI.Container();
+    app.stage.addChild(container);
 
-      // add the container's background
-      const background = PIXI.Sprite.from(PixiBackground);
-      background.width = app.screen.width;
-      background.height = app.screen.height;
-      container.addChild(background);
+    // add the container's background
+    const background = PIXI.Sprite.from(PixiBackground);
+    background.width = app.screen.width;
+    background.height = app.screen.height;
+    container.addChild(background);
 
-      // add an example sprite onto the middle of the container
-      const sprite = PIXI.Sprite.from('https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png');
-      sprite.width = 84;
-      sprite.height = 84;
-      sprite.x = background.width / 2;
-      sprite.y = background.height / 2;
-      sprite.anchor.set(0.5);
-      container.addChild(sprite);
-    }
-  }, [pixiRef.current]);
+    // add an example avatar onto the middle of the container
+    const avatar = PIXI.Sprite.from(Jovial);
+    avatar.width = 156;
+    avatar.height = 156;
+    avatar.x = background.width / 2;
+    avatar.y = background.height / 2;
+    avatar.anchor.set(0.5);
+    container.addChild(avatar);
+
+    // add the user's name above the avatar
+    const name = new PIXI.Text(displayName, { fill: 0xffffff, fontSize: 16 });
+    name.x = avatar.x;
+    name.y = avatar.y - avatar.height / 2 - 10;
+    name.anchor.set(0.5);
+    container.addChild(name);
+  }, [pixiRef.current, sessionLoaded]);
 
   /**
    * When the user moves between rooms, establish a new connection with the room.
@@ -122,15 +128,10 @@ export const World = React.memo(() => {
    * When the user logs in, establish a new connection with the room.
    */
   useEffect(() => {
-    if (localStorage.getItem(LocalStorage.Session)) {
-      // wait until the user is authenticated to connect to the room in the URL
-      if (session.token) {
-        connectToRoom(roomId);
-      }
-    } else {
+    if (sessionLoaded) {
       connectToRoom(roomId);
     }
-  }, [session]);
+  }, [sessionLoaded]);
 
   /**
    * Listen to messages when the socket is established.
