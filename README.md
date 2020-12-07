@@ -39,4 +39,6 @@ the sprite sheets.
 Execute entity code (such as Avatar, Toys, etc.) in a WebWorker. You can post messages and receive messages from the main thread to the web worker and vice versa, which
 is very helpful if you want to execute code at certain frames of the Sprite.
 - Ex: Execute a post message each frame on the AnimatedSprite's onFrameChange function.
+  - If we cap the frames of an AnimatedSprite to 30 frames per second, then as long as the postMessage doesn't take more than ~33.3ms to send, then it will run each frame on time
+  - https://surma.dev/things/is-postmessage-slow/ this article shows a graph of about how long postMessage takes based on the data being sent
 - https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage
