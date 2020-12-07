@@ -30,3 +30,8 @@ Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
 - Make world width equal to the width of the background the user uploads.
 - Disable wheel.
 - Set clamp to true, clamp both x and y so the user cannot view passed it.
+
+Compress sprite sheet images before uploading it to the server. Look at this Stackoverflow
+https://stackoverflow.com/questions/33077804/losslessly-compressing-images-on-django example
+to see how it's done in Django. This will significantly help improve load times whenever loading
+the sprite sheets. 
