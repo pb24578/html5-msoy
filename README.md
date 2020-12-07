@@ -36,6 +36,10 @@ Minify an entity's javascript files using https://github.com/wilsonzlin/minify-h
 
 Minify the texture.json file using this small script https://gist.github.com/KinoAR/a5cf8a207529ee643389c4462ebf13cd.
 
+Instead of making the user put all files into a single zip folder, program a user interface in the web app to allow them to add new states, actions, etc. instead of them having
+to do it. This makes it so much easier to create an avatar and allow them to do it natively. This makes previewing it easy, and this also makes uploading much easier. Also, the
+user doesn't have to wait for the entire avatar to be uploaded before it can preview it since now it's done while the user is creating the avatar.
+
 Execute entity code (such as Avatar, Toys, etc.) in a WebWorker. You can post messages and receive messages from the main thread to the web worker and vice versa, which
 is very helpful if you want to execute code at certain frames of the Sprite.
 - Ex: Execute a post message each frame on the AnimatedSprite's onFrameChange function.
