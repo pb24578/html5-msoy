@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { createRef, useContext, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
@@ -7,7 +7,7 @@ import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { LocalStorage } from '../../shared/constants';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
 import { getUser } from '../../shared/user/selectors';
-import { resizePixiApp, appDOMId } from '../../shared/pixi';
+import app, { resizePixiApp } from '../../shared/pixi';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
@@ -66,6 +66,18 @@ export const World = React.memo(() => {
   const worldsMatch: WorldsMatch = useSelector(getWorldsMatch);
   const paramRoomId = worldsMatch?.params.id;
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
+
+  /**
+   * Create a reference to the Pixi App container. Once the reference
+   * has been created, then add the Pixi app's view to the container.
+   */
+  const pixiRef = createRef<HTMLDivElement>();
+  useEffect(() => {
+    if (pixiRef.current) {
+      pixiRef.current.append(app.view);
+      resizePixiApp();
+    }
+  }, [pixiRef.current]);
 
   /**
    * When the user moves between rooms, establish a new connection with the room.
@@ -162,7 +174,7 @@ export const World = React.memo(() => {
         <ChatContainer>
           <Chat />
         </ChatContainer>
-        <PixiAppContainer id={appDOMId} />
+        <PixiAppContainer ref={pixiRef} />
       </GameContainer>
       <ToolbarContainer>
         <Toolbar />
