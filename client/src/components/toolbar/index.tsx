@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { VolumeUp, People, MeetingRoom } from '@styled-icons/material';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
-import { getRoomSocket } from '../world/selectors';
+import { getWorldSocket } from '../world/selectors';
 import { SendChatMessage } from '../chat/types';
 
 const Container = styled(FlexRow)`
@@ -47,7 +47,7 @@ const Utility = styled.div`
 const maxChars = 256;
 
 export const Toolbar = React.memo(() => {
-  const socket = useSelector(getRoomSocket);
+  const socket = useSelector(getWorldSocket);
   const [textMessage, setMessage] = useState('');
 
   const onChangeText = (event: React.FormEvent<EventTarget>) => {

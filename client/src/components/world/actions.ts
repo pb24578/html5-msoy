@@ -5,14 +5,14 @@ import { getSession } from '../../shared/user/selectors';
 import { Room } from './types';
 import { actions, initialState } from './reducer';
 
-const { setRoom } = actions;
+const { setRoom, setWorldSocket } = actions;
 
 // eslint-disable-next-line max-len
 export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFromRoom] = createAsyncAction({
   id: 'disconnect-from-room',
   async: (store, status) => async () => {
     const state = store.getState() as IState;
-    const { socket } = state.world.room;
+    const { socket } = state.world;
     if (socket) {
       socket.onclose = null;
       socket.close();
@@ -37,10 +37,10 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
       const room: Room = {
         id,
         participants: [],
-        socket,
       };
 
       store.dispatch(setRoom(room));
+      store.dispatch(setWorldSocket(socket));
     },
   },
   [getSession],

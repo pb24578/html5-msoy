@@ -13,7 +13,7 @@ import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
-import { getPixiApp, getRoomId, getRoomSocket, getWorldError } from './selectors';
+import { getPixiApp, getRoomId, getWorldSocket, getWorldError } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
 import { isConnectionError, isReceiveParticipants } from './types';
 
@@ -61,7 +61,7 @@ export const World = React.memo(() => {
   const sessionLoaded = useSelector(isSessionLoaded);
   const { displayName, redirectRoomId } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
-  const socket = useSelector(getRoomSocket);
+  const socket = useSelector(getWorldSocket);
   const theme = useContext(ThemeContext);
 
   // receive the room id that the user is connecting to

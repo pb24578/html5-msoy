@@ -4,6 +4,7 @@ export interface World {
   error: WorldError | null;
   pixi: Pixi;
   room: Room;
+  socket: WebSocket | null;
 }
 
 export interface Pixi {
@@ -13,7 +14,6 @@ export interface Pixi {
 export interface Room {
   id: number;
   participants: Participant[];
-  socket: WebSocket | null;
 }
 
 export interface WorldError {

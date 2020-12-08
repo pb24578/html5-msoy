@@ -10,8 +10,8 @@ export const initialState: World = {
   room: {
     id: 0,
     participants: [],
-    socket: null,
   },
+  socket: null,
 };
 
 const slice = createSlice({
@@ -25,14 +25,17 @@ const slice = createSlice({
         app.renderer.resize(parent.clientWidth, parent.clientHeight);
       }
     },
-    setWorldError: (state, action: PayloadAction<WorldError>) => {
-      state.error = action.payload;
-    },
     setParticipants: (state, action: PayloadAction<Participant[]>) => {
       state.room.participants = action.payload;
     },
     setRoom: (state, action: PayloadAction<Room>) => {
       state.room = action.payload;
+    },
+    setWorldError: (state, action: PayloadAction<WorldError>) => {
+      state.error = action.payload;
+    },
+    setWorldSocket: (state, action: PayloadAction<WebSocket>) => {
+      state.socket = action.payload;
     },
   },
 });
