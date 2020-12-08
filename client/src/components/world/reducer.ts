@@ -34,7 +34,7 @@ const slice = createSlice({
     setWorldError: (state, action: PayloadAction<WorldError>) => {
       state.error = action.payload;
     },
-    setWorldSocket: (state, action: PayloadAction<WebSocket>) => {
+    setWorldSocket: (state, action: PayloadAction<WebSocket | null>) => {
       state.socket = action.payload;
     },
   },

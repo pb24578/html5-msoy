@@ -18,6 +18,7 @@ export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFrom
       socket.close();
     }
     store.dispatch(setRoom(initialState.room));
+    store.dispatch(setWorldSocket(initialState.socket));
   },
 });
 
