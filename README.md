@@ -32,6 +32,8 @@ I'll also have a code editor in the avatar creator that allows you to add your o
 
 Makes it easier for the creator to do stuff and not have to worry about setting up a bunch of code and classpaths and all that hell. Also, this allows for you to edit your avatar's states/actions/code in real time.
 
+You can tint a white sprite http://scottmcdonnell.github.io/pixi-examples/index.html?s=demos&f=tinting.js&title=Tinting this should be helpful for making configurable avatars. Only limitation is how can we program config sprite sheets? 
+
 # To Do
 1. Create a class that extends AnimatedSprite such as in this example: https://github.com/pixijs/pixi.js/issues/6271.
     - Name these classes EntityControl, AvatarControl, BackgroundControl, ToyControl, etc.
