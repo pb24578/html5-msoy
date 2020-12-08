@@ -1,20 +1,12 @@
-import * as PIXI from 'pixi.js-legacy';
 import { EntityControl } from '.';
-import { ActorWorker } from './workers';
 
 interface State {
   name: string;
 }
 
 export class ActorControl extends EntityControl {
-  private workerInstance: any;
   private states: State[] | null = null;
   private currentState: State | null = null;
-
-  constructor(textures: PIXI.Texture[] | PIXI.AnimatedSprite.FrameObject[], autoUpdate?: boolean) {
-    super(textures, autoUpdate);
-    this.workerInstance = ActorWorker();
-  }
 
   /**
    * Registers the actor's states. The first state will be your "default" state.

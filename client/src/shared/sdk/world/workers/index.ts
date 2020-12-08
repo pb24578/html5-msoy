@@ -1,3 +1,3 @@
-const ActorWorker = require('workerize-loader!./actor-worker');
+const AvatarWorker = require('workerize-loader!./avatar-worker');
 
-export { ActorWorker };
+export { AvatarWorker };

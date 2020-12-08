@@ -1,11 +1,19 @@
+import * as PIXI from 'pixi.js-legacy';
 import { ActorControl } from '.';
+import { AvatarWorker } from './workers';
 
 interface Action {
   name: string;
 }
 
 export class AvatarControl extends ActorControl {
+  private worker: any;
   private actions: Action[] | null = null;
+
+  constructor(textures: PIXI.Texture[] | PIXI.AnimatedSprite.FrameObject[], autoUpdate?: boolean) {
+    super(textures, autoUpdate);
+    this.worker = AvatarWorker();
+  }
 
   /**
    * Registers the avatar's actions.
