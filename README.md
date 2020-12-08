@@ -23,6 +23,15 @@ Before continuing, modify the connection settings in the constants.ts file to yo
 
 To see the production processes running, execute ```pm2 list```. To end any of those processes, execute ```pm2 delete <name>```.
 
+# HTML5 Whirled SDK Outline
+You setup the states and actions and code in the website itself. There will be a customizable avatar creator in the website which you can specify which sprite sheets will be used for the state or action.
+
+Avatars are created using spritesheets and the art can be made from whatever tool u wanna use (like paintnet, photoshop, adobe flash, etc). Then you create a sprite sheet using a free (and open-source) texture packer tool online at http://free-tex-packer.com/ for web version https://free-tex-packer.com/app/. You can upload those sprites into the avatar creator on the website to build your states and actions.
+
+I'll also have a code editor on avatar creator that allows you to add your own code to the avatar and all that good stuff. You can also edit the Avatar Body code just like you could in the original Whirled (to make stuff like ImpatientBody, LSABody, etc.)
+
+Makes it easier for the creator to do stuff and not have to worry about setting up a bunch of code and classpaths and all that hell. Also, this allows for you to edit your avatar's states/actions/code in real time.
+
 # To Do
 1. Create a class that extends AnimatedSprite such as in this example: https://github.com/pixijs/pixi.js/issues/6271.
     - Name these classes EntityControl, AvatarControl, BackgroundControl, ToyControl, etc.
