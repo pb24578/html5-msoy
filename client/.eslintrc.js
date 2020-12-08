@@ -38,6 +38,8 @@ module.exports = {
     'no-param-reassign': 'off',
     'arrow-parens': [0, { requireForBlockBody: false }],
     'import/extensions': 0,
+    'import/no-webpack-loader-syntax': 0,
+    'no-restricted-globals': 0,
     'no-restricted-syntax': 0,
     'no-continue': 0,
     'no-shadow': 0,

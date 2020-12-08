@@ -1,5 +1,15 @@
 import { EntityControl } from '.';
 
+/*
+import { ActorWorker } from './workers';
+const actorWorker = require('workerize-loader!./workers/actor-worker');
+
+const instance: typeof ActorWorker = actorWorker();
+instance.expensive(1000).then((number) => {
+  console.log(number);
+});
+*/
+
 interface State {
   name: string;
 }
