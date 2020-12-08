@@ -13,7 +13,7 @@ import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
-import { getPixiApp, getRoomId, getWorldSocket, getWorldError } from './selectors';
+import { getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
 import { isConnectionError, isReceiveParticipants } from './types';
 
