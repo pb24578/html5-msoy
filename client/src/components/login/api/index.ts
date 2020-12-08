@@ -1,3 +1,1 @@
-import { fetchLogin } from './fetchLogin';
-
-export { fetchLogin };
+export * from './fetchLogin';

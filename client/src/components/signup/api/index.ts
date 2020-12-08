@@ -1,3 +1,1 @@
-import { fetchSignup } from './fetchSignup';
-
-export { fetchSignup };
+export * from './fetchSignup';

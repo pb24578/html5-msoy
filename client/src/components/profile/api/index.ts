@@ -1,3 +1,1 @@
-import { fetchProfile } from './fetchProfile';
-
-export { fetchProfile };
+export * from './fetchProfile';

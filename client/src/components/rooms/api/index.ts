@@ -1,3 +1,1 @@
-import { fetchRooms } from './fetchRooms';
-
-export { fetchRooms };
+export * from './fetchRooms';

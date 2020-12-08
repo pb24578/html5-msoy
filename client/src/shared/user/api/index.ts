@@ -1,4 +1,2 @@
-import { deleteSession } from './deleteSession';
-import { fetchSession } from './fetchSession';
-
-export { deleteSession, fetchSession };
+export * from './deleteSession';
+export * from './fetchSession';

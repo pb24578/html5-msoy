@@ -1,6 +1,4 @@
-import { AbstractControl } from './abstract-control';
-import { EntityControl } from './entity-control';
-import { ActorControl } from './actor-control';
-import { AvatarControl } from './avatar-control';
-
-export { AbstractControl, EntityControl, ActorControl, AvatarControl };
+export * from './abstract-control';
+export * from './entity-control';
+export * from './actor-control';
+export * from './avatar-control';

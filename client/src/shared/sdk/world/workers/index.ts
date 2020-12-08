@@ -1,3 +1,3 @@
-import * as ActorWorker from './actor-worker';
+const ActorWorker = require('workerize-loader!./actor-worker');
 
 export { ActorWorker };
