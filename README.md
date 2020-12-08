@@ -27,8 +27,11 @@ To see the production processes running, execute ```pm2 list```. To end any of t
 Create a class that extends AnimatedSprite such as in this example: https://github.com/pixijs/pixi.js/issues/6271.
 - Make a class for Entity: Avatar extends Entity, Toy extends Entity, Furniture extends Entity, etc.
 
-Create an AvatarControl to handle controlling the avatar. Look here https://www.whirled.club/code/asdocs/ for how it's done.  
+Create an AvatarControl to handle controlling the avatar. Look here https://www.whirled.club/code/asdocs/ for how it's done.
+- We don't need the user to access the APIs, instead we can just allow for the user to use it
+
 Create a Body to handle how the Avatar body should function. Look here https://wiki.whirled.club/wiki/Zoltea%27s_Tweaked_Whirled_SDK to download the Whirled SDK and use the Body.as as an example.
+- In the custom editor, allow them to also code the Body and perform a live-preview. This means we'll need to install an in-browser code editor (this one seems good https://www.npmjs.com/package/codemirror)
 
 Instead of making the user put all files into a single zip folder, program a user interface in the web app to allow them to add new states, actions, etc. instead of them having
 to do it. This makes it so much easier to create an avatar and allow them to do it natively. This makes previewing it easy, and this also makes uploading much easier. Also, the
