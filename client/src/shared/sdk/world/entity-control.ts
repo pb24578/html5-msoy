@@ -9,7 +9,7 @@ export class EntityControl extends AbstractControl {
 
   constructor(textures: Textures, script: string, autoUpdate?: boolean) {
     super(textures, autoUpdate);
-    this.loadEntityLogic(script);
+    this.loadEntityScript(script);
   }
 
   /**
@@ -21,7 +21,7 @@ export class EntityControl extends AbstractControl {
    *
    * @param script The URL to the entity's script logic.
    */
-  public async loadEntityLogic(script: string) {
+  public async loadEntityScript(script: string) {
     if (this.worker) {
       this.worker.terminate();
     }
