@@ -5,7 +5,7 @@ interface Action {
 }
 
 export class AvatarControl extends ActorControl {
-  private actions: Action[] | null = null;
+  private actions: Action[] = [];
 
   /**
    * Registers the avatar's actions.

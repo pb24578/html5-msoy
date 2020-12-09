@@ -5,7 +5,7 @@ interface State {
 }
 
 export class ActorControl extends EntityControl {
-  private states: State[] | null = null;
+  private states: State[] = [];
   private currentState: State | null = null;
 
   /**
@@ -42,7 +42,6 @@ export class ActorControl extends EntityControl {
    * Set a state, the state must be in the registered states.
    */
   public setState(state: string) {
-    if (!this.states) throw new Error('You must register states first.');
     const newState = this.states.find((currentState) => currentState.name === state);
     if (!newState) {
       throw new Error(`The state ${state} does not exist.`);
