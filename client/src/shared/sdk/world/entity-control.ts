@@ -1,8 +1,16 @@
+import * as PIXI from 'pixi.js-legacy';
 import { AbstractControl } from '.';
 import { CrossOriginWorker } from '../net';
 
+type Textures = PIXI.Texture[] | PIXI.AnimatedSprite.FrameObject[];
+
 export class EntityControl extends AbstractControl {
   protected worker: any;
+
+  constructor(textures: Textures, script: string, autoUpdate?: boolean) {
+    super(textures, autoUpdate);
+    this.loadEntityLogic(script);
+  }
 
   /**
    * Loads the JavaScript logic for this entity. This script is a JavaScript file that
@@ -13,7 +21,7 @@ export class EntityControl extends AbstractControl {
    *
    * @param script The URL to the entity's script logic.
    */
-  public async loadScript(script: string) {
+  public async loadEntityLogic(script: string) {
     if (this.worker) {
       this.worker.terminate();
     }
