@@ -1,2 +1,0 @@
-# Web-Workers for World
-These web-workers are called for entities on the world. We use web-workers to handle the communication between an entity and the world because they provide security (because of CORS policy) and running entities under a multi-threaded environment.
