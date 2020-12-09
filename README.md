@@ -23,35 +23,38 @@ Before continuing, modify the connection settings in the constants.ts file to yo
 
 To see the production processes running, execute ```pm2 list```. To end any of those processes, execute ```pm2 delete <name>```.
 
-# HTML5 Whirled SDK Outline
-You setup the states and actions and code in the website itself. There will be a customizable avatar creator in the website which you can specify which sprite sheets will be used for the state or action.
+# Uploading Avatars
+1. Best way to make avatars is to create a sprite sheet with the entire avatar in there. Avatars are created using spritesheets and the art can be made from whatever tool you wanna use (like paintnet, photoshop, adobe flash, etc). You create a sprite sheet using a free (and open-source) texture packer tool online at http://free-tex-packer.com/ for web version https://free-tex-packer.com/app/.
 
-Avatars are created using spritesheets and the art can be made from whatever tool you wanna use (like paintnet, photoshop, adobe flash, etc). You create a sprite sheet using a free (and open-source) texture packer tool online at http://free-tex-packer.com/ for web version https://free-tex-packer.com/app/. You can upload those sprites into the avatar creator on the website to build your states and actions. This means avatar creation is now free and you do not need Adobe flash to make avatars (you can use any art tool you like).
+Then the creator add a json tag called "animations" with array of images that specify the states, actions, and transitions. This is similar to how y0> is doing it.
 
-I'll also have a code editor in the avatar creator that allows you to add your own code to the avatar and all that good stuff. You can also edit the Avatar Body code just like you could in the original Whirled (to make stuff like ImpatientBody, LSABody, etc.)
-
-Makes it easier for the creator to do stuff and not have to worry about setting up a bunch of code and classpaths and all that hell. Also, this allows for you to edit your avatar's states/actions/code in real time.
-
-You can tint a white sprite http://scottmcdonnell.github.io/pixi-examples/index.html?s=demos&f=tinting.js&title=Tinting this should be helpful for making configurable avatars. Only limitation is how can we program config sprite sheets? 
-
-# To Do
-1. Execute entity code (such as Avatar, Toys, etc.) in a WebWorker. You can post messages and receive messages from the main thread to the web worker and vice versa, which is very helpful if you want to execute code at certain frames of the Sprite.
-
-2. Best way to make avatars is to create a sprite sheet with the entire avatar in there. Then add json tag called "animations" with array of images that specify the states, actions, and transitions. This is similar to how yo> is doing it.
-
-This means the program will only have to load a single sprite sheet and only have to load a single json. This is much faster to do and it'll be much easier for the creator to make avatars too.
-
-Also, only allow for one index.js file which will contain all of the logic for the Avatar. The script file can import other files (from a cdn) if it wants to extend functionality from other codes. This file will override functions or perform postMessage, which the AvatarControl will pick up.
+2. The body.js will receive the texture.json file from post message. Then the body will start sending messages back to the avatar control to setup the avatar. This file will be modeled after the file from Whirled. Note that the index.js (logic script by the user) file will import the body.js.
 
 3. Compress sprite sheet before uploading it to the server. Look at this Stackoverflow
 https://stackoverflow.com/questions/33077804/losslessly-compressing-images-on-django example
 to see how it's done in Django. This will significantly help improve load times whenever loading
 the sprite sheets.
 
-4. Minify an entity's javascript files using https://github.com/wilsonzlin/minify-html/tree/master/python.
+4. Minify the index.js file using https://github.com/wilsonzlin/minify-html/tree/master/python.
 
 5. Minify the texture.json file using this small script https://gist.github.com/KinoAR/a5cf8a207529ee643389c4462ebf13cd.
 
+### Example Communication Between index.js and Avatar:
+In worker:  
+```js
+postMessage(type: 'addEventListener', payload: { event: 'onEnterFrame', name: 'enterFrame');
+```
+
+Now the AvatarBody.ts will register an onEnterFrame listener.
+
+Then in the worker "message" event listener, it will listen for type 'event' with the name 'enterFrame'.
+
+To remove event, execute in worker:  
+```js
+postMessage(type: 'removeEventListener', payload: { event: 'onEnterFrame', name: 'enterFrame');
+```
+
+# PixiJS VCam To Do
 6. Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
     - Make screen height and width equal to the width and height of the pixi app screen.
     - Make world height equal to the height of the pixi app screen.
