@@ -35,29 +35,24 @@ Makes it easier for the creator to do stuff and not have to worry about setting 
 You can tint a white sprite http://scottmcdonnell.github.io/pixi-examples/index.html?s=demos&f=tinting.js&title=Tinting this should be helpful for making configurable avatars. Only limitation is how can we program config sprite sheets? 
 
 # To Do
-1. Execute entity code (such as Avatar, Toys, etc.) in a WebWorker. You can post messages and receive messages from the main thread to the web worker and vice versa, which
-is very helpful if you want to execute code at certain frames of the Sprite.
-    - Ex: Execute a post message each frame on the AnimatedSprite's onFrameChange function.
-    - If we cap the frames of an AnimatedSprite to 30 frames per second, then as long as the postMessage doesn't take more than ~33.3ms to send, then it will run each frame on time
-    - Require the creator to create a settings object in the index.js file, which will specify which frames to register and listen for
-    - https://surma.dev/things/is-postmessage-slow/ this article shows a graph of about how long postMessage takes based on the data being sent
-    - https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage
+1. Execute entity code (such as Avatar, Toys, etc.) in a WebWorker. You can post messages and receive messages from the main thread to the web worker and vice versa, which is very helpful if you want to execute code at certain frames of the Sprite.
 
-2. Instead of making the user put all files into a single zip folder, program a user interface in the web app to allow them to add new states, actions, etc. This makes it so much easier to create an avatar and allow them to do it natively. This makes previewing it easy, and this also makes uploading much easier. Also, the user doesn't have to wait for the entire avatar to be uploaded before it can preview it since now it's done while the user is creating the avatar.
+2. Best way to make avatars is to create a sprite sheet with the entire avatar in there. Then add json tag called "animations" with array of images that specify the states, actions, and transitions. This is similar to how yo> is doing it.
 
-3. Create a Body to handle how the Avatar body should function. Look here https://wiki.whirled.club/wiki/Zoltea%27s_Tweaked_Whirled_SDK to download the Whirled SDK and use the Body.as as an example.
-    - In the custom editor, allow them to also code the Body and perform a live-preview. This means we'll need to install an in-browser code editor (this one seems good https://www.npmjs.com/package/codemirror)
+This means the program will only have to load a single sprite sheet and only have to load a single json. This is much faster to do and it'll be much easier for the creator to make avatars too.
 
-4. Compress sprite sheet images before uploading it to the server. Look at this Stackoverflow
+Also, only allow for one index.js file which will contain all of the logic for the Avatar. The script file can import other files (from a cdn) if it wants to extend functionality from other codes. This file will override functions or perform postMessage, which the AvatarControl will pick up.
+
+3. Compress sprite sheet before uploading it to the server. Look at this Stackoverflow
 https://stackoverflow.com/questions/33077804/losslessly-compressing-images-on-django example
 to see how it's done in Django. This will significantly help improve load times whenever loading
 the sprite sheets.
 
-5. Minify an entity's javascript files using https://github.com/wilsonzlin/minify-html/tree/master/python.
+4. Minify an entity's javascript files using https://github.com/wilsonzlin/minify-html/tree/master/python.
 
-6. Minify the texture.json file using this small script https://gist.github.com/KinoAR/a5cf8a207529ee643389c4462ebf13cd.
+5. Minify the texture.json file using this small script https://gist.github.com/KinoAR/a5cf8a207529ee643389c4462ebf13cd.
 
-7. Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
+6. Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
     - Make screen height and width equal to the width and height of the pixi app screen.
     - Make world height equal to the height of the pixi app screen.
     - Make world width equal to the width of the background the user uploads.
