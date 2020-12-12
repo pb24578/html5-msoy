@@ -29,15 +29,15 @@ export class EntityControl extends AbstractControl {
     }
     this.worker = new CrossOriginWorker();
     await this.worker.loadCrossOriginScript(script);
-    this.listenWorkerMessages();
+    this.listenWorkerMessage();
   }
 
   /**
-   * Listen to the worker's messages. Call this once the worker has been loaded.
+   * Listen to the worker's message events. Call this once the worker has been loaded.
    *
    * @param worker The worker that was just loaded.
    */
-  protected listenWorkerMessages() {
+  protected listenWorkerMessage() {
     if (!this.worker) {
       throw new Error('The worker has not yet loaded.');
     }

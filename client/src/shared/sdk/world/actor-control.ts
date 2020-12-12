@@ -10,12 +10,12 @@ export class ActorControl extends EntityControl {
   protected moving = false;
 
   /**
-   * Listen to the worker's messages. Call this once the worker has been loaded.
+   * Listen to the worker's message events. Call this once the worker has been loaded.
    *
    * @param worker The worker that was just loaded.
    */
-  protected listenWorkerMessages() {
-    super.listenWorkerMessages();
+  protected listenWorkerMessage() {
+    super.listenWorkerMessage();
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
       if (data.type === WorkerMessage.addEventListener) {
