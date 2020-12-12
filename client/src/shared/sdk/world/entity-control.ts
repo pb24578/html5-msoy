@@ -1,18 +1,24 @@
 import * as PIXI from 'pixi.js-legacy';
 import { AbstractControl, ControlEvent, WorkerMessage } from '.';
-import { CrossOriginWorker } from '../net';
 
 export class EntityControl extends AbstractControl {
-  protected entity: PIXI.AnimatedSprite;
-  protected spritesheet: PIXI.Spritesheet;
-  protected worker: any;
+  protected entity: PIXI.AnimatedSprite | undefined;
+  protected spritesheet: PIXI.Spritesheet | undefined;
+  protected worker: Worker;
 
+  constructor(script: string) {
+    super();
+    this.worker = this.loadEntityWorker(script);
+  }
+
+  /*
   constructor(spritesheet: PIXI.Spritesheet, script: string) {
     super();
     this.spritesheet = spritesheet;
     this.entity = new PIXI.AnimatedSprite([]);
     this.loadEntityWorker(script);
   }
+  */
 
   /**
    * Loads the JavaScript logic for this entity. This script is a JavaScript file that
@@ -23,13 +29,25 @@ export class EntityControl extends AbstractControl {
    *
    * @param script The URL to the entity's script logic, will be loaded from a WebWorker.
    */
-  private async loadEntityWorker(script: string) {
+  private loadEntityWorker(script: string) {
     if (this.worker) {
       this.worker.terminate();
     }
-    this.worker = new CrossOriginWorker();
-    await this.worker.loadCrossOriginScript(script);
+
+    /**
+     * Loads a worker from an external URL.
+     * https://stackoverflow.com/questions/21913673/execute-web-worker-from-different-origin
+     */
+    const getWorkerScript = (script: string) => {
+      const content = `importScripts( "${script}" );`;
+      return URL.createObjectURL(new Blob([content], { type: 'text/javascript' }));
+    };
+
+    const workerScript = getWorkerScript(script);
+    this.worker = new Worker(workerScript);
     this.listenWorkerMessage();
+    URL.revokeObjectURL(workerScript);
+    return this.worker;
   }
 
   /**
@@ -44,6 +62,7 @@ export class EntityControl extends AbstractControl {
 
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
+      console.log('dead ass 1');
 
       if (data.type === WorkerMessage.addEventListener) {
         const { type, name } = data.payload;

@@ -8,6 +8,7 @@ import { Jovial, PixiBackground } from '../../assets';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
 import { getUser, isSessionLoaded } from '../../shared/user/selectors';
+import { AvatarControl } from '../../shared/sdk/world';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
@@ -90,6 +91,9 @@ export const World = React.memo(() => {
     background.width = app.screen.width;
     background.height = app.screen.height;
     container.addChild(background);
+
+    // example ctrl
+    const ctrl = new AvatarControl('http://localhost:8000/static/testing.js');
 
     // add an example avatar onto the middle of the container
     const avatar = PIXI.Sprite.from(Jovial);
