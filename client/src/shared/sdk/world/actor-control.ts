@@ -18,7 +18,6 @@ export class ActorControl extends EntityControl {
     super.listenWorkerMessage();
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-      console.log('dead ass 2');
 
       if (data.type === WorkerMessage.isMoving) {
         this.worker.postMessage({

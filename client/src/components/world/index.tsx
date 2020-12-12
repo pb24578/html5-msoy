@@ -92,8 +92,12 @@ export const World = React.memo(() => {
     background.height = app.screen.height;
     container.addChild(background);
 
-    // example ctrl
-    const ctrl = new AvatarControl('http://localhost:8000/static/testing.js');
+    // example ctrl, TODO: delete later
+    const ctrl = new AvatarControl('http://localhost:8000/static/body.js');
+    setTimeout(() => {
+      console.log('ok time to set moving to true');
+      ctrl.setMoving(true);
+    }, 3000);
 
     // add an example avatar onto the middle of the container
     const avatar = PIXI.Sprite.from(Jovial);

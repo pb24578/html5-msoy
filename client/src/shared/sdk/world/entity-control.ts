@@ -62,7 +62,6 @@ export class EntityControl extends AbstractControl {
 
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-      console.log('dead ass 1');
 
       if (data.type === WorkerMessage.addEventListener) {
         const { type, name } = data.payload;
