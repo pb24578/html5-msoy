@@ -9,7 +9,7 @@ export abstract class AbstractControl {
   /**
    * Registers an event listener to the list of events.
    *
-   * @param event The event to register
+   * @param event The event to register.
    */
   public addEventListener(event: EventListener) {
     this.eventListeners.push(event);
@@ -17,7 +17,8 @@ export abstract class AbstractControl {
 
   /**
    * Removes an event listener from the list of events.
-   * @param event The event to remove
+   *
+   * @param event The event to remove.
    */
   public removeEventListener(event: EventListener) {
     const eventIndex = this.eventListeners.findIndex(
@@ -29,7 +30,9 @@ export abstract class AbstractControl {
   }
 
   /**
-   * Return the listening event(s) from the given event string.
+   * Returns the listening event(s) from the given event string.
+   *
+   * @param event The event to receive from.
    */
   public getListeningEvents(event: string) {
     const registeredEvents = [];

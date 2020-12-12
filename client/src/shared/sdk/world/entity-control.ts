@@ -38,16 +38,18 @@ export class EntityControl extends AbstractControl {
 
   /**
    * Dispatches an event to the worker.
+   *
+   * @param eventDispatch The event to dispatch
    */
-  public dispatchEvent(DispatchEvent: DispatchEvent) {
-    const registeredEvents = this.getListeningEvents(DispatchEvent.event);
+  public dispatchEvent(eventDispatch: DispatchEvent) {
+    const registeredEvents = this.getListeningEvents(eventDispatch.event);
     registeredEvents.forEach((event) => {
       this.worker.postMessage({
         type: 'event',
         payload: {
-          event: DispatchEvent.event,
+          event: eventDispatch.event,
           name: event.name,
-          value: DispatchEvent.value,
+          value: eventDispatch.value,
         },
       });
     });
