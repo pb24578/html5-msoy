@@ -18,16 +18,6 @@ export class ActorControl extends EntityControl {
     super.listenWorkerMessage();
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-      if (data.type === WorkerMessage.addEventListener) {
-        const { type, name } = data.payload;
-        if (type === ControlEvent.appearanceChanged.type) {
-          const eventListener: ControlEventListener = {
-            event: new ControlEvent(this.worker, type, name),
-            callback: () => 1,
-          };
-          this.addEventListener(eventListener);
-        }
-      }
 
       if (data.type === WorkerMessage.isMoving) {
         this.worker.postMessage({

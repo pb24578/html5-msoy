@@ -44,6 +44,20 @@ export class EntityControl extends AbstractControl {
 
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
+
+      if (data.type === WorkerMessage.addEventListener) {
+        const { type, name } = data.payload;
+        this.addEventListener({
+          event: new ControlEvent(this.worker, type, name),
+          callback: () => {
+            this.worker.postMessage({
+              type: 'event',
+              payload: data.payload,
+            });
+          },
+        });
+      }
+
       if (data.type === WorkerMessage.removeEventListener) {
         const { type, name } = data.payload;
         this.removeEventListener(this.worker, type, name);
