@@ -1,4 +1,4 @@
-import { EntityControl } from '.';
+import { EntityControl, ControlEvent } from '.';
 
 interface State {
   name: string;
@@ -55,9 +55,6 @@ export class ActorControl extends EntityControl {
    */
   public setMoving(moving: boolean) {
     this.moving = moving;
-    this.dispatchEvent({
-      event: 'onMoving',
-      value: moving,
-    });
+    this.dispatchEvent(ControlEvent.APPEARANCE_CHANGED);
   }
 }

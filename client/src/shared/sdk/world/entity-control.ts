@@ -2,11 +2,6 @@ import * as PIXI from 'pixi.js-legacy';
 import { AbstractControl } from '.';
 import { CrossOriginWorker } from '../net';
 
-interface DispatchEvent {
-  event: string;
-  value: any;
-}
-
 export class EntityControl extends AbstractControl {
   protected entity: PIXI.AnimatedSprite;
   protected spritesheet: PIXI.Spritesheet;
@@ -26,14 +21,48 @@ export class EntityControl extends AbstractControl {
    *
    * Any subsequent calls to this function will terminate the previous script.
    *
-   * @param script The URL to the entity's script logic.
+   * @param script The URL to the entity's script logic, will be loaded from a WebWorker.
    */
-  public async loadEntityWorker(script: string) {
+  private async loadEntityWorker(script: string) {
     if (this.worker) {
       this.worker.terminate();
     }
-    this.worker = CrossOriginWorker();
-    await this.worker.loadCrossOriginScript(script);
+    const worker = CrossOriginWorker();
+    await worker.loadCrossOriginScript(script);
+    this.workerLoaded(worker);
+  }
+
+  /**
+   * Called whenever the worker has been loaded.
+   *
+   * @param worker The worker that was just loaded.
+   */
+  protected workerLoaded(worker: any) {
+    this.worker = worker;
+    worker.addEventListener('message', (event: MessageEvent) => {
+      const { data } = event;
+      if (data.type === 'addEventListener') {
+        const { name, event } = data.payload;
+        this.addEventListener({ name, event });
+      } else if (data.type === 'removeEventListener') {
+        const { name, event } = data.payload;
+        this.removeEventListener({ name, event });
+      }
+    });
+  }
+
+  /**
+   * Returns the entity's animated sprite.
+   */
+  public getEntity() {
+    return this.entity;
+  }
+
+  /**
+   * Returns the spritesheet.
+   */
+  public getSpriteSheet() {
+    return this.spritesheet;
   }
 
   /**
@@ -41,15 +70,14 @@ export class EntityControl extends AbstractControl {
    *
    * @param eventDispatch The event to dispatch
    */
-  public dispatchEvent(eventDispatch: DispatchEvent) {
-    const registeredEvents = this.getListeningEvents(eventDispatch.event);
-    registeredEvents.forEach((event) => {
+  protected dispatchEvent(event: string) {
+    const listeningEvents = this.getListeningEvents(event);
+    listeningEvents.forEach((event) => {
       this.worker.postMessage({
         type: 'event',
         payload: {
-          event: eventDispatch.event,
+          event,
           name: event.name,
-          value: eventDispatch.value,
         },
       });
     });

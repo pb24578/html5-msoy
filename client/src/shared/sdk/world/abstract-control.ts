@@ -1,7 +1,4 @@
-interface EventListener {
-  name: string;
-  event: string;
-}
+import { EventListener } from '.';
 
 export abstract class AbstractControl {
   protected eventListeners: EventListener[] = [];
