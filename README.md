@@ -42,16 +42,16 @@ the sprite sheets.
 ### 1. Example addEventListener Between index.js and Avatar:
 In index.js worker:  
 ```js
-postMessage(type: 'addEventListener', payload: { event: 'onEnterFrame', name: 'enterFrame');
+postMessage(type: 'addEventListener', payload: { type: 'onEnterFrame', name: 'enterFrame');
 ```
 
 Now the AvatarBody.ts will receive the message, then register an onEnterFrame listener.
 
-Then in the worker "message" event listener, it will listen for type 'event' with the name 'enterFrame'.
+Then in the worker "message" event listener, it will listen for the event.
 
 To remove event, execute in worker:  
 ```js
-postMessage(type: 'removeEventListener', payload: { event: 'onEnterFrame', name: 'enterFrame');
+postMessage(type: 'removeEventListener', payload: { type: 'onEnterFrame', name: 'enterFrame');
 ```
 
 ### 2. Example setState Between index.js and Avatar:
