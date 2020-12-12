@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
-import { AbstractControl } from '.';
+import { AbstractControl, EventListener, WorkerMessage } from '.';
 import { CrossOriginWorker } from '../net';
 
 export class EntityControl extends AbstractControl {
@@ -41,12 +41,12 @@ export class EntityControl extends AbstractControl {
     this.worker = worker;
     worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-      if (data.type === 'addEventListener') {
-        const { name, event } = data.payload;
-        this.addEventListener({ name, event });
-      } else if (data.type === 'removeEventListener') {
-        const { name, event } = data.payload;
-        this.removeEventListener({ name, event });
+      if (data.type === WorkerMessage.ADD_EVENT_LISTENER) {
+        const listener: EventListener = data.payload;
+        this.addEventListener(listener);
+      } else if (data.type === WorkerMessage.REMOVE_EVENT_LISTENER) {
+        const listener: EventListener = data.payload;
+        this.removeEventListener(listener);
       }
     });
   }
@@ -66,7 +66,9 @@ export class EntityControl extends AbstractControl {
   }
 
   /**
-   * Dispatches an event to the worker.
+   * Dispatches an event to the worker. There can be multiple events that were
+   * registered with different names, so this function iterates all the events
+   * that were registered and dispatches them.
    *
    * @param eventDispatch The event to dispatch
    */

@@ -1,4 +1,4 @@
-import { EntityControl, ControlEvent } from '.';
+import { EntityControl, ControlEvent, WorkerMessage } from '.';
 
 interface State {
   name: string;
@@ -8,6 +8,26 @@ export class ActorControl extends EntityControl {
   protected states: State[] = [];
   protected currentState: State | null = null;
   protected moving = false;
+
+  /**
+   * Called whenever the worker has been loaded.
+   *
+   * @param worker The worker that was just loaded.
+   */
+  protected workerLoaded(worker: any) {
+    super.workerLoaded(worker);
+    worker.addEventListener('message', (event: MessageEvent) => {
+      const { data } = event;
+      if (data.type === WorkerMessage.IS_MOVING) {
+        worker.postMessage({
+          type: WorkerMessage.IS_MOVING,
+          payload: {
+            value: this.moving,
+          },
+        });
+      }
+    });
+  }
 
   /**
    * Registers the actor's states. The first state will be your "default" state.
@@ -51,7 +71,7 @@ export class ActorControl extends EntityControl {
   }
 
   /**
-   * Sets if the actor is now moving.
+   * Sets if the actor is now moving and dispatches an appearance changed event.
    */
   public setMoving(moving: boolean) {
     this.moving = moving;

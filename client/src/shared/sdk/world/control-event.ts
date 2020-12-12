@@ -4,5 +4,5 @@ export interface EventListener {
 }
 
 export enum ControlEvent {
-  APPEARANCE_CHANGED = 'APPEARANCE_CHANGED',
+  APPEARANCE_CHANGED = 'appearanceChanged',
 }
