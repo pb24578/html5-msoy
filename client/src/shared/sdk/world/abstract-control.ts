@@ -24,7 +24,7 @@ export abstract class AbstractControl {
    */
   protected removeEventListener(target: EventTarget, type: string, name: string) {
     let listenerIndex = -1;
-    for (let eInd = this.eventListeners.length - 1; eInd >= 0 && listenerIndex !== -1; eInd += 1) {
+    for (let eInd = this.eventListeners.length - 1; eInd >= 0 && listenerIndex !== -1; eInd -= 1) {
       const eventListener = this.eventListeners[eInd];
       const { target: eventTarget, type: eventType, name: eventName } = eventListener.event;
       if (eventTarget === target && eventType === type && eventName === name) {
