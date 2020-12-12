@@ -1,4 +1,4 @@
-import { EntityControl, ControlEvent, WorkerMessage } from '.';
+import { EntityControl, ControlEvent, ControlEventListener, WorkerMessage } from '.';
 
 interface State {
   name: string;
@@ -10,17 +10,28 @@ export class ActorControl extends EntityControl {
   protected moving = false;
 
   /**
-   * Called whenever the worker has been loaded.
+   * Listen to the worker's messages. Call this once the worker has been loaded.
    *
    * @param worker The worker that was just loaded.
    */
-  protected workerLoaded(worker: any) {
-    super.workerLoaded(worker);
-    worker.addEventListener('message', (event: MessageEvent) => {
+  protected listenWorkerMessages() {
+    super.listenWorkerMessages();
+    this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-      if (data.type === WorkerMessage.IS_MOVING) {
-        worker.postMessage({
-          type: WorkerMessage.IS_MOVING,
+      if (data.type === WorkerMessage.addEventListener) {
+        const { type, name } = data.payload;
+        if (type === ControlEvent.appearanceChanged.type) {
+          const eventListener: ControlEventListener = {
+            event: new ControlEvent(this.worker, type, name),
+            callback: () => 1,
+          };
+          this.addEventListener(eventListener);
+        }
+      }
+
+      if (data.type === WorkerMessage.isMoving) {
+        this.worker.postMessage({
+          type: WorkerMessage.isMoving,
           payload: {
             value: this.moving,
           },
@@ -75,6 +86,6 @@ export class ActorControl extends EntityControl {
    */
   public setMoving(moving: boolean) {
     this.moving = moving;
-    this.dispatchEvent(ControlEvent.APPEARANCE_CHANGED);
+    this.worker.dispatchEvent(ControlEvent.appearanceChanged);
   }
 }

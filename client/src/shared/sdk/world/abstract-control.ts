@@ -1,43 +1,37 @@
-import { EventListener } from '.';
+import { ControlEventListener } from '.';
 
 export abstract class AbstractControl {
-  protected eventListeners: EventListener[] = [];
+  protected eventListeners: ControlEventListener[] = [];
 
   /**
-   * Registers an event listener to the list of events.
+   * Adds an event into a target.
    *
-   * @param event The event to register.
+   * @param eventListener The event listener to add.
    */
-  public addEventListener(event: EventListener) {
-    this.eventListeners.push(event);
+  protected addEventListener(listener: ControlEventListener) {
+    const { target, type } = listener.event;
+    target.addEventListener(type, listener.callback);
+    this.eventListeners.push(listener);
   }
 
   /**
-   * Removes an event listener from the list of events.
+   * Removes an event from a target.
    *
-   * @param event The event to remove.
+   * @param target The event target to remove a listener from.
+   * @param type The event type.
+   * @param name The event name.
    */
-  public removeEventListener(event: EventListener) {
-    const eventIndex = this.eventListeners.findIndex(
-      (currentEvent) => currentEvent.event === event.event && currentEvent.name === event.name,
-    );
-    if (eventIndex !== -1) {
-      this.eventListeners.splice(eventIndex, 1);
-    }
-  }
+  protected removeEventListener(target: EventTarget, type: string, name: string) {
+    const listenerIndex = this.eventListeners.findIndex((eventListener) => {
+      const { target: eventTarget, type: eventType, name: eventName } = eventListener.event;
+      return eventTarget === target && eventType === type && eventName === name;
+    });
 
-  /**
-   * Returns the listening event(s) from the given event string.
-   *
-   * @param event The event to receive from.
-   */
-  public getListeningEvents(event: string) {
-    const registeredEvents = [];
-    for (let eventIndex = 0; eventIndex < this.eventListeners.length; eventIndex += 1) {
-      if (this.eventListeners[eventIndex].event === event) {
-        registeredEvents.push(this.eventListeners[eventIndex]);
-      }
+    if (listenerIndex !== -1) {
+      // remove this event
+      const eventListener = this.eventListeners[listenerIndex];
+      target.removeEventListener(type, eventListener.callback);
+      this.eventListeners.splice(listenerIndex, 1);
     }
-    return registeredEvents;
   }
 }
