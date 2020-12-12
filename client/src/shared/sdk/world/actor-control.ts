@@ -1,4 +1,4 @@
-import { EntityControl, ControlEvent, WorkerMessage } from '.';
+import { EntityControl, WorkerMessage } from '.';
 
 interface State {
   name: string;
@@ -19,13 +19,9 @@ export class ActorControl extends EntityControl {
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
 
-      if (data.type === WorkerMessage.isMoving) {
-        this.worker.postMessage({
-          type: WorkerMessage.isMoving,
-          payload: {
-            value: this.moving,
-          },
-        });
+      if (data.type === WorkerMessage.registerStates) {
+        const { value } = data.payload;
+        this.registerStates(value);
       }
     });
   }
@@ -76,6 +72,11 @@ export class ActorControl extends EntityControl {
    */
   public setMoving(moving: boolean) {
     this.moving = moving;
-    this.worker.dispatchEvent(ControlEvent.appearanceChanged);
+    this.worker.postMessage({
+      type: WorkerMessage.isMoving,
+      payload: {
+        value: moving,
+      },
+    });
   }
 }

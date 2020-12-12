@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
-import { AbstractControl, ControlEvent, WorkerMessage } from '.';
+import { AbstractControl } from '.';
 
 export class EntityControl extends AbstractControl {
   protected entity: PIXI.AnimatedSprite | undefined;
@@ -59,28 +59,6 @@ export class EntityControl extends AbstractControl {
     if (!this.worker) {
       throw new Error('The worker has not yet loaded.');
     }
-
-    this.worker.addEventListener('message', (event: MessageEvent) => {
-      const { data } = event;
-
-      if (data.type === WorkerMessage.addEventListener) {
-        const { type, name } = data.payload;
-        this.addEventListener({
-          event: new ControlEvent(this.worker, type, name),
-          callback: () => {
-            this.worker.postMessage({
-              type: 'event',
-              payload: data.payload,
-            });
-          },
-        });
-      }
-
-      if (data.type === WorkerMessage.removeEventListener) {
-        const { type, name } = data.payload;
-        this.removeEventListener(this.worker, type, name);
-      }
-    });
   }
 
   /**
