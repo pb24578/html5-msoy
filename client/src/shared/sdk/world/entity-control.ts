@@ -2,6 +2,11 @@ import * as PIXI from 'pixi.js-legacy';
 import { AbstractControl } from '.';
 import { CrossOriginWorker } from '../net';
 
+interface DispatchEvent {
+  event: string;
+  value: any;
+}
+
 export class EntityControl extends AbstractControl {
   protected entity: PIXI.AnimatedSprite;
   protected spritesheet: PIXI.Spritesheet;
@@ -11,7 +16,7 @@ export class EntityControl extends AbstractControl {
     super();
     this.spritesheet = spritesheet;
     this.entity = new PIXI.AnimatedSprite([]);
-    this.loadEntityScript(script);
+    this.loadEntityWorker(script);
   }
 
   /**
@@ -23,11 +28,28 @@ export class EntityControl extends AbstractControl {
    *
    * @param script The URL to the entity's script logic.
    */
-  public async loadEntityScript(script: string) {
+  public async loadEntityWorker(script: string) {
     if (this.worker) {
       this.worker.terminate();
     }
     this.worker = CrossOriginWorker();
     await this.worker.loadCrossOriginScript(script);
+  }
+
+  /**
+   * Dispatches an event to the worker.
+   */
+  public dispatchEvent(DispatchEvent: DispatchEvent) {
+    const registeredEvents = this.getListeningEvents(DispatchEvent.event);
+    registeredEvents.forEach((event) => {
+      this.worker.postMessage({
+        type: 'event',
+        payload: {
+          event: DispatchEvent.event,
+          name: event.name,
+          value: DispatchEvent.value,
+        },
+      });
+    });
   }
 }

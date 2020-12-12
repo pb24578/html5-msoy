@@ -5,8 +5,9 @@ interface State {
 }
 
 export class ActorControl extends EntityControl {
-  private states: State[] = [];
-  private currentState: State | null = null;
+  protected states: State[] = [];
+  protected currentState: State | null = null;
+  protected moving = false;
 
   /**
    * Registers the actor's states. The first state will be your "default" state.
@@ -47,5 +48,16 @@ export class ActorControl extends EntityControl {
       throw new Error(`The state ${state} does not exist.`);
     }
     this.currentState = newState;
+  }
+
+  /**
+   * Sets if the actor is now moving.
+   */
+  public setMoving(moving: boolean) {
+    this.moving = moving;
+    this.dispatchEvent({
+      event: 'onMoving',
+      value: moving,
+    });
   }
 }
