@@ -15,17 +15,22 @@ export abstract class AbstractControl {
   }
 
   /**
-   * Removes an event from a target.
+   * Removes an event from a target. If two or more events with the same target, type, and name
+   * exist, then it'll remove the most recent event listener that was added.
    *
    * @param target The event target to remove a listener from.
    * @param type The event type.
    * @param name The event name.
    */
   protected removeEventListener(target: EventTarget, type: string, name: string) {
-    const listenerIndex = this.eventListeners.findIndex((eventListener) => {
+    let listenerIndex = -1;
+    for (let eInd = this.eventListeners.length - 1; eInd >= 0 && listenerIndex !== -1; eInd += 1) {
+      const eventListener = this.eventListeners[eInd];
       const { target: eventTarget, type: eventType, name: eventName } = eventListener.event;
-      return eventTarget === target && eventType === type && eventName === name;
-    });
+      if (eventTarget === target && eventType === type && eventName === name) {
+        listenerIndex = eInd;
+      }
+    }
 
     if (listenerIndex !== -1) {
       // remove this event
