@@ -14,7 +14,7 @@ import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
-import { getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
+import { getAvatarMap, getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
 import {
   isConnectionError,
@@ -76,6 +76,9 @@ export const World = React.memo(() => {
   const paramRoomId = worldsMatch?.params.id;
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
 
+  // receive the entities on the world
+  const avatarMap = useSelector(getAvatarMap);
+
   /**
    * Creates a reference to the Pixi App container. Once the reference
    * has been created, then set the Pixi app's view to the container,
@@ -83,7 +86,7 @@ export const World = React.memo(() => {
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
-    if (!pixiRef.current || !sessionLoaded || !socket) return;
+    if (!pixiRef.current || !sessionLoaded || !socket || avatarMap.size === 0) return;
     pixiRef.current.append(app.view);
     app.stage.removeChildren();
     dispatch(resizePixiApp());
@@ -99,72 +102,32 @@ export const World = React.memo(() => {
     background.height = app.screen.height;
     stage.addChild(background);
 
-    const avatarLoader = new PIXI.Loader();
-    const texture = 'http://localhost:8000/media/soda/texture.json';
-    avatarLoader.add(texture);
-    avatarLoader.load(() => {
-      const sheet = avatarLoader.resources[texture].spritesheet;
-      if (sheet) {
-        const ctrl = new AvatarControl(sheet, 'http://localhost:8000/media/body.js');
-        const avatar = ctrl.getSprite();
+    // add each avatar from the avatar map
+    avatarMap.forEach((ctrl) => {
+      const sprite = ctrl.getSprite();
+      const name = ctrl.getName();
 
-        // add an example avatar
-        avatar.width = 142;
-        avatar.height = 156;
-        avatar.anchor.set(0.5);
-        stage.addChild(avatar);
+      // add the avatar onto the stage
+      sprite.width = 142;
+      sprite.height = 156;
+      sprite.anchor.set(0.5);
+      stage.addChild(sprite);
 
-        // add the user's name
-        const name = new PIXI.Text(displayName, { fill: 0xffffff, fontSize: 16 });
-        name.anchor.set(0.5);
-        stage.addChild(name);
+      // add the avatar's name
+      name.anchor.set(0.5);
+      stage.addChild(name);
 
-        const setAvatarPosition = (x: number, y: number) => {
-          avatar.x = x;
-          avatar.y = y;
-          name.x = avatar.x;
-          name.y = avatar.y - avatar.height / 2 - 10;
+      // move the avatar whenever the container is clicked
+      stage.on('mousedown', (event: PIXI.InteractionEvent) => {
+        const { x, y } = event.data.global;
+        const avatarPosition: SendEntityPosition = {
+          type: 'avatar.position',
+          payload: { id, x, y },
         };
-
-        // set the sprite's position to the middle of the stage
-        setAvatarPosition(stage.width / 2, stage.height / 2);
-
-        // move the avatar whenever the container is clicked
-        let request = 0;
-        stage.on('mousedown', (event: PIXI.InteractionEvent) => {
-          const { x, y } = event.data.global;
-          const avatarPosition: SendEntityPosition = {
-            type: 'avatar.position',
-            payload: { id, x, y },
-          };
-          socket.send(JSON.stringify(avatarPosition));
-          const xDistance = Math.abs(x - avatar.x);
-          const yDistance = Math.abs(y - avatar.y);
-          const invVelocity = 56;
-          const xVelocity = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
-          const yVelocity = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
-
-          const moveAvatar = () => {
-            if ((xVelocity < 0 && avatar.x <= x) || (xVelocity >= 0 && avatar.x >= x)) {
-              setAvatarPosition(x, y);
-              ctrl.setMoving(false);
-              return;
-            }
-            request = requestAnimationFrame(moveAvatar);
-            setAvatarPosition(avatar.x + xVelocity, avatar.y + yVelocity);
-            app.renderer.render(stage);
-          };
-
-          ctrl.setMoving(true);
-          if (request) {
-            // cancel the previous movement for this Avatar
-            cancelAnimationFrame(request);
-          }
-          moveAvatar();
-        });
-      }
+        socket.send(JSON.stringify(avatarPosition));
+      });
     });
-  }, [pixiRef.current, sessionLoaded, socket]);
+  }, [pixiRef.current, sessionLoaded, socket, avatarMap]);
 
   /**
    * When the user moves between rooms, establish a new connection with the room.

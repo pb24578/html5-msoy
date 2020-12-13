@@ -2,14 +2,16 @@ import * as PIXI from 'pixi.js-legacy';
 import { EntityControl, WorkerMessage } from '.';
 
 export class ActorControl extends EntityControl {
+  protected name: PIXI.Text;
   protected states: string[] = [];
   protected currentState: string;
   protected moving;
 
-  constructor(sheet: PIXI.Spritesheet, script: string) {
+  constructor(name: string, sheet: PIXI.Spritesheet, script: string) {
     super(sheet, script);
     this.currentState = this.default;
     this.moving = false;
+    this.name = new PIXI.Text(name, { fill: 0xffffff, fontSize: 16 });
   }
 
   /**
@@ -65,6 +67,23 @@ export class ActorControl extends EntityControl {
     if (!newState || !this.sheet.animations[newState]) return;
     this.currentState = newState;
     this.sprite.textures = this.sheet.animations[state];
+  }
+
+  /**
+   * Returns the the name of the actor.
+   */
+  public getName() {
+    return this.name;
+  }
+
+  /**
+   * Sets the actor's position. This is helpful to align the name with the sprite.
+   */
+  public setPosition(x: number, y: number) {
+    this.sprite.x = x;
+    this.sprite.y = y;
+    this.name.x = this.sprite.x;
+    this.name.y = this.sprite.y - this.sprite.height / 2 - 10;
   }
 
   /**

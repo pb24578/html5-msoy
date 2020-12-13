@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
+import { Profile } from '../profile/types';
 import { AvatarControl } from '../../shared/sdk/world';
 
 export interface World {
@@ -51,6 +52,7 @@ export const isReceiveParticipants = (object: any): object is ReceiveParticipant
 
 export interface Avatar {
   id: number;
+  owner: Profile;
   texture: string;
   script: string;
   position: EntityPosition;
