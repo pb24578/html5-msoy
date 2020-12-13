@@ -2,7 +2,7 @@ import { createAsyncAction } from 'async-selector-kit';
 import * as PIXI from 'pixi.js-legacy';
 import { IState } from '../../store';
 import { SocketURI } from '../../shared/constants';
-import { getSession } from '../../shared/user/selectors';
+import { getSession, getUser } from '../../shared/user/selectors';
 import { AvatarControl } from '../../shared/sdk/world';
 import { getWorldSocket, getParticipantMap, getPixiStage } from './selectors';
 import { EntityPosition, ParticipantMap, ParticipantPayload, Room, SendEntityPosition } from './types';
@@ -55,7 +55,7 @@ export const [setParticipantMap] = createAsyncAction(
   {
     id: 'set-participant-map',
     // eslint-disable-next-line max-len
-    async: (store, status, participantMap, stage, socket) => async (participants: ParticipantPayload[]) => {
+    async: (store, status, participantMap, stage, user, socket) => async (participants: ParticipantPayload[]) => {
       participants.forEach(({ avatar }) => {
         if (avatar && !PIXI.Loader.shared.resources[avatar.texture]) {
           PIXI.Loader.shared.add(avatar.texture);
@@ -95,24 +95,26 @@ export const [setParticipantMap] = createAsyncAction(
             name.anchor.set(0.5);
             stage.addChild(name);
 
-            // move the avatar whenever the container is clicked
-            stage.on('mousedown', (event: PIXI.InteractionEvent) => {
-              if (!socket) return;
-              const { x, y } = event.data.global;
-              const { id } = participant.avatar;
-              const avatarPosition: SendEntityPosition = {
-                type: 'avatar.position',
-                payload: { id, x, y },
-              };
-              socket.send(JSON.stringify(avatarPosition));
-            });
+            if (participant.id === user.id) {
+              // move the avatar whenever the container is clicked
+              stage.on('mousedown', (event: PIXI.InteractionEvent) => {
+                if (!socket) return;
+                const { x, y } = event.data.global;
+                const { id } = participant.avatar;
+                const avatarPosition: SendEntityPosition = {
+                  type: 'avatar.position',
+                  payload: { id, x, y },
+                };
+                socket.send(JSON.stringify(avatarPosition));
+              });
+            }
           }
         });
         store.dispatch(updateParticipantMap(newParticipantMap));
       });
     },
   },
-  [getParticipantMap, getPixiStage, getWorldSocket],
+  [getParticipantMap, getPixiStage, getUser, getWorldSocket],
 );
 
 export const [setAvatarPosition] = createAsyncAction(
