@@ -82,6 +82,6 @@ export class EntityControl extends AbstractControl {
    * Returns the spritesheet.
    */
   public getSpriteSheet() {
-    return this.spritesheet;
+    return this.sheet;
   }
 }
