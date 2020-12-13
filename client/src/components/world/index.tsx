@@ -161,7 +161,7 @@ export const World = React.memo(() => {
       }
 
       if (isReceiveAvatarPosition(data)) {
-        setAvatarPosition(data.payload);
+        setAvatarPosition(data);
       }
 
       if (isReceiveChatMessage(data)) {
@@ -180,7 +180,7 @@ export const World = React.memo(() => {
           id: 0,
           profile: {
             id: 0,
-            redirectRoomId: 0,
+            redirectRoomId: 1,
             displayName: 'Server',
           },
         },

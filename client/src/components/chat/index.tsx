@@ -102,7 +102,7 @@ export const Chat = React.memo(() => {
    * @param participant The participant that this user wants to interact with.
    */
   const openInteractions = (participant: Participant) => {
-    dispatch(push(`${routes.profiles.pathname}/${participant.id}`));
+    dispatch(push(`${routes.profiles.pathname}/${participant.profile.id}`));
   };
 
   return (

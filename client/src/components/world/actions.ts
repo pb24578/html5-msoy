@@ -5,7 +5,7 @@ import { SocketURI } from '../../shared/constants';
 import { getSession, getUser } from '../../shared/user/selectors';
 import { AvatarControl } from '../../shared/sdk/world';
 import { getWorldSocket, getParticipantMap, getPixiStage } from './selectors';
-import { EntityPosition, ParticipantMap, ParticipantPayload, Room, SendEntityPosition } from './types';
+import { ParticipantMap, ParticipantPayload, Room, ReceiveEntityPosition, SendEntityPosition } from './types';
 import { actions, initialState } from './reducer';
 
 const { setParticipantMap: updateParticipantMap, setRoom, setWorldSocket } = actions;
@@ -94,15 +94,14 @@ export const [setParticipantMap] = createAsyncAction(
             name.anchor.set(0.5);
             stage.addChild(name);
 
-            if (participant.id === user.id) {
+            if (participant.profile.id === user.id) {
               // move the avatar whenever the container is clicked
               stage.on('mousedown', (event: PIXI.InteractionEvent) => {
                 if (!socket) return;
                 const { x, y } = event.data.global;
-                const { id } = participant.avatar;
                 const avatarPosition: SendEntityPosition = {
                   type: 'avatar.position',
-                  payload: { id, x, y },
+                  payload: { position: { x, y } },
                 };
                 socket.send(JSON.stringify(avatarPosition));
               });
@@ -133,8 +132,9 @@ export const [setParticipantMap] = createAsyncAction(
 export const [setAvatarPosition] = createAsyncAction(
   {
     id: 'set-avatar-position',
-    async: (store, status) => async (position: EntityPosition) => {
-      const { id, x, y } = position;
+    async: (store, status) => async (position: ReceiveEntityPosition) => {
+      const { id } = position.payload;
+      const { x, y } = position.payload.position;
       const state = store.getState() as IState;
       const participant = state.world.room.participantMap[id];
       if (!participant || !participant.avatar) return;

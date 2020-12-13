@@ -43,6 +43,11 @@ export interface Participant {
   avatar?: AvatarControl;
 }
 
+export interface EntityPosition {
+  x: number;
+  y: number;
+}
+
 export interface AvatarPayload {
   id: number;
   texture: string;
@@ -66,20 +71,19 @@ export interface ReceiveParticipants {
 export const isReceiveParticipants = (object: any): object is ReceiveParticipants =>
   'type' in object && object.type === 'participants';
 
-export interface EntityPosition {
-  id: number;
-  x: number;
-  y: number;
-}
-
 export interface SendEntityPosition {
   type: string;
-  payload: EntityPosition;
+  payload: {
+    position: EntityPosition;
+  };
 }
 
 export interface ReceiveEntityPosition {
   type: string;
-  payload: EntityPosition;
+  payload: {
+    id: number;
+    position: EntityPosition;
+  };
 }
 
 export const isReceiveAvatarPosition = (object: any): object is ReceiveEntityPosition =>

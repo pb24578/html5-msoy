@@ -25,7 +25,9 @@ async def broadcast_message(room_channel_name, channel_name, json_data):
     message = message[0: max_chars]
 
     def get_participant():
-        return Participant.objects.get(channel_name=channel_name)
+        return Participant.objects.get(
+            channel_room__channel_name=room_channel_name, channel_name=channel_name
+        )
     participant = await sync_to_async(get_participant)()
 
     def get_profile():
@@ -58,7 +60,7 @@ async def broadcast_message(room_channel_name, channel_name, json_data):
         }
     )
 
-async def broadcast_entity_position(room_channel_name, json_data):
+async def broadcast_entity_position(room_channel_name, channel_name, json_data):
     """
     Sends the new entity position to the users of the room.
     """
@@ -66,10 +68,20 @@ async def broadcast_entity_position(room_channel_name, json_data):
     type = json_data['type']
     payload = json_data['payload']
 
+    def get_participant_id():
+        participant = Participant.objects.get(
+            channel_room__channel_name=room_channel_name, channel_name=channel_name
+        )
+        return participant.id
+    id = await sync_to_async(get_participant_id)()
+
     await channel_layer.group_send(
         room_channel_name,
         {
             'type': type,
-            'payload': payload
+            'payload': {
+                "id": id,
+                "position": payload["position"]
+            }
         }
     )
