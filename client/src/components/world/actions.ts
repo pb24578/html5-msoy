@@ -92,9 +92,9 @@ export const [setParticipantMap] = createAsyncAction(
     // eslint-disable-next-line max-len
     async: (store, status, participantMap, stage, user) => async (participants: ParticipantPayload[]) => {
       participants.forEach(({ avatar }) => {
-        const mediaTexture = `${ContentURI}${avatar.texture}`;
-        if (avatar && !PIXI.Loader.shared.resources[mediaTexture]) {
-          PIXI.Loader.shared.add(mediaTexture);
+        const textureURL = ContentURI + avatar.texture;
+        if (avatar && !PIXI.Loader.shared.resources[textureURL]) {
+          PIXI.Loader.shared.add(textureURL);
         }
       });
 
