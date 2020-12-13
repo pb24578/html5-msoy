@@ -26,7 +26,8 @@ async def broadcast_message(room_channel_name, channel_name, json_data):
 
     def get_participant():
         return Participant.objects.get(
-            channel_room__channel_name=room_channel_name, channel_name=channel_name
+            channel_room__channel_name=room_channel_name,
+            channel_name=channel_name
         )
     participant = await sync_to_async(get_participant)()
 
@@ -70,7 +71,8 @@ async def broadcast_entity_position(room_channel_name, channel_name, json_data):
 
     def get_participant_id():
         participant = Participant.objects.get(
-            channel_room__channel_name=room_channel_name, channel_name=channel_name
+            channel_room__channel_name=room_channel_name,
+            channel_name=channel_name
         )
         return participant.id
     id = await sync_to_async(get_participant_id)()
