@@ -51,6 +51,41 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
   [getSession],
 );
 
+export const [handleUserAvatarPosition] = createAsyncAction(
+  {
+    id: 'handle-user-avatar-position',
+    async: (store, status, stage, socket) => async (ctrl: AvatarControl) => {
+      if (!socket) return;
+      // set the initial position of this user's avatar
+      const x = stage.width / 2;
+      const y = stage.height / 2;
+      ctrl.setPosition(x, y);
+      const avatarPosition: SendEntityPosition = {
+        type: 'avatar.position',
+        payload: {
+          id: ctrl.getEntityId(),
+          position: { x, y },
+        },
+      };
+      socket.send(JSON.stringify(avatarPosition));
+
+      // move the avatar whenever the container is clicked
+      stage.on('mousedown', (event: PIXI.InteractionEvent) => {
+        const { x, y } = event.data.global;
+        const avatarPosition: SendEntityPosition = {
+          type: 'avatar.position',
+          payload: {
+            id: ctrl.getEntityId(),
+            position: { x, y },
+          },
+        };
+        socket.send(JSON.stringify(avatarPosition));
+      });
+    },
+  },
+  [getPixiStage, getWorldSocket],
+);
+
 export const [setParticipantMap] = createAsyncAction(
   {
     id: 'set-participant-map',
@@ -97,26 +132,11 @@ export const [setParticipantMap] = createAsyncAction(
 
             const isUserParticipant = participant.profile.id === user.id;
             if (isUserParticipant) {
-              // move the avatar whenever the container is clicked
-              stage.on('mousedown', (event: PIXI.InteractionEvent) => {
-                if (!socket) return;
-                const { x, y } = event.data.global;
-                const avatarPosition: SendEntityPosition = {
-                  type: 'avatar.position',
-                  payload: {
-                    id: ctrl.getEntityId(),
-                    position: { x, y },
-                  },
-                };
-                socket.send(JSON.stringify(avatarPosition));
-              });
+              handleUserAvatarPosition(ctrl);
             }
           }
         });
 
-        /**
-         * Remove avatars from the stage that are no longer in the world.
-         */
         const oldParticipants = Object.values(participantMap);
         oldParticipants.forEach((participant) => {
           const isOldParticipant = !newParticipantMap[participant.id];
