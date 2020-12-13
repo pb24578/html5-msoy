@@ -93,12 +93,12 @@ export const World = React.memo(() => {
     container.addChild(background);
 
     // example ctrl, TODO: delete later
-    const jovialSprite = 'http://localhost:8000/media/jovial/texture.png';
-    const jovialTexture = 'http://localhost:8000/media/jovial/texture.json';
-    PIXI.Loader.shared.add(jovialTexture);
-    PIXI.Loader.shared.add(jovialSprite);
+    const sprite = 'http://localhost:8000/media/soda/texture.png';
+    const texture = 'http://localhost:8000/media/soda/texture.json';
+    PIXI.Loader.shared.add(texture);
+    PIXI.Loader.shared.add(sprite);
     PIXI.Loader.shared.load(() => {
-      const sheet = PIXI.Loader.shared.resources[jovialTexture].spritesheet;
+      const sheet = PIXI.Loader.shared.resources[texture].spritesheet;
       if (sheet) {
         const ctrl = new AvatarControl(sheet, 'http://localhost:8000/media/body.js');
         const avatar = ctrl.getSprite();
