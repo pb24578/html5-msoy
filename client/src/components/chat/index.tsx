@@ -5,7 +5,8 @@ import styled, { ThemeContext } from 'styled-components';
 import routes from '../../shared/routes';
 import { FlexColumn } from '../../shared/styles/flex';
 import { Participant } from '../world/types';
-import { getMessages, getParticipants } from './selectors';
+import { getParticipantMap } from '../world/selectors';
+import { getMessages } from './selectors';
 
 const Container = styled(FlexColumn)`
   height: 100%;
@@ -77,7 +78,7 @@ const MessageSender = styled.div`
 export const Chat = React.memo(() => {
   const dispatch = useDispatch();
   const messages = useSelector(getMessages);
-  const participants = useSelector(getParticipants);
+  const participantMap = useSelector(getParticipantMap);
   const theme = useContext(ThemeContext);
 
   /**
@@ -104,16 +105,19 @@ export const Chat = React.memo(() => {
     dispatch(push(`${routes.profiles.pathname}/${participant.id}`));
   };
 
+  const participants: React.ReactElement[] = [];
+  participantMap.forEach((participant, index) => {
+    participants.push(
+      <ChatParticipant key={index} onClick={() => openInteractions(participant)}>
+        {participant.displayName}
+      </ChatParticipant>,
+    );
+  });
+
   return (
     <Container>
       <UsersTitle>Users Online</UsersTitle>
-      <UsersList>
-        {participants.map((participant, index) => (
-          <ChatParticipant key={index} onClick={() => openInteractions(participant)}>
-            {participant.displayName}
-          </ChatParticipant>
-        ))}
-      </UsersList>
+      <UsersList>{participants}</UsersList>
       <ChatHistoryOverflow>
         <ChatHistory ref={chatRef}>
           {messages.reduceRight((elements, message, index) => {

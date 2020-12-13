@@ -1,5 +1,4 @@
 import * as PIXI from 'pixi.js-legacy';
-import { Profile } from '../profile/types';
 import { AvatarControl } from '../../shared/sdk/world';
 
 export interface World {
@@ -15,8 +14,7 @@ export interface Pixi {
 
 export interface Room {
   id: number;
-  participants: Participant[];
-  avatarMap: Map<number, AvatarControl>;
+  participantMap: Map<number, Participant>;
 }
 
 export interface WorldError {
@@ -38,35 +36,31 @@ export const isConnectionError = (object: any): object is ConnectionError =>
 export interface Participant {
   id: number;
   displayName: string;
+  avatar?: AvatarControl;
 }
 
-export interface ReceiveParticipants {
-  type: string;
-  payload: {
-    participants: Participant[];
-  };
-}
-
-export const isReceiveParticipants = (object: any): object is ReceiveParticipants =>
-  'type' in object && object.type === 'participants';
-
-export interface Avatar {
+export interface AvatarPayload {
   id: number;
-  owner: Profile;
   texture: string;
   script: string;
   position: EntityPosition;
 }
 
-export interface ReceiveAvatars {
+export interface ParticipantPayload {
+  id: number;
+  displayName: string;
+  avatar: AvatarPayload;
+}
+
+export interface ReceiveParticipants {
   type: string;
   payload: {
-    avatars: Avatar[];
+    participants: ParticipantPayload[];
   };
 }
 
-export const isReceiveAvatars = (object: any): object is ReceiveAvatars =>
-  'type' in object && object.type === 'avatars';
+export const isReceiveParticipants = (object: any): object is ReceiveParticipants =>
+  'type' in object && object.type === 'participants';
 
 export interface EntityPosition {
   id: number;

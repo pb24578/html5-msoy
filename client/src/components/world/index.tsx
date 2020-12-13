@@ -8,24 +8,17 @@ import { PixiBackground } from '../../assets';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
 import { getUser, isSessionLoaded } from '../../shared/user/selectors';
-import { AvatarControl } from '../../shared/sdk/world';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
-import { getAvatarMap, getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
+import { getParticipantMap, getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
-import {
-  isConnectionError,
-  isReceiveAvatars,
-  isReceiveAvatarPosition,
-  isReceiveParticipants,
-  SendEntityPosition,
-} from './types';
+import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants, SendEntityPosition } from './types';
 
 const { addMessage } = chatActions;
-const { resizePixiApp, setAvatarMap, setAvatarPosition, setWorldError, setParticipants } = actions;
+const { resizePixiApp, setAvatarPosition, setWorldError, setParticipantMap } = actions;
 
 const Container = styled(FlexColumn)`
   padding-right: 8px;
@@ -66,7 +59,7 @@ export const World = React.memo(() => {
   const error = useSelector(getWorldError);
   const app = useSelector(getPixiApp);
   const sessionLoaded = useSelector(isSessionLoaded);
-  const { id, displayName, redirectRoomId } = useSelector(getUser);
+  const { id, redirectRoomId } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
   const socket = useSelector(getWorldSocket);
   const theme = useContext(ThemeContext);
@@ -76,8 +69,8 @@ export const World = React.memo(() => {
   const paramRoomId = worldsMatch?.params.id;
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
 
-  // receive the entities on the world
-  const avatarMap = useSelector(getAvatarMap);
+  // receive the participant information
+  const participantMap = useSelector(getParticipantMap);
 
   /**
    * Creates a reference to the Pixi App container. Once the reference
@@ -86,7 +79,7 @@ export const World = React.memo(() => {
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
-    if (!pixiRef.current || !sessionLoaded || !socket || avatarMap.size === 0) return;
+    if (!pixiRef.current || !sessionLoaded || !socket || participantMap.size === 0) return;
     pixiRef.current.append(app.view);
     app.stage.removeChildren();
     dispatch(resizePixiApp());
@@ -103,7 +96,9 @@ export const World = React.memo(() => {
     stage.addChild(background);
 
     // add each avatar from the avatar map
-    avatarMap.forEach((ctrl) => {
+    participantMap.forEach((participant) => {
+      const ctrl = participant.avatar;
+      if (!ctrl) return;
       const sprite = ctrl.getSprite();
       const name = ctrl.getName();
 
@@ -127,7 +122,7 @@ export const World = React.memo(() => {
         socket.send(JSON.stringify(avatarPosition));
       });
     });
-  }, [pixiRef.current, sessionLoaded, socket, avatarMap]);
+  }, [pixiRef.current, sessionLoaded, socket, participantMap]);
 
   /**
    * When the user moves between rooms, establish a new connection with the room.
@@ -164,11 +159,7 @@ export const World = React.memo(() => {
       const data = JSON.parse(event.data);
 
       if (isReceiveParticipants(data)) {
-        dispatch(setParticipants(data.payload.participants));
-      }
-
-      if (isReceiveAvatars(data)) {
-        dispatch(setAvatarMap(data.payload.avatars));
+        dispatch(setParticipantMap(data.payload.participants));
       }
 
       if (isReceiveAvatarPosition(data)) {

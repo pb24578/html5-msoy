@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import * as PIXI from 'pixi.js-legacy';
 import { AvatarControl } from '../../shared/sdk/world';
-import { Avatar, EntityPosition, Participant, Room, World, WorldError } from './types';
+import { EntityPosition, ParticipantPayload, Room, World, WorldError } from './types';
 
 export const initialState: World = {
   error: null,
@@ -10,8 +10,7 @@ export const initialState: World = {
   },
   room: {
     id: 0,
-    participants: [],
-    avatarMap: new Map(),
+    participantMap: new Map(),
   },
   socket: null,
 };
@@ -27,31 +26,11 @@ const slice = createSlice({
         app.renderer.resize(parent.clientWidth, parent.clientHeight);
       }
     },
-    setAvatarMap: (state, action: PayloadAction<Avatar[]>) => {
-      action.payload.forEach((avatar) => {
-        if (!PIXI.Loader.shared.resources[avatar.texture]) {
-          PIXI.Loader.shared.add(avatar.texture);
-        }
-      });
-
-      PIXI.Loader.shared.load(() => {
-        for (let avatarIndex = 0; avatarIndex < action.payload.length; avatarIndex += 1) {
-          const avatar = action.payload[avatarIndex];
-          if (!state.room.avatarMap.has(avatar.id)) {
-            // add the new avatar if it doesn't already exist in the avatar map
-            const sheet = PIXI.Loader.shared.resources[avatar.texture].spritesheet;
-            if (sheet) {
-              const ctrl = new AvatarControl(avatar.owner.displayName, sheet, avatar.script);
-              state.room.avatarMap.set(avatar.id, ctrl);
-            }
-          }
-        }
-      });
-    },
     setAvatarPosition: (state, action: PayloadAction<EntityPosition>) => {
       const { id, x, y } = action.payload;
-      const ctrl = state.room.avatarMap.get(id);
-      if (!ctrl) return;
+      const participant = state.room.participantMap.get(id);
+      if (!participant || !participant.avatar) return;
+      const ctrl = participant.avatar;
       const stage = state.pixi.app.stage.getChildAt(0);
       const avatar = ctrl.getSprite();
 
@@ -81,8 +60,30 @@ const slice = createSlice({
       }
       moveAvatar();
     },
-    setParticipants: (state, action: PayloadAction<Participant[]>) => {
-      state.room.participants = action.payload;
+    setParticipantMap: (state, action: PayloadAction<ParticipantPayload[]>) => {
+      action.payload.forEach(({ avatar }) => {
+        if (avatar && !PIXI.Loader.shared.resources[avatar.texture]) {
+          PIXI.Loader.shared.add(avatar.texture);
+        }
+      });
+
+      PIXI.Loader.shared.load(() => {
+        action.payload.forEach((participant) => {
+          if (!state.room.participantMap.has(participant.id)) {
+            // add the new participant if the participant isn't already in the map
+            const { avatar } = participant;
+            const sheet = PIXI.Loader.shared.resources[avatar.texture].spritesheet;
+            if (sheet) {
+              const ctrl = new AvatarControl(participant.displayName, sheet, avatar.script);
+              state.room.participantMap.set(participant.id, {
+                id: participant.id,
+                displayName: participant.displayName,
+                avatar: ctrl,
+              });
+            }
+          }
+        });
+      });
     },
     setRoom: (state, action: PayloadAction<Room>) => {
       state.room = action.payload;
