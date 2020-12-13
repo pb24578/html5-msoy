@@ -1,8 +1,8 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
 from rest.models import Room
-from rest.getters.user import get_display_name, get_id
-from ..models import ChannelRoom
+from ...models import ChannelRoom
+from .message import broadcast_message
 import humps
 import json
 
@@ -78,32 +78,9 @@ class WorldConsumer(AsyncWebsocketConsumer):
         type = json_data['type']
         payload = json_data['payload']
 
-        # send a message to the users in this room
         if type == 'message':
-            message = payload['message']
-
-            # prevent blank messages from being sent
-            if not bool(message) or message.isspace():
-                return
-
-            # strip off too many characters
-            max_chars = 256
-            message = message[0: max_chars]
-
-            # receive the sender's information
-            sender = {
-                'id': await sync_to_async(get_id)(self.scope['user']),
-                'display_name': await sync_to_async(get_display_name)(self.scope['user']),
-            }
-
-            await self.channel_layer.group_send(
-                self.group_name,
-                {
-                    'type': 'message',
-                    'payload': {'sender': sender, 'message': message}
-                }
-            )
-
+            await broadcast_message(self.group_name, self.scope['user'], payload['message'])
+            
     async def participants(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 

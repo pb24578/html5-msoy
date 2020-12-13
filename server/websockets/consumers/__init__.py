@@ -1,1 +1,1 @@
-from .world_consumer import WorldConsumer
+from .world import WorldConsumer
