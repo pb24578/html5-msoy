@@ -32,7 +32,7 @@ async def broadcast_message(room_channel_name, channel_name, json_data):
 
     def get_profile():
         if participant.user and participant.user.is_authenticated:
-            profile = ProfileSerializer(participant.user)
+            profile = ProfileSerializer(participant.user).data
         else:
             profile = {
                 "id": get_id(participant.user),
