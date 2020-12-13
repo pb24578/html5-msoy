@@ -6,9 +6,11 @@ const hostName = window.location.hostname;
 export const RestURI = `http://${hostName}:8000`;
 
 /**
- * The URI for static files.
+ * The URI for static and media files. The app uses the same URI for static
+ * and media files because it doesn't between those two contents and uses
+ * the same hosting service for it.
  */
-export const StaticURI = RestURI;
+export const ContentURI = RestURI;
 
 /**
  * The URI for the web-socket connections.

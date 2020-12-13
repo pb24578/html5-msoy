@@ -1,7 +1,7 @@
 import { createAsyncAction } from 'async-selector-kit';
 import * as PIXI from 'pixi.js-legacy';
 import { IState } from '../../store';
-import { SocketURI } from '../../shared/constants';
+import { SocketURI, ContentURI } from '../../shared/constants';
 import { getSession, getUser } from '../../shared/user/selectors';
 import { AvatarControl } from '../../shared/sdk/world';
 import { getWorldSocket, getParticipantMap, getPixiStage } from './selectors';
@@ -90,10 +90,11 @@ export const [setParticipantMap] = createAsyncAction(
   {
     id: 'set-participant-map',
     // eslint-disable-next-line max-len
-    async: (store, status, participantMap, stage, user, socket) => async (participants: ParticipantPayload[]) => {
+    async: (store, status, participantMap, stage, user) => async (participants: ParticipantPayload[]) => {
       participants.forEach(({ avatar }) => {
-        if (avatar && !PIXI.Loader.shared.resources[avatar.texture]) {
-          PIXI.Loader.shared.add(avatar.texture);
+        const mediaTexture = `${ContentURI}${avatar.texture}`;
+        if (avatar && !PIXI.Loader.shared.resources[mediaTexture]) {
+          PIXI.Loader.shared.add(mediaTexture);
         }
       });
 
@@ -153,7 +154,7 @@ export const [setParticipantMap] = createAsyncAction(
       });
     },
   },
-  [getParticipantMap, getPixiStage, getUser, getWorldSocket],
+  [getParticipantMap, getPixiStage, getUser],
 );
 
 export const [setAvatarPosition] = createAsyncAction(
