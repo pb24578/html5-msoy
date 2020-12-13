@@ -75,6 +75,8 @@ class WorldConsumer(AsyncWebsocketConsumer):
         if not 'type' in json_data or not 'payload' in json_data:
             return
 
+        type = json_data['type']
+
         if type == 'message':
             await broadcast_message(self.group_name, self.scope['user'], json_data)
 
