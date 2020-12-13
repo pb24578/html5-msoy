@@ -61,9 +61,9 @@ async def broadcast_message(room_channel_name, channel_name, json_data):
         }
     )
 
-async def broadcast_entity_position(room_channel_name, channel_name, json_data, move_participant):
+async def broadcast_participant_position(room_channel_name, channel_name, json_data):
     """
-    Sends the new entity position to the users of the room.
+    Sends the new participant's position to the users of the room.
     """
 
     type = json_data['type']
@@ -84,8 +84,7 @@ async def broadcast_entity_position(room_channel_name, channel_name, json_data, 
         participant.x = position["x"]
         participant.y = position["y"]
         participant.save()
-    if move_participant:
-        await sync_to_async(set_participant_position)()
+    await sync_to_async(set_participant_position)()
 
     def get_participant_id():
         return participant.id
