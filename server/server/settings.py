@@ -138,10 +138,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Media files (user uploaded content such as Avatars, Toys, Furniture, etc.)
+# Media files (user uploaded content)
 MEDIA_URL = '/media/'
 
-# this is the directory where media files uploaded by users will go 
+# this is the directory where media files created by users will be uploaded into
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Static files (CSS, JavaScript, Images)
