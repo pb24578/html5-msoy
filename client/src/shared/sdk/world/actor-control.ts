@@ -91,7 +91,7 @@ export class ActorControl extends EntityControl {
     this.sprite.x = x;
     this.sprite.y = y;
     this.name.x = this.sprite.x;
-    this.name.y = this.sprite.y - this.sprite.height / 2 - 10;
+    this.name.y = this.sprite.y - this.sprite.height - 20;
   }
 
   /**

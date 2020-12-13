@@ -84,14 +84,12 @@ export const [setParticipantMap] = createAsyncAction(
             const sprite = ctrl.getSprite();
             const name = ctrl.getName();
 
-            // add the avatar onto the stage
+            // add the avatar and the name onto the stage
             sprite.width = 142;
             sprite.height = 156;
-            sprite.anchor.set(0.5);
-            stage.addChild(sprite);
-
-            // add the avatar's name
+            sprite.anchor.set(0.5, 1);
             name.anchor.set(0.5);
+            stage.addChild(sprite);
             stage.addChild(name);
 
             // move the avatar to the loaded position
