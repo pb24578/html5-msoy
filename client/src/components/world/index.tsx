@@ -178,7 +178,11 @@ export const World = React.memo(() => {
       const errorMessage: ChatMessage = {
         sender: {
           id: 0,
-          displayName: 'Server',
+          profile: {
+            id: 0,
+            redirectRoomId: 0,
+            displayName: 'Server',
+          },
         },
         message: 'There was an issue connecting to the room. The server will redirect you elsewhere.',
         backgroundColor: theme.warningColors.primary,

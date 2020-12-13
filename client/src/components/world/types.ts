@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js-legacy';
+import { Profile } from '../profile/types';
 import { AvatarControl } from '../../shared/sdk/world';
 
 export interface World {
@@ -38,7 +39,7 @@ export const isConnectionError = (object: any): object is ConnectionError =>
 
 export interface Participant {
   id: number;
-  displayName: string;
+  profile: Profile;
   avatar?: AvatarControl;
 }
 
@@ -51,7 +52,7 @@ export interface AvatarPayload {
 
 export interface ParticipantPayload {
   id: number;
-  displayName: string;
+  profile: Profile;
   avatar: AvatarPayload;
 }
 

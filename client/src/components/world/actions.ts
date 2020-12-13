@@ -72,13 +72,12 @@ export const [setParticipantMap] = createAsyncAction(
           }
 
           // add the new participant into the participant map
-          const { avatar } = participant;
+          const { avatar, profile } = participant;
           const sheet = PIXI.Loader.shared.resources[avatar.texture].spritesheet;
           if (sheet) {
-            const ctrl = new AvatarControl(participant.displayName, sheet, avatar.script);
+            const ctrl = new AvatarControl(profile.displayName, sheet, avatar.script);
             newParticipantMap[participant.id] = {
-              id: participant.id,
-              displayName: participant.displayName,
+              ...participant,
               avatar: ctrl,
             };
 

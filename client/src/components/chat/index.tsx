@@ -111,7 +111,7 @@ export const Chat = React.memo(() => {
       <UsersList>
         {Object.values(participantMap).map((participant, index) => (
           <ChatParticipant key={index} onClick={() => openInteractions(participant)}>
-            {participant.displayName}
+            {participant.profile.displayName}
           </ChatParticipant>
         ))}
       </UsersList>
@@ -120,7 +120,7 @@ export const Chat = React.memo(() => {
           {messages.reduceRight((elements, message, index) => {
             const backgroundColor = message.backgroundColor || theme.darkerColors.primary;
             const participant = message.sender;
-            const { displayName } = message.sender;
+            const { displayName } = participant.profile;
             const onClick = () => openInteractions(participant);
             elements.push(
               <Message key={index} backgroundColor={backgroundColor}>
