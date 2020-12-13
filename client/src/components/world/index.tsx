@@ -25,7 +25,7 @@ import {
 } from './types';
 
 const { addMessage } = chatActions;
-const { resizePixiApp, setAvatars, setAvatarPosition, setWorldError, setParticipants } = actions;
+const { resizePixiApp, setAvatarMap, setAvatarPosition, setWorldError, setParticipants } = actions;
 
 const Container = styled(FlexColumn)`
   padding-right: 8px;
@@ -205,7 +205,7 @@ export const World = React.memo(() => {
       }
 
       if (isReceiveAvatars(data)) {
-        dispatch(setAvatars(data.payload.avatars));
+        dispatch(setAvatarMap(data.payload.avatars));
       }
 
       if (isReceiveAvatarPosition(data)) {

@@ -27,7 +27,7 @@ const slice = createSlice({
         app.renderer.resize(parent.clientWidth, parent.clientHeight);
       }
     },
-    setAvatars: (state, action: PayloadAction<Avatar[]>) => {
+    setAvatarMap: (state, action: PayloadAction<Avatar[]>) => {
       action.payload.forEach((avatar) => {
         if (!PIXI.Loader.shared.resources[avatar.texture]) {
           PIXI.Loader.shared.add(avatar.texture);

@@ -15,4 +15,5 @@ export const getPixiApp = (state: IState) => state.world.pixi.app;
  * Room-related selectors.
  */
 export const getParticipants = (state: IState) => state.world.room.participants;
+export const getAvatarMap = (state: IState) => state.world.room.avatarMap;
 export const getRoomId = (state: IState) => state.world.room.id;
