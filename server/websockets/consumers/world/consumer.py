@@ -78,7 +78,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
         type = json_data['type']
 
         if type == 'message':
-            await broadcast_message(self.group_name, self.scope['user'], json_data)
+            await broadcast_message(self.group_name, self.channel_name, json_data)
 
         if type == 'avatar.position':
             await broadcast_entity_position(self.group_name, json_data)

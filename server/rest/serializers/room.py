@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .user import ProfileSerializer
 from ..models import Room
-from websockets.models import ChannelRoom
+from django.apps import apps
 
 class RoomSerializer(serializers.ModelSerializer):
     online = serializers.SerializerMethodField('get_online')
@@ -12,6 +12,8 @@ class RoomSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'online', 'owner']
 
     def get_online(self, obj):
+        ChannelRoom = apps.get_model('websockets.ChannelRoom')
+
         try:
             channel_room = ChannelRoom.objects.get(room=obj)
         except:

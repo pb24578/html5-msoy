@@ -18,7 +18,7 @@ class ChannelRoomManager(models.Manager):
             room = Room.objects.get(id=room_id)
             channel_room, created = ChannelRoom.objects.get_or_create(channel_name=room_channel_name, room=room)
             channel_room.add_participant(user_channel_name, user)
-        except:
+        except Exception as e:
             return
         return channel_room
 
