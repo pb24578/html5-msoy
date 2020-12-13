@@ -16,10 +16,10 @@ import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
 import { getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
-import { isConnectionError, isReceiveParticipants } from './types';
+import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants } from './types';
 
 const { addMessage } = chatActions;
-const { resizePixiApp, setWorldError, setParticipants } = actions;
+const { resizePixiApp, setAvatarPosition, setWorldError, setParticipants } = actions;
 
 const Container = styled(FlexColumn)`
   padding-right: 8px;
@@ -122,10 +122,11 @@ export const World = React.memo(() => {
           name.y = avatar.y - avatar.height / 2 - 10;
         };
 
-        // set the avatar's position to the middle of the stage
+        // set the sprite's position to the middle of the stage
         setAvatarPosition(stage.width / 2, stage.height / 2);
 
         // move the avatar whenever the container is clicked
+        let request = 0;
         stage.on('mousedown', (event: PIXI.InteractionEvent) => {
           const { x, y } = event.data.global;
           const xDistance = Math.abs(x - avatar.x);
@@ -140,15 +141,15 @@ export const World = React.memo(() => {
               ctrl.setMoving(false);
               return;
             }
-            ctrl.request = requestAnimationFrame(moveAvatar);
+            request = requestAnimationFrame(moveAvatar);
             setAvatarPosition(avatar.x + xVelocity, avatar.y + yVelocity);
             app.renderer.render(stage);
           };
 
           ctrl.setMoving(true);
-          if (ctrl.request) {
+          if (request) {
             // cancel the previous movement for this Avatar
-            cancelAnimationFrame(ctrl.request);
+            cancelAnimationFrame(request);
           }
           moveAvatar();
         });
@@ -192,6 +193,10 @@ export const World = React.memo(() => {
 
       if (isReceiveParticipants(data)) {
         dispatch(setParticipants(data.payload.participants));
+      }
+
+      if (isReceiveAvatarPosition(data)) {
+        dispatch(setAvatarPosition(data.payload));
       }
 
       if (isReceiveChatMessage(data)) {

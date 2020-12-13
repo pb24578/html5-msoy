@@ -32,9 +32,16 @@ export interface ConnectionError {
 export const isConnectionError = (object: any): object is ConnectionError =>
   'type' in object && object.type === 'connection.error';
 
+export interface Avatar {
+  spritesheet: string;
+  texture: string;
+  position: EntityPosition;
+}
+
 export interface Participant {
   id: number;
   displayName: string;
+  avatar?: Avatar;
 }
 
 export interface ReceiveParticipants {
@@ -46,3 +53,17 @@ export interface ReceiveParticipants {
 
 export const isReceiveParticipants = (object: any): object is ReceiveParticipants =>
   'type' in object && object.type === 'participants';
+
+export interface EntityPosition {
+  id: number;
+  x: number;
+  y: number;
+}
+
+export interface ReceiveEntityPosition {
+  type: string;
+  payload: EntityPosition;
+}
+
+export const isReceiveAvatarPosition = (object: any): object is ReceiveEntityPosition =>
+  'type' in object && object.type === 'avatar.position';

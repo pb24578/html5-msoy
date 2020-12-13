@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import * as PIXI from 'pixi.js-legacy';
-import { World, WorldError, Participant, Room } from './types';
+import { EntityPosition, Participant, Room, World, WorldError } from './types';
 
 export const initialState: World = {
   error: null,
@@ -24,6 +24,9 @@ const slice = createSlice({
       if (parent) {
         app.renderer.resize(parent.clientWidth, parent.clientHeight);
       }
+    },
+    setAvatarPosition: (state, action: PayloadAction<EntityPosition>) => {
+      // none
     },
     setParticipants: (state, action: PayloadAction<Participant[]>) => {
       state.room.participants = action.payload;
