@@ -5,10 +5,10 @@ import { SocketURI } from '../../shared/constants';
 import { getSession } from '../../shared/user/selectors';
 import { AvatarControl } from '../../shared/sdk/world';
 import { getWorldSocket, getParticipantMap } from './selectors';
-import { EntityPosition, ParticipantPayload, Room } from './types';
+import { EntityPosition, ParticipantMap, ParticipantPayload, Room } from './types';
 import { actions, initialState } from './reducer';
 
-const { addParticipant, setRoom, setWorldSocket } = actions;
+const { setParticipantMap: updateParticipantMap, setRoom, setWorldSocket } = actions;
 
 // eslint-disable-next-line max-len
 export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFromRoom] = createAsyncAction(
@@ -62,26 +62,27 @@ export const [setParticipantMap] = createAsyncAction(
       });
 
       PIXI.Loader.shared.load(() => {
+        const newParticipantMap: ParticipantMap = {};
         participants.forEach((participant) => {
-          const participantExists = participantMap[participant.id];
-          if (participantExists) return;
+          const existingParticipant = participantMap[participant.id];
+          if (existingParticipant) {
+            newParticipantMap[participant.id] = existingParticipant;
+            return;
+          }
 
-          // add the new participant if the participant isn't already in the map
+          // add the new participant into the participant map
           const { avatar } = participant;
           const sheet = PIXI.Loader.shared.resources[avatar.texture].spritesheet;
           if (sheet) {
             const ctrl = new AvatarControl(participant.displayName, sheet, avatar.script);
-            const participantPayload = {
+            newParticipantMap[participant.id] = {
               id: participant.id,
-              participant: {
-                id: participant.avatar.id,
-                displayName: participant.displayName,
-                avatar: ctrl,
-              },
+              displayName: participant.displayName,
+              avatar: ctrl,
             };
-            store.dispatch(addParticipant(participantPayload));
           }
         });
+        store.dispatch(updateParticipantMap(newParticipantMap));
       });
     },
   },

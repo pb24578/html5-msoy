@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import * as PIXI from 'pixi.js-legacy';
-import { Participant, Room, World, WorldError } from './types';
+import { Participant, ParticipantMap, Room, World, WorldError } from './types';
 
 export const initialState: World = {
   error: null,
@@ -18,15 +18,15 @@ const slice = createSlice({
   name: 'world',
   initialState,
   reducers: {
-    addParticipant: (state, action: PayloadAction<{ id: number; participant: Participant }>) => {
-      state.room.participantMap[action.payload.id] = action.payload.participant;
-    },
     resizePixiApp: (state) => {
       const { app } = state.pixi;
       const parent = app.view.parentElement;
       if (parent) {
         app.renderer.resize(parent.clientWidth, parent.clientHeight);
       }
+    },
+    setParticipantMap: (state, action: PayloadAction<ParticipantMap>) => {
+      state.room.participantMap = action.payload;
     },
     setRoom: (state, action: PayloadAction<Room>) => {
       state.room = action.payload;

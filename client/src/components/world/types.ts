@@ -12,9 +12,11 @@ export interface Pixi {
   app: PIXI.Application;
 }
 
+export type ParticipantMap = { [id: number]: Participant };
+
 export interface Room {
   id: number;
-  participantMap: { [id: number]: Participant };
+  participantMap: ParticipantMap;
 }
 
 export interface WorldError {
