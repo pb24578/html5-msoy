@@ -61,7 +61,7 @@ export class ActorControl extends EntityControl {
    * Set a state, the state must be in the registered states.
    */
   public setState(state: string) {
-    const newState = this.states.find((currentState) => currentState.name === state);
+    const newState = this.states.find((currentState) => currentState === state);
     if (!newState) return;
     this.currentState = newState;
   }
