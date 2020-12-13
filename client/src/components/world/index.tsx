@@ -82,41 +82,76 @@ export const World = React.memo(() => {
     app.stage.removeChildren();
     dispatch(resizePixiApp());
 
-    // create the app's container
-    const container = new PIXI.Container();
-    app.stage.addChild(container);
+    // create the app's stage
+    const stage = new PIXI.Container();
+    stage.interactive = true;
+    app.stage.addChild(stage);
 
     // add the container's background
     const background = PIXI.Sprite.from(PixiBackground);
     background.width = app.screen.width;
     background.height = app.screen.height;
-    container.addChild(background);
+    stage.addChild(background);
 
-    // example ctrl, TODO: delete later
+    const avatarLoader = new PIXI.Loader();
     const sprite = 'http://localhost:8000/media/soda/texture.png';
     const texture = 'http://localhost:8000/media/soda/texture.json';
-    PIXI.Loader.shared.add(texture);
-    PIXI.Loader.shared.add(sprite);
-    PIXI.Loader.shared.load(() => {
-      const sheet = PIXI.Loader.shared.resources[texture].spritesheet;
+    avatarLoader.add(texture);
+    avatarLoader.add(sprite);
+    avatarLoader.load(() => {
+      const sheet = avatarLoader.resources[texture].spritesheet;
       if (sheet) {
         const ctrl = new AvatarControl(sheet, 'http://localhost:8000/media/body.js');
         const avatar = ctrl.getSprite();
 
-        // add an example avatar onto the middle of the container
+        // add an example avatar
         avatar.width = 142;
         avatar.height = 156;
-        avatar.x = background.width / 2;
-        avatar.y = background.height / 2;
         avatar.anchor.set(0.5);
-        container.addChild(avatar);
+        stage.addChild(avatar);
 
-        // add the user's name above the avatar
+        // add the user's name
         const name = new PIXI.Text(displayName, { fill: 0xffffff, fontSize: 16 });
-        name.x = avatar.x;
-        name.y = avatar.y - avatar.height / 2 - 10;
         name.anchor.set(0.5);
-        container.addChild(name);
+        stage.addChild(name);
+
+        const setAvatarPosition = (x: number, y: number) => {
+          avatar.x = x;
+          avatar.y = y;
+          name.x = avatar.x;
+          name.y = avatar.y - avatar.height / 2 - 10;
+        };
+
+        // set the avatar's position to the middle of the stage
+        setAvatarPosition(stage.width / 2, stage.height / 2);
+
+        // move the avatar whenever the container is clicked
+        stage.on('mousedown', (event: PIXI.InteractionEvent) => {
+          const { x, y } = event.data.global;
+          const xDistance = Math.abs(x - avatar.x);
+          const yDistance = Math.abs(y - avatar.y);
+          const invVelocity = 56;
+          const xVelocity = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
+          const yVelocity = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
+
+          const moveAvatar = () => {
+            if ((xVelocity < 0 && avatar.x <= x) || (xVelocity >= 0 && avatar.x >= x)) {
+              setAvatarPosition(x, y);
+              ctrl.setMoving(false);
+              return;
+            }
+            ctrl.request = requestAnimationFrame(moveAvatar);
+            setAvatarPosition(avatar.x + xVelocity, avatar.y + yVelocity);
+            app.renderer.render(stage);
+          };
+
+          ctrl.setMoving(true);
+          if (ctrl.request) {
+            // cancel the previous movement for this Avatar
+            cancelAnimationFrame(ctrl.request);
+          }
+          moveAvatar();
+        });
       }
     });
   }, [pixiRef.current, sessionLoaded]);
