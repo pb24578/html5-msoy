@@ -36,8 +36,8 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
        */
       const socket = new WebSocket(`${SocketURI}/worlds/${id}?token=${token}`);
       const room: Room = {
+        ...initialState.room,
         id,
-        participants: [],
       };
 
       store.dispatch(setRoom(room));

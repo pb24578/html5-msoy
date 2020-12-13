@@ -16,10 +16,16 @@ import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
 import { getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
 import { disconnectFromRoom, connectToRoom } from './actions';
-import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants } from './types';
+import {
+  isConnectionError,
+  isReceiveAvatars,
+  isReceiveAvatarPosition,
+  isReceiveParticipants,
+  SendEntityPosition,
+} from './types';
 
 const { addMessage } = chatActions;
-const { resizePixiApp, setAvatarPosition, setWorldError, setParticipants } = actions;
+const { resizePixiApp, setAvatars, setAvatarPosition, setWorldError, setParticipants } = actions;
 
 const Container = styled(FlexColumn)`
   padding-right: 8px;
@@ -60,7 +66,7 @@ export const World = React.memo(() => {
   const error = useSelector(getWorldError);
   const app = useSelector(getPixiApp);
   const sessionLoaded = useSelector(isSessionLoaded);
-  const { displayName, redirectRoomId } = useSelector(getUser);
+  const { id, displayName, redirectRoomId } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
   const socket = useSelector(getWorldSocket);
   const theme = useContext(ThemeContext);
@@ -94,10 +100,8 @@ export const World = React.memo(() => {
     stage.addChild(background);
 
     const avatarLoader = new PIXI.Loader();
-    const sprite = 'http://localhost:8000/media/soda/texture.png';
     const texture = 'http://localhost:8000/media/soda/texture.json';
     avatarLoader.add(texture);
-    avatarLoader.add(sprite);
     avatarLoader.load(() => {
       const sheet = avatarLoader.resources[texture].spritesheet;
       if (sheet) {
@@ -129,6 +133,11 @@ export const World = React.memo(() => {
         let request = 0;
         stage.on('mousedown', (event: PIXI.InteractionEvent) => {
           const { x, y } = event.data.global;
+          const avatarPosition: SendEntityPosition = {
+            type: 'avatar.position',
+            payload: { id, x, y },
+          };
+          socket.send(JSON.stringify(avatarPosition));
           const xDistance = Math.abs(x - avatar.x);
           const yDistance = Math.abs(y - avatar.y);
           const invVelocity = 56;
@@ -193,6 +202,10 @@ export const World = React.memo(() => {
 
       if (isReceiveParticipants(data)) {
         dispatch(setParticipants(data.payload.participants));
+      }
+
+      if (isReceiveAvatars(data)) {
+        dispatch(setAvatars(data.payload.avatars));
       }
 
       if (isReceiveAvatarPosition(data)) {

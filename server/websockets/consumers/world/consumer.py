@@ -87,10 +87,13 @@ class WorldConsumer(AsyncWebsocketConsumer):
     async def participants(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
-    async def message(self, event):
+    async def avatars(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def avatar_position(self, event):
+        await self.send(text_data=json.dumps(humps.camelize(event)))
+
+    async def message(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def connection_error(self, event):
