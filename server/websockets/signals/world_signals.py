@@ -1,4 +1,5 @@
 from django.dispatch import Signal, receiver
+from django.templatetags.static import static
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from rest.getters.user import get_display_name, get_id
@@ -38,8 +39,8 @@ def broadcast_participants(sender, channel_room, **kwargs):
             'profile': profile,
             'avatar': {
                 "id": user_id,
-                "texture": 'http://localhost:8000/static/soda/texture.json',
-                "script": 'http://localhost:8000/static/body.js',
+                "texture": static('soda/texture.json'),
+                "script": static('body.json'),
                 "position": {
                     "id": user_id,
                     "x": participant.x,

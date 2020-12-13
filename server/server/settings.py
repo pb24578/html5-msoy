@@ -138,14 +138,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Media files (user uploaded content such as Avatars, Toys, Furniture, etc.)
+MEDIA_URL = '/media/'
+
+# this is the directory where media files uploaded by users will go 
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/'
 
 # this is directory name where collectstatic files command will put your app level static files
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # this is directory paths where you have to put your project level static files
 # you can put multiple folders here

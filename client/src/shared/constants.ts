@@ -6,6 +6,11 @@ const hostName = window.location.hostname;
 export const RestURI = `http://${hostName}:8000`;
 
 /**
+ * The URI for static files.
+ */
+export const StaticURI = RestURI;
+
+/**
  * The URI for the web-socket connections.
  */
 export const SocketURI = `ws://${hostName}:8000`;

@@ -2,6 +2,11 @@
 Install the client dependencies by running ```yarn install``` in the client directory.
 
 Install the server dependencies by running ```pip install -r requirements``` in the server directory.
+
+### Media and Static Files
+In order to generate the staticfiles, cd into the server directory and run ```python manage.py collectstatic```.
+
+In the ```server/server/settings.py```, change the STATIC_URL and MEDIA_URL to the CDN (content delivery network) that hosts the static and media files.
   
 # Run HTML5 Msoy
 HTML5 Msoy has two different environments: staging and production.
