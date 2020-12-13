@@ -95,7 +95,8 @@ export const [setParticipantMap] = createAsyncAction(
             // move the avatar to the loaded position
             ctrl.setPosition(avatar.position.x, avatar.position.y);
 
-            if (participant.profile.id === user.id) {
+            const isUserAvatar = participant.profile.id === user.id;
+            if (isUserAvatar) {
               // move the avatar whenever the container is clicked
               stage.on('mousedown', (event: PIXI.InteractionEvent) => {
                 if (!socket) return;

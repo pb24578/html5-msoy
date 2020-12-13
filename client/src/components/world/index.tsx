@@ -81,12 +81,13 @@ export const World = React.memo(() => {
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
-    if (!pixiRef.current || !sessionLoaded) return;
+    if (!pixiRef.current || !socket) return;
     pixiRef.current.append(app.view);
     app.stage.removeChildren();
     dispatch(resizePixiApp());
 
-    // create the app's stage
+    // reset the app's stage
+    stage.removeChildren();
     stage.interactive = true;
     app.stage.addChild(stage);
 
@@ -95,7 +96,7 @@ export const World = React.memo(() => {
     background.width = app.screen.width;
     background.height = app.screen.height;
     stage.addChild(background);
-  }, [pixiRef.current, sessionLoaded]);
+  }, [pixiRef.current, socket]);
 
   /**
    * Called whenever a re-render occurs for entities in the world.
