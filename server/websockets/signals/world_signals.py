@@ -23,7 +23,7 @@ def broadcast_participants(sender, channel_room, **kwargs):
         user = participant.user
         user_id = get_id(user)
 
-        if user.is_authenticated:
+        if user and user.is_authenticated:
             profile = ProfileSerializer(user).data
         else:
             profile = {
