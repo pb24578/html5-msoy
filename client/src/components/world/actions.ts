@@ -95,8 +95,8 @@ export const [setParticipantMap] = createAsyncAction(
             // move the avatar to the loaded position
             ctrl.setPosition(avatar.position.x, avatar.position.y);
 
-            const isUserAvatar = participant.profile.id === user.id;
-            if (isUserAvatar) {
+            const isUserParticipant = participant.profile.id === user.id;
+            if (isUserParticipant) {
               // move the avatar whenever the container is clicked
               stage.on('mousedown', (event: PIXI.InteractionEvent) => {
                 if (!socket) return;
@@ -117,8 +117,10 @@ export const [setParticipantMap] = createAsyncAction(
         /**
          * Remove avatars from the stage that are no longer in the world.
          */
-        Object.values(participantMap).forEach((participant) => {
-          if (!newParticipantMap[participant.id]) {
+        const oldParticipants = Object.values(participantMap);
+        oldParticipants.forEach((participant) => {
+          const isOldParticipant = !newParticipantMap[participant.id];
+          if (isOldParticipant) {
             // delete this avatar since it's no longer in the world
             const ctrl = participant.avatar;
             if (ctrl) {

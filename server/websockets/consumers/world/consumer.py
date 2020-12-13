@@ -33,25 +33,6 @@ class WorldConsumer(AsyncWebsocketConsumer):
             self.group_id, self.group_name, self.channel_name, user=self.scope['user']
         )
 
-        # prune duplicate participants of this user
-        def prune_duplicate_participants():
-            if self.scope['user'].is_anonymous:
-                return
-            
-            participants = self.channel_room.get_duplicate_participants(self.channel_name, user=self.scope['user'])
-            for participant in participants:
-                async_to_sync(self.channel_layer.send)(
-                    participant.channel_name,
-                    {
-                        'type': 'connection.error',
-                        'payload': {
-                            'sender': 'Server',
-                            'reason': "You've been kicked out of the server because you connected somewhere else."
-                        }
-                    }
-                )
-        await sync_to_async(prune_duplicate_participants)()
-
         await self.accept()
 
     async def disconnect(self, close_code):

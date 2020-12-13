@@ -52,6 +52,20 @@ class ChannelRoom(models.Model):
 
         if user and user.is_authenticated:
             authed_user = user
+            duplicate_participant = Participant.objects.filter(user=authed_user).first()
+            if bool(duplicate_participant):
+                # remove the duplicate participant from this room
+                duplicate_participant.delete()
+                async_to_sync(channel_layer.send)(
+                    duplicate_participant.channel_name,
+                    {
+                        'type': 'connection.error',
+                        'payload': {
+                            'sender': 'Server',
+                            'reason': "You've been kicked out of the server because you connected somewhere else."
+                        }
+                    }
+                )
         else:
             authed_user = None
         
@@ -99,16 +113,6 @@ class ChannelRoom(models.Model):
         """
 
         return Participant.objects.filter(channel_room=self).distinct()
-
-    def get_duplicate_participants(self, channel_name, user=None):
-        """
-        Returns all of the participants in this room with the same user.
-        """
-
-        if not user or user.is_anonymous:
-            return
-
-        return Participant.objects.filter(channel_room=self, user=user).exclude(channel_name=channel_name)
 
     def prune_room(self):
         """
