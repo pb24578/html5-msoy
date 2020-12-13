@@ -10,10 +10,10 @@ export class ActorControl extends EntityControl {
   /**
    * The position and velocity to animate the actor to.
    */
-  public clickedX: number = 0;
-  public clickedY: number = 0;
-  public velocityX: number = 0;
-  public velocityY: number = 0;
+  private clickedX: number = 0;
+  private clickedY: number = 0;
+  private velocityX: number = 0;
+  private velocityY: number = 0;
 
   constructor(name: string, sheet: PIXI.Spritesheet, script: string) {
     super(sheet, script);
@@ -115,10 +115,22 @@ export class ActorControl extends EntityControl {
   }
 
   /**
+   * Move to coordinates on the stage with the provided velocity.
+   */
+  public moveTo(x: number, y: number, velocityX: number, velocityY: number) {
+    this.clickedX = x;
+    this.clickedY = y;
+    this.velocityX = velocityX;
+    this.velocityY = velocityY;
+  }
+
+  /**
    * A function dispatched to animate moving the actor. This is dispatched by
-   * the pixi loop in order to animate the actor moving on the stage.
+   * the pixi loop in order to animate the actor moving on the stage. In order
+   * for the actor to move, you must call the moveTo function.
    *
-   * If the velocity variables are 0, then the position of the actor does not change.
+   * If the velocity is 0, then the position of the actor does not change.
+   *
    */
   public moveActor() {
     if (this.velocityX === 0 && this.velocityY === 0) return;

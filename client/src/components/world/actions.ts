@@ -106,12 +106,7 @@ export const [setAvatarPosition] = createAsyncAction(
       const invVelocity = 56;
       const velocityX = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
       const velocityY = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
-
-      // perform an animation to the clicked x and y
-      ctrl.clickedX = x;
-      ctrl.clickedY = y;
-      ctrl.velocityX = velocityX;
-      ctrl.velocityY = velocityY;
+      ctrl.moveTo(x, y, velocityX, velocityY);
     },
   },
   [],

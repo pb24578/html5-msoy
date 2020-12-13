@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useRef, useEffect } from 'react';
+import React, { createRef, useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
@@ -69,7 +69,8 @@ export const World = React.memo(() => {
   const paramRoomId = worldsMatch?.params.id;
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
 
-  // receive the participant information
+  // handle the participants in the world
+  const [pixiRequestFrame, setPixiRequestFrame] = useState(0);
   const participantMap = useSelector(getParticipantMap);
 
   /**
@@ -130,9 +131,12 @@ export const World = React.memo(() => {
             ctrl.moveActor();
           }
         });
-        requestAnimationFrame(pixiLoop);
+        setPixiRequestFrame(requestAnimationFrame(pixiLoop));
         app.renderer.render(stage);
       };
+      if (pixiRequestFrame) {
+        cancelAnimationFrame(pixiRequestFrame);
+      }
       pixiLoop();
     });
   }, [pixiRef.current, sessionLoaded, socket, participantMap]);
