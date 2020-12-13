@@ -15,7 +15,7 @@ import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
 import { getParticipantMap, getPixiApp, getPixiStage, getRoomId, getWorldError, getWorldSocket } from './selectors';
 import { connectToRoom, disconnectFromRoom, setAvatarPosition, setParticipantMap } from './actions';
-import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants } from './types';
+import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants, ServerParticipant } from './types';
 
 const { addMessage } = chatActions;
 const { resizePixiApp, setWorldError } = actions;
@@ -177,14 +177,7 @@ export const World = React.memo(() => {
 
     socket.onclose = () => {
       const errorMessage: ChatMessage = {
-        sender: {
-          id: 0,
-          profile: {
-            id: 0,
-            redirectRoomId: 1,
-            displayName: 'Server',
-          },
-        },
+        sender: ServerParticipant,
         message: 'There was an issue connecting to the room. The server will redirect you elsewhere.',
         backgroundColor: theme.warningColors.primary,
       };

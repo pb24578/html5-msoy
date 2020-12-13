@@ -43,6 +43,15 @@ export interface Participant {
   avatar?: AvatarControl;
 }
 
+export const ServerParticipant: Participant = {
+  id: 0,
+  profile: {
+    id: 0,
+    redirectRoomId: 1,
+    displayName: 'Server',
+  },
+};
+
 export interface EntityPosition {
   x: number;
   y: number;
