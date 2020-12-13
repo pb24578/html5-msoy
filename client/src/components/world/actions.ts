@@ -108,9 +108,6 @@ export const [setAvatarPosition] = createAsyncAction(
       const velocityY = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
 
       // perform an animation to the clicked x and y
-      if (!ctrl.isMoving()) {
-        ctrl.setMoving(true);
-      }
       ctrl.clickedX = x;
       ctrl.clickedY = y;
       ctrl.velocityX = velocityX;

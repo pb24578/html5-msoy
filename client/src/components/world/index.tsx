@@ -126,7 +126,7 @@ export const World = React.memo(() => {
       const pixiLoop = () => {
         participants.forEach((participant) => {
           const ctrl = participant.avatar;
-          if (ctrl && ctrl.isMoving()) {
+          if (ctrl) {
             ctrl.moveActor();
           }
         });

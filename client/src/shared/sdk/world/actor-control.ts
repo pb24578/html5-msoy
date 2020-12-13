@@ -122,12 +122,17 @@ export class ActorControl extends EntityControl {
    */
   public moveActor() {
     if (this.velocityX === 0 && this.velocityY === 0) return;
+    if (!this.isMoving()) {
+      this.setMoving(true);
+    }
     if (
       (this.velocityX < 0 && this.sprite.x <= this.clickedX) ||
       (this.velocityX >= 0 && this.sprite.x >= this.clickedX)
     ) {
       this.setPosition(this.clickedX, this.clickedY);
       this.setMoving(false);
+      this.clickedX = 0;
+      this.clickedY = 0;
       this.velocityX = 0;
       this.velocityY = 0;
       return;
