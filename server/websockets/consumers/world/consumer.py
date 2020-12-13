@@ -75,19 +75,13 @@ class WorldConsumer(AsyncWebsocketConsumer):
         if not 'type' in json_data or not 'payload' in json_data:
             return
 
-        type = json_data['type']
-        payload = json_data['payload']
-
         if type == 'message':
-            await broadcast_message(self.group_name, self.scope['user'], payload)
+            await broadcast_message(self.group_name, self.scope['user'], json_data)
 
         if type == 'avatar.position':
-            await broadcast_entity_position(self.group_name, type, payload)
+            await broadcast_entity_position(self.group_name, json_data)
             
     async def participants(self, event):
-        await self.send(text_data=json.dumps(humps.camelize(event)))
-
-    async def avatars(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def avatar_position(self, event):

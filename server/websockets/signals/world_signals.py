@@ -22,11 +22,24 @@ def broadcast_participants(sender, channel_room, **kwargs):
         user = participant.user
 
         # format the participant's data
+        id = get_id(user)
         participant = {
-            'id': get_id(user),
-            'display_name': get_display_name(user)
+            'id': id,
+            'display_name': get_display_name(user),
+            'avatar': {
+                "id": id,
+                "texture": 'http://localhost:8000/media/soda/texture.json',
+                "script": 'http://localhost:8000/media/body.js',
+                "position": {
+                    "id": id,
+                    "x": participant.x,
+                    "y": participant.y
+                }
+            }
         }
         participants.append(participant)
+
+    print(participants)
 
     # broadcast a signal with all of the participants
     async_to_sync(channel_layer.group_send)(
