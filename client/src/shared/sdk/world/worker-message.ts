@@ -1,17 +1,26 @@
 export class WorkerMessage {
   /**
-   * Called to send the spritesheet JSON data to the entity. This is helpful for
-   * the entity to begin registering the animations into states and actions.
+   * Called once the spritesheet data has loaded.
    */
-  public static getSpritesheet: string = 'getSpritesheet';
-
-  /**
-   * Called to register states to the avatar.
-   */
-  public static registerStates: string = 'registerStates';
+  public static spritesheet: string = 'spritesheet';
 
   /**
    * Called whenever the actor is moving.
    */
-  public static isMoving: string = 'isMoving';
+  public static moving: string = 'moving';
+
+  /**
+   * Called to register states to the actor.
+   */
+  public static registerStates: string = 'registerStates';
+
+  /**
+   * Called to register actions to the avatar.
+   */
+  public static registerActions: string = 'registerActions';
+
+  /**
+   * Called to set a state to the actor.
+   */
+  public static setState: string = 'setState';
 }

@@ -1,18 +1,19 @@
+import * as PIXI from 'pixi.js-legacy';
 import { EntityControl, WorkerMessage } from '.';
 
-interface State {
-  name: string;
-}
-
 export class ActorControl extends EntityControl {
-  protected states: State[] = [];
-  protected currentState: State | null = null;
-  protected moving = false;
+  protected states: string[] = [];
+  protected currentState: string;
+  protected moving;
+
+  constructor(sheet: PIXI.Spritesheet, script: string) {
+    super(sheet, script);
+    this.currentState = this.default;
+    this.moving = false;
+  }
 
   /**
-   * Listen to the worker's message events. Call this once the worker has been loaded.
-   *
-   * @param worker The worker that was just loaded.
+   * @override
    */
   protected listenWorkerMessage() {
     super.listenWorkerMessage();
@@ -22,6 +23,11 @@ export class ActorControl extends EntityControl {
       if (data.type === WorkerMessage.registerStates) {
         const { value } = data.payload;
         this.registerStates(value);
+      }
+
+      if (data.type === WorkerMessage.setState) {
+        const { value } = data.payload;
+        this.setState(value);
       }
     });
   }
@@ -38,22 +44,17 @@ export class ActorControl extends EntityControl {
       if (state.length > maxStateLength) {
         throw new Error(`States cannot be greater than ${maxStateLength} characters.`);
       }
-      const registerState: State = {
-        name: state,
-      };
-      return registerState;
+      return state;
     });
 
     this.states = registeredStates;
-    this.currentState = registeredStates[0] || null;
   }
 
   /**
    * Returns the current state.
    */
   public getState() {
-    if (!this.currentState) throw new Error('You must set a state.');
-    return this.currentState.name;
+    return this.currentState;
   }
 
   /**
@@ -61,19 +62,17 @@ export class ActorControl extends EntityControl {
    */
   public setState(state: string) {
     const newState = this.states.find((currentState) => currentState.name === state);
-    if (!newState) {
-      throw new Error(`The state ${state} does not exist.`);
-    }
+    if (!newState) return;
     this.currentState = newState;
   }
 
   /**
-   * Sets if the actor is now moving and dispatches an appearance changed event.
+   * Sets whether or not the actor is moving and posts a message to the worker.
    */
   public setMoving(moving: boolean) {
     this.moving = moving;
     this.worker.postMessage({
-      type: WorkerMessage.isMoving,
+      type: WorkerMessage.moving,
       payload: {
         value: moving,
       },

@@ -1,24 +1,34 @@
 import * as PIXI from 'pixi.js-legacy';
-import { AbstractControl } from '.';
+import { AbstractControl, WorkerMessage } from '.';
 
 export class EntityControl extends AbstractControl {
-  protected entity: PIXI.AnimatedSprite | undefined;
-  protected spritesheet: PIXI.Spritesheet | undefined;
+  protected entity: PIXI.AnimatedSprite;
+  protected default: string;
+  protected sheet: PIXI.Spritesheet;
   protected worker: Worker;
 
-  constructor(script: string) {
+  constructor(sheet: PIXI.Spritesheet, script: string) {
     super();
-    this.worker = this.loadEntityWorker(script);
-  }
 
-  /*
-  constructor(spritesheet: PIXI.Spritesheet, script: string) {
-    super();
-    this.spritesheet = spritesheet;
-    this.entity = new PIXI.AnimatedSprite([]);
-    this.loadEntityWorker(script);
+    // receive the "default" animation, which is the first sheet animation
+    const animations = Object.keys(sheet.animations);
+    if (animations.length === 0) {
+      throw new Error('No animations have been defined in the spritesheet.');
+    }
+
+    [this.default] = animations;
+    this.entity = new PIXI.AnimatedSprite(sheet.animations[this.default]);
+    this.sheet = sheet;
+    this.worker = this.loadEntityWorker(script);
+
+    // send the spritesheet JSON data to the worker
+    this.worker.postMessage({
+      type: WorkerMessage.spritesheet,
+      payload: {
+        value: this.sheet.data,
+      },
+    });
   }
-  */
 
   /**
    * Loads the JavaScript logic for this entity. This script is a JavaScript file that

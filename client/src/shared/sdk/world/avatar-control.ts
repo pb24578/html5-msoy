@@ -1,11 +1,22 @@
-import { ActorControl } from '.';
-
-interface Action {
-  name: string;
-}
+import { ActorControl, WorkerMessage } from '.';
 
 export class AvatarControl extends ActorControl {
-  private actions: Action[] = [];
+  private actions: string[] = [];
+
+  /**
+   * @override
+   */
+  protected listenWorkerMessage() {
+    super.listenWorkerMessage();
+    this.worker.addEventListener('message', (event: MessageEvent) => {
+      const { data } = event;
+
+      if (data.type === WorkerMessage.registerActions) {
+        const { value } = data.payload;
+        this.registerActions(value);
+      }
+    });
+  }
 
   /**
    * Registers the avatar's actions.
@@ -19,10 +30,7 @@ export class AvatarControl extends ActorControl {
       if (action.length > maxActionLength) {
         throw new Error(`Actions cannot be greater than ${maxActionLength} characters.`);
       }
-      const registerAction: Action = {
-        name: action,
-      };
-      return registerAction;
+      return action;
     });
 
     this.actions = registeredActions;
