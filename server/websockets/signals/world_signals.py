@@ -39,8 +39,6 @@ def broadcast_participants(sender, channel_room, **kwargs):
         }
         participants.append(participant)
 
-    print(participants)
-
     # broadcast a signal with all of the participants
     async_to_sync(channel_layer.group_send)(
         channel_room.channel_name,

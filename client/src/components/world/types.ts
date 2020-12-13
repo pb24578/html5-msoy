@@ -14,7 +14,7 @@ export interface Pixi {
 
 export interface Room {
   id: number;
-  participantMap: Map<number, Participant>;
+  participantMap: { [id: number]: Participant };
 }
 
 export interface WorldError {

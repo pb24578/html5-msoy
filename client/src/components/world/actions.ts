@@ -1,26 +1,30 @@
 import { createAsyncAction } from 'async-selector-kit';
+import * as PIXI from 'pixi.js-legacy';
 import { IState } from '../../store';
 import { SocketURI } from '../../shared/constants';
 import { getSession } from '../../shared/user/selectors';
-import { Room } from './types';
+import { AvatarControl } from '../../shared/sdk/world';
+import { getWorldSocket, getParticipantMap } from './selectors';
+import { EntityPosition, ParticipantPayload, Room } from './types';
 import { actions, initialState } from './reducer';
 
-const { setRoom, setWorldSocket } = actions;
+const { addParticipant, setRoom, setWorldSocket } = actions;
 
 // eslint-disable-next-line max-len
-export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFromRoom] = createAsyncAction({
-  id: 'disconnect-from-room',
-  async: (store, status) => async () => {
-    const state = store.getState() as IState;
-    const { socket } = state.world;
-    if (socket) {
-      socket.onclose = null;
-      socket.close();
-    }
-    store.dispatch(setRoom(initialState.room));
-    store.dispatch(setWorldSocket(initialState.socket));
+export const [disconnectFromRoom, loadingDisconnectFromRoom, errorDisconnectFromRoom] = createAsyncAction(
+  {
+    id: 'disconnect-from-room',
+    async: (store, status, socket) => async () => {
+      if (socket) {
+        socket.onclose = null;
+        socket.close();
+      }
+      store.dispatch(setRoom(initialState.room));
+      store.dispatch(setWorldSocket(initialState.socket));
+    },
   },
-});
+  [getWorldSocket],
+);
 
 export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createAsyncAction(
   {
@@ -45,4 +49,83 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
     },
   },
   [getSession],
+);
+
+export const [setParticipantMap] = createAsyncAction(
+  {
+    id: 'set-participant-map',
+    async: (store, status, participantMap) => async (participants: ParticipantPayload[]) => {
+      participants.forEach(({ avatar }) => {
+        if (avatar && !PIXI.Loader.shared.resources[avatar.texture]) {
+          PIXI.Loader.shared.add(avatar.texture);
+        }
+      });
+
+      PIXI.Loader.shared.load(() => {
+        participants.forEach((participant) => {
+          const participantExists = participantMap[participant.id];
+          if (participantExists) return;
+
+          // add the new participant if the participant isn't already in the map
+          const { avatar } = participant;
+          const sheet = PIXI.Loader.shared.resources[avatar.texture].spritesheet;
+          if (sheet) {
+            const ctrl = new AvatarControl(participant.displayName, sheet, avatar.script);
+            const participantPayload = {
+              id: participant.id,
+              participant: {
+                id: participant.avatar.id,
+                displayName: participant.displayName,
+                avatar: ctrl,
+              },
+            };
+            store.dispatch(addParticipant(participantPayload));
+          }
+        });
+      });
+    },
+  },
+  [getParticipantMap],
+);
+
+export const [setAvatarPosition] = createAsyncAction(
+  {
+    id: 'set-avatar-position',
+    async: (store, status) => async (position: EntityPosition) => {
+      const { id, x, y } = position;
+      const state = store.getState() as IState;
+      const participant = state.world.room.participantMap[id];
+      if (!participant || !participant.avatar) return;
+      const ctrl = participant.avatar;
+      const stage = state.world.pixi.app.stage.getChildAt(0);
+      const avatar = ctrl.getSprite();
+
+      // receive the x and y velocity to move this avatar
+      const xDistance = Math.abs(x - avatar.x);
+      const yDistance = Math.abs(y - avatar.y);
+      const invVelocity = 56;
+      const xVelocity = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
+      const yVelocity = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
+
+      let request = 0;
+      const moveAvatar = () => {
+        if ((xVelocity < 0 && avatar.x <= x) || (xVelocity >= 0 && avatar.x >= x)) {
+          ctrl.setPosition(x, y);
+          ctrl.setMoving(false);
+          return;
+        }
+        request = requestAnimationFrame(moveAvatar);
+        ctrl.setPosition(avatar.x + xVelocity, avatar.y + yVelocity);
+        state.world.pixi.app.renderer.render(stage);
+      };
+
+      ctrl.setMoving(true);
+      if (request) {
+        // cancel the previous movement for this avatar
+        cancelAnimationFrame(request);
+      }
+      moveAvatar();
+    },
+  },
+  [],
 );

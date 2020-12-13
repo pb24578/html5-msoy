@@ -14,11 +14,11 @@ import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
 import { getParticipantMap, getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
-import { disconnectFromRoom, connectToRoom } from './actions';
+import { connectToRoom, disconnectFromRoom, setAvatarPosition, setParticipantMap } from './actions';
 import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants, SendEntityPosition } from './types';
 
 const { addMessage } = chatActions;
-const { resizePixiApp, setAvatarPosition, setWorldError, setParticipantMap } = actions;
+const { resizePixiApp, setWorldError } = actions;
 
 const Container = styled(FlexColumn)`
   padding-right: 8px;
@@ -79,7 +79,8 @@ export const World = React.memo(() => {
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
-    if (!pixiRef.current || !sessionLoaded || !socket || participantMap.size === 0) return;
+    const participants = Object.values(participantMap);
+    if (!pixiRef.current || !sessionLoaded || !socket || participants.length === 0) return;
     pixiRef.current.append(app.view);
     app.stage.removeChildren();
     dispatch(resizePixiApp());
@@ -96,7 +97,7 @@ export const World = React.memo(() => {
     stage.addChild(background);
 
     // add each avatar from the avatar map
-    participantMap.forEach((participant) => {
+    participants.forEach((participant) => {
       const ctrl = participant.avatar;
       if (!ctrl) return;
       const sprite = ctrl.getSprite();
@@ -159,11 +160,11 @@ export const World = React.memo(() => {
       const data = JSON.parse(event.data);
 
       if (isReceiveParticipants(data)) {
-        dispatch(setParticipantMap(data.payload.participants));
+        setParticipantMap(data.payload.participants);
       }
 
       if (isReceiveAvatarPosition(data)) {
-        dispatch(setAvatarPosition(data.payload));
+        setAvatarPosition(data.payload);
       }
 
       if (isReceiveChatMessage(data)) {

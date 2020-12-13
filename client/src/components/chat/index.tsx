@@ -105,19 +105,16 @@ export const Chat = React.memo(() => {
     dispatch(push(`${routes.profiles.pathname}/${participant.id}`));
   };
 
-  const participants: React.ReactElement[] = [];
-  participantMap.forEach((participant, index) => {
-    participants.push(
-      <ChatParticipant key={index} onClick={() => openInteractions(participant)}>
-        {participant.displayName}
-      </ChatParticipant>,
-    );
-  });
-
   return (
     <Container>
       <UsersTitle>Users Online</UsersTitle>
-      <UsersList>{participants}</UsersList>
+      <UsersList>
+        {Object.values(participantMap).map((participant, index) => (
+          <ChatParticipant key={index} onClick={() => openInteractions(participant)}>
+            {participant.displayName}
+          </ChatParticipant>
+        ))}
+      </UsersList>
       <ChatHistoryOverflow>
         <ChatHistory ref={chatRef}>
           {messages.reduceRight((elements, message, index) => {
