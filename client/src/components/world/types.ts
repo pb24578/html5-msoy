@@ -10,6 +10,7 @@ export interface World {
 
 export interface Pixi {
   app: PIXI.Application;
+  stage: PIXI.Container;
 }
 
 export type ParticipantMap = { [id: number]: Participant };

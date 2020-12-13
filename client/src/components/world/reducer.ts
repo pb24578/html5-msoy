@@ -1,11 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import * as PIXI from 'pixi.js-legacy';
-import { Participant, ParticipantMap, Room, World, WorldError } from './types';
+import { ParticipantMap, Room, World, WorldError } from './types';
 
 export const initialState: World = {
   error: null,
   pixi: {
     app: new PIXI.Application(),
+    stage: new PIXI.Container(),
   },
   room: {
     id: 0,

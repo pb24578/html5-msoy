@@ -10,6 +10,7 @@ export const getWorldSocket = (state: IState) => state.world.socket;
  * Pixi-related selectors.
  */
 export const getPixiApp = (state: IState) => state.world.pixi.app;
+export const getPixiStage = (state: IState) => state.world.pixi.stage;
 
 /**
  * Room-related selectors.

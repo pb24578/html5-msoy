@@ -13,9 +13,9 @@ import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
-import { getParticipantMap, getPixiApp, getRoomId, getWorldError, getWorldSocket } from './selectors';
+import { getParticipantMap, getPixiApp, getPixiStage, getRoomId, getWorldError, getWorldSocket } from './selectors';
 import { connectToRoom, disconnectFromRoom, setAvatarPosition, setParticipantMap } from './actions';
-import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants, SendEntityPosition } from './types';
+import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants } from './types';
 
 const { addMessage } = chatActions;
 const { resizePixiApp, setWorldError } = actions;
@@ -58,8 +58,9 @@ export const World = React.memo(() => {
   const location = useLocation();
   const error = useSelector(getWorldError);
   const app = useSelector(getPixiApp);
+  const stage = useSelector(getPixiStage);
   const sessionLoaded = useSelector(isSessionLoaded);
-  const { id, redirectRoomId } = useSelector(getUser);
+  const { redirectRoomId } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
   const socket = useSelector(getWorldSocket);
   const theme = useContext(ThemeContext);
@@ -80,14 +81,12 @@ export const World = React.memo(() => {
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
-    const participants = Object.values(participantMap);
-    if (!pixiRef.current || !sessionLoaded || !socket || participants.length === 0) return;
+    if (!pixiRef.current || !sessionLoaded) return;
     pixiRef.current.append(app.view);
     app.stage.removeChildren();
     dispatch(resizePixiApp());
 
     // create the app's stage
-    const stage = new PIXI.Container();
     stage.interactive = true;
     app.stage.addChild(stage);
 
@@ -96,50 +95,32 @@ export const World = React.memo(() => {
     background.width = app.screen.width;
     background.height = app.screen.height;
     stage.addChild(background);
+  }, [pixiRef.current, sessionLoaded]);
 
-    // add each avatar from the avatar map
-    participants.forEach((participant) => {
-      const ctrl = participant.avatar;
-      if (!ctrl) return;
-      const sprite = ctrl.getSprite();
-      const name = ctrl.getName();
+  /**
+   * Called whenever a re-render occurs for entities in the world.
+   */
+  useEffect(() => {
+    const participants = Object.values(participantMap);
 
-      // add the avatar onto the stage
-      sprite.width = 142;
-      sprite.height = 156;
-      sprite.anchor.set(0.5);
-      stage.addChild(sprite);
-
-      // add the avatar's name
-      name.anchor.set(0.5);
-      stage.addChild(name);
-
-      // move the avatar whenever the container is clicked
-      stage.on('mousedown', (event: PIXI.InteractionEvent) => {
-        const { x, y } = event.data.global;
-        const avatarPosition: SendEntityPosition = {
-          type: 'avatar.position',
-          payload: { id, x, y },
-        };
-        socket.send(JSON.stringify(avatarPosition));
+    /**
+     * The Pixi loop the re-renders entities to animate movement.
+     */
+    const pixiLoop = () => {
+      Object.values(participants).forEach((participant) => {
+        const ctrl = participant.avatar;
+        if (ctrl) {
+          ctrl.moveActor();
+        }
       });
-
-      const pixiLoop = () => {
-        participants.forEach((participant) => {
-          const ctrl = participant.avatar;
-          if (ctrl) {
-            ctrl.moveActor();
-          }
-        });
-        setPixiRequestFrame(requestAnimationFrame(pixiLoop));
-        app.renderer.render(stage);
-      };
-      if (pixiRequestFrame) {
-        cancelAnimationFrame(pixiRequestFrame);
-      }
-      pixiLoop();
-    });
-  }, [pixiRef.current, sessionLoaded, socket, participantMap]);
+      setPixiRequestFrame(requestAnimationFrame(pixiLoop));
+      app.renderer.render(stage);
+    };
+    if (pixiRequestFrame) {
+      cancelAnimationFrame(pixiRequestFrame);
+    }
+    pixiLoop();
+  }, [participantMap]);
 
   /**
    * When the user moves between rooms, establish a new connection with the room.

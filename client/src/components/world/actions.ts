@@ -4,8 +4,8 @@ import { IState } from '../../store';
 import { SocketURI } from '../../shared/constants';
 import { getSession } from '../../shared/user/selectors';
 import { AvatarControl } from '../../shared/sdk/world';
-import { getWorldSocket, getParticipantMap } from './selectors';
-import { EntityPosition, ParticipantMap, ParticipantPayload, Room } from './types';
+import { getWorldSocket, getParticipantMap, getPixiStage } from './selectors';
+import { EntityPosition, ParticipantMap, ParticipantPayload, Room, SendEntityPosition } from './types';
 import { actions, initialState } from './reducer';
 
 const { setParticipantMap: updateParticipantMap, setRoom, setWorldSocket } = actions;
@@ -54,7 +54,8 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
 export const [setParticipantMap] = createAsyncAction(
   {
     id: 'set-participant-map',
-    async: (store, status, participantMap) => async (participants: ParticipantPayload[]) => {
+    // eslint-disable-next-line max-len
+    async: (store, status, participantMap, stage, socket) => async (participants: ParticipantPayload[]) => {
       participants.forEach(({ avatar }) => {
         if (avatar && !PIXI.Loader.shared.resources[avatar.texture]) {
           PIXI.Loader.shared.add(avatar.texture);
@@ -80,13 +81,38 @@ export const [setParticipantMap] = createAsyncAction(
               displayName: participant.displayName,
               avatar: ctrl,
             };
+
+            const sprite = ctrl.getSprite();
+            const name = ctrl.getName();
+
+            // add the avatar onto the stage
+            sprite.width = 142;
+            sprite.height = 156;
+            sprite.anchor.set(0.5);
+            stage.addChild(sprite);
+
+            // add the avatar's name
+            name.anchor.set(0.5);
+            stage.addChild(name);
+
+            // move the avatar whenever the container is clicked
+            stage.on('mousedown', (event: PIXI.InteractionEvent) => {
+              if (!socket) return;
+              const { x, y } = event.data.global;
+              const { id } = participant.avatar;
+              const avatarPosition: SendEntityPosition = {
+                type: 'avatar.position',
+                payload: { id, x, y },
+              };
+              socket.send(JSON.stringify(avatarPosition));
+            });
           }
         });
         store.dispatch(updateParticipantMap(newParticipantMap));
       });
     },
   },
-  [getParticipantMap],
+  [getParticipantMap, getPixiStage, getWorldSocket],
 );
 
 export const [setAvatarPosition] = createAsyncAction(
