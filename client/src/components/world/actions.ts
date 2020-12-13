@@ -75,7 +75,7 @@ export const [setParticipantMap] = createAsyncAction(
           const { avatar, profile } = participant;
           const sheet = PIXI.Loader.shared.resources[avatar.texture].spritesheet;
           if (sheet) {
-            const ctrl = new AvatarControl(profile.displayName, sheet, avatar.script);
+            const ctrl = new AvatarControl(avatar.id, profile.displayName, sheet, avatar.script);
             newParticipantMap[participant.id] = {
               ...participant,
               avatar: ctrl,
@@ -101,7 +101,10 @@ export const [setParticipantMap] = createAsyncAction(
                 const { x, y } = event.data.global;
                 const avatarPosition: SendEntityPosition = {
                   type: 'avatar.position',
-                  payload: { position: { x, y } },
+                  payload: {
+                    id: ctrl.getEntityId(),
+                    position: { x, y },
+                  },
                 };
                 socket.send(JSON.stringify(avatarPosition));
               });
@@ -133,10 +136,10 @@ export const [setAvatarPosition] = createAsyncAction(
   {
     id: 'set-avatar-position',
     async: (store, status) => async (position: ReceiveEntityPosition) => {
-      const { id } = position.payload;
+      const { participantId } = position.payload;
       const { x, y } = position.payload.position;
       const state = store.getState() as IState;
-      const participant = state.world.room.participantMap[id];
+      const participant = state.world.room.participantMap[participantId];
       if (!participant || !participant.avatar) return;
       const ctrl = participant.avatar;
       const avatar = ctrl.getSprite();

@@ -75,14 +75,15 @@ async def broadcast_entity_position(room_channel_name, channel_name, json_data):
             channel_name=channel_name
         )
         return participant.id
-    id = await sync_to_async(get_participant_id)()
+    participant_id = await sync_to_async(get_participant_id)()
 
     await channel_layer.group_send(
         room_channel_name,
         {
             'type': type,
             'payload': {
-                "id": id,
+                "id": payload["id"],
+                "participant_id": participant_id,
                 "position": payload["position"]
             }
         }

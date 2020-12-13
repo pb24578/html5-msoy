@@ -74,6 +74,7 @@ export const isReceiveParticipants = (object: any): object is ReceiveParticipant
 export interface SendEntityPosition {
   type: string;
   payload: {
+    id: number;
     position: EntityPosition;
   };
 }
@@ -82,6 +83,7 @@ export interface ReceiveEntityPosition {
   type: string;
   payload: {
     id: number;
+    participantId: number;
     position: EntityPosition;
   };
 }

@@ -15,8 +15,8 @@ export class ActorControl extends EntityControl {
   private velocityX: number = 0;
   private velocityY: number = 0;
 
-  constructor(name: string, sheet: PIXI.Spritesheet, script: string) {
-    super(sheet, script);
+  constructor(id: number, name: string, sheet: PIXI.Spritesheet, script: string) {
+    super(id, sheet, script);
     this.currentState = this.default;
     this.moving = false;
     this.name = new PIXI.Text(name, { fill: 0xffffff, fontSize: 16 });

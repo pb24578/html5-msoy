@@ -2,13 +2,15 @@ import * as PIXI from 'pixi.js-legacy';
 import { AbstractControl, WorkerMessage } from '.';
 
 export class EntityControl extends AbstractControl {
+  protected id: number;
   protected sprite: PIXI.AnimatedSprite;
   protected default: string;
   protected sheet: PIXI.Spritesheet;
   protected worker: Worker;
 
-  constructor(sheet: PIXI.Spritesheet, script: string) {
+  constructor(id: number, sheet: PIXI.Spritesheet, script: string) {
     super();
+    this.id = id;
 
     // receive the "default" animation, which is the first sheet animation
     const animations = Object.keys(sheet.animations);
@@ -69,6 +71,13 @@ export class EntityControl extends AbstractControl {
     if (!this.worker) {
       throw new Error('The worker has not yet loaded.');
     }
+  }
+
+  /**
+   * Returns the entity's id
+   */
+  public getEntityId() {
+    return this.id;
   }
 
   /**
