@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js-legacy';
 import { AbstractControl, WorkerMessage } from '.';
 
 export class EntityControl extends AbstractControl {
-  protected entity: PIXI.AnimatedSprite;
+  protected sprite: PIXI.AnimatedSprite;
   protected default: string;
   protected sheet: PIXI.Spritesheet;
   protected worker: Worker;
@@ -17,7 +17,7 @@ export class EntityControl extends AbstractControl {
     }
 
     [this.default] = animations;
-    this.entity = new PIXI.AnimatedSprite(sheet.animations[this.default]);
+    this.sprite = new PIXI.AnimatedSprite(sheet.animations[this.default]);
     this.sheet = sheet;
     this.worker = this.loadEntityWorker(script);
 
@@ -74,8 +74,8 @@ export class EntityControl extends AbstractControl {
   /**
    * Returns the entity's animated sprite.
    */
-  public getEntity() {
-    return this.entity;
+  public getSprite() {
+    return this.sprite;
   }
 
   /**

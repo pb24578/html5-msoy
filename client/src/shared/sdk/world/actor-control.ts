@@ -62,8 +62,9 @@ export class ActorControl extends EntityControl {
    */
   public setState(state: string) {
     const newState = this.states.find((currentState) => currentState === state);
-    if (!newState) return;
+    if (!newState || !this.sheet.animations[newState]) return;
     this.currentState = newState;
+    this.sprite = new PIXI.AnimatedSprite(this.sheet.animations[state]);
   }
 
   /**

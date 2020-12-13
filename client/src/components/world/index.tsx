@@ -101,7 +101,7 @@ export const World = React.memo(() => {
       const sheet = PIXI.Loader.shared.resources[jovialTexture].spritesheet;
       if (sheet) {
         const ctrl = new AvatarControl(sheet, 'http://localhost:8000/media/body.js');
-        const avatar = ctrl.getEntity();
+        const avatar = ctrl.getSprite();
 
         // add an example avatar onto the middle of the container
         avatar.width = 142;
