@@ -81,7 +81,7 @@ class WorldConsumer(AsyncWebsocketConsumer):
             await broadcast_message(self.group_name, self.channel_name, json_data)
 
         if type == 'avatar.position':
-            await broadcast_entity_position(self.group_name, self.channel_name, json_data)
+            await broadcast_entity_position(self.group_name, self.channel_name, json_data, True)
             
     async def participants(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))

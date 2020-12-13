@@ -61,19 +61,33 @@ async def broadcast_message(room_channel_name, channel_name, json_data):
         }
     )
 
-async def broadcast_entity_position(room_channel_name, channel_name, json_data):
+async def broadcast_entity_position(room_channel_name, channel_name, json_data, move_participant):
     """
     Sends the new entity position to the users of the room.
     """
 
     type = json_data['type']
     payload = json_data['payload']
+    entity_id = payload["id"]
+    position = payload["position"]
 
-    def get_participant_id():
+    def get_participant():
         participant = Participant.objects.get(
             channel_room__channel_name=room_channel_name,
             channel_name=channel_name
         )
+        return participant
+    participant = await sync_to_async(get_participant)()
+
+    # if this was for an avatar, then set participant's position to the payload data
+    def set_participant_position():
+        participant.x = position["x"]
+        participant.y = position["y"]
+        participant.save()
+    if move_participant:
+        await sync_to_async(set_participant_position)()
+
+    def get_participant_id():
         return participant.id
     participant_id = await sync_to_async(get_participant_id)()
 
@@ -82,9 +96,9 @@ async def broadcast_entity_position(room_channel_name, channel_name, json_data):
         {
             'type': type,
             'payload': {
-                "id": payload["id"],
+                "id": entity_id,
                 "participant_id": participant_id,
-                "position": payload["position"]
+                "position": position,
             }
         }
     )
