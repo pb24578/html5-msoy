@@ -8,9 +8,12 @@ export class ActorControl extends EntityControl {
   protected moving;
 
   /**
-   * A request frame id to keep track of the animation frame.
+   * The position and velocity to animate the actor to.
    */
-  public request: number = 0;
+  public clickedX: number = 0;
+  public clickedY: number = 0;
+  public velocityX: number = 0;
+  public velocityY: number = 0;
 
   constructor(name: string, sheet: PIXI.Spritesheet, script: string) {
     super(sheet, script);
@@ -92,6 +95,13 @@ export class ActorControl extends EntityControl {
   }
 
   /**
+   * Returns if the actor is moving.
+   */
+  public isMoving() {
+    return this.moving;
+  }
+
+  /**
    * Sets whether or not the actor is moving and posts a message to the worker.
    */
   public setMoving(moving: boolean) {
@@ -102,5 +112,26 @@ export class ActorControl extends EntityControl {
         value: moving,
       },
     });
+  }
+
+  /**
+   * A function dispatched to animate moving the actor. This is dispatched by
+   * the pixi loop in order to animate the actor moving on the stage.
+   *
+   * If the velocity variables are 0, then the position of the actor does not change.
+   */
+  public moveActor() {
+    if (this.velocityX === 0 && this.velocityY === 0) return;
+    if (
+      (this.velocityX < 0 && this.sprite.x <= this.clickedX) ||
+      (this.velocityX >= 0 && this.sprite.x >= this.clickedX)
+    ) {
+      this.setPosition(this.clickedX, this.clickedY);
+      this.setMoving(false);
+      this.velocityX = 0;
+      this.velocityY = 0;
+      return;
+    }
+    this.setPosition(this.sprite.x + this.velocityX, this.sprite.y + this.velocityY);
   }
 }

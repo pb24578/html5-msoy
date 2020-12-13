@@ -122,6 +122,18 @@ export const World = React.memo(() => {
         };
         socket.send(JSON.stringify(avatarPosition));
       });
+
+      const pixiLoop = () => {
+        participants.forEach((participant) => {
+          const ctrl = participant.avatar;
+          if (ctrl && ctrl.isMoving()) {
+            ctrl.moveActor();
+          }
+        });
+        requestAnimationFrame(pixiLoop);
+        app.renderer.render(stage);
+      };
+      pixiLoop();
     });
   }, [pixiRef.current, sessionLoaded, socket, participantMap]);
 

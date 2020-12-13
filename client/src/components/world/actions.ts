@@ -98,33 +98,23 @@ export const [setAvatarPosition] = createAsyncAction(
       const participant = state.world.room.participantMap[id];
       if (!participant || !participant.avatar) return;
       const ctrl = participant.avatar;
-      const stage = state.world.pixi.app.stage.getChildAt(0);
       const avatar = ctrl.getSprite();
 
       // receive the x and y velocity to move this avatar
       const xDistance = Math.abs(x - avatar.x);
       const yDistance = Math.abs(y - avatar.y);
       const invVelocity = 56;
-      const xVelocity = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
-      const yVelocity = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
+      const velocityX = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
+      const velocityY = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
 
-      const moveAvatar = () => {
-        if ((xVelocity < 0 && avatar.x <= x) || (xVelocity >= 0 && avatar.x >= x)) {
-          ctrl.setPosition(x, y);
-          ctrl.setMoving(false);
-          return;
-        }
-        ctrl.request = requestAnimationFrame(moveAvatar);
-        ctrl.setPosition(avatar.x + xVelocity, avatar.y + yVelocity);
-        state.world.pixi.app.renderer.render(stage);
-      };
-
-      ctrl.setMoving(true);
-      if (ctrl.request) {
-        // cancel the previous movement for this avatar
-        cancelAnimationFrame(ctrl.request);
+      // perform an animation to the clicked x and y
+      if (!ctrl.isMoving()) {
+        ctrl.setMoving(true);
       }
-      moveAvatar();
+      ctrl.clickedX = x;
+      ctrl.clickedY = y;
+      ctrl.velocityX = velocityX;
+      ctrl.velocityY = velocityY;
     },
   },
   [],
