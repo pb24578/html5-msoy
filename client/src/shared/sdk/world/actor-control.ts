@@ -64,7 +64,7 @@ export class ActorControl extends EntityControl {
     const newState = this.states.find((currentState) => currentState === state);
     if (!newState || !this.sheet.animations[newState]) return;
     this.currentState = newState;
-    this.sprite = new PIXI.AnimatedSprite(this.sheet.animations[state]);
+    this.sprite.textures = this.sheet.animations[state];
   }
 
   /**
