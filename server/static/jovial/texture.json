@@ -1,0 +1,42 @@
+{
+  "frames": {
+    "jovial.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 298,
+        "h": 439
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 47,
+        "y": 25,
+        "w": 298,
+        "h": 439
+      },
+      "sourceSize": {
+        "w": 414,
+        "h": 480
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "animations": {
+    "state_default": ["jovial.png"]
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.6",
+    "image": "texture.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 298,
+      "h": 439
+    },
+    "scale": 1
+  }
+}

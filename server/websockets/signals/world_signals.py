@@ -38,8 +38,8 @@ def broadcast_participants(sender, channel_room, **kwargs):
             'profile': profile,
             'avatar': {
                 "id": user_id,
-                "texture": 'http://localhost:8000/media/soda/texture.json',
-                "script": 'http://localhost:8000/media/body.js',
+                "texture": 'http://localhost:8000/static/soda/texture.json',
+                "script": 'http://localhost:8000/static/body.js',
                 "position": {
                     "id": user_id,
                     "x": participant.x,
