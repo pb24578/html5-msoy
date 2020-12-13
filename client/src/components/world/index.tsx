@@ -77,7 +77,7 @@ export const World = React.memo(() => {
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
-    if (!pixiRef.current || !sessionLoaded) return;
+    if (!pixiRef.current || !sessionLoaded || !socket) return;
     pixiRef.current.append(app.view);
     app.stage.removeChildren();
     dispatch(resizePixiApp());
@@ -155,7 +155,7 @@ export const World = React.memo(() => {
         });
       }
     });
-  }, [pixiRef.current, sessionLoaded]);
+  }, [pixiRef.current, sessionLoaded, socket]);
 
   /**
    * When the user moves between rooms, establish a new connection with the room.

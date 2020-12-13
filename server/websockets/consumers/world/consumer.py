@@ -2,7 +2,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync, sync_to_async
 from rest.models import Room
 from ...models import ChannelRoom
-from .message import broadcast_message
+from .broadcasts import broadcast_message, broadcast_entity_position
 import humps
 import json
 
@@ -79,12 +79,18 @@ class WorldConsumer(AsyncWebsocketConsumer):
         payload = json_data['payload']
 
         if type == 'message':
-            await broadcast_message(self.group_name, self.scope['user'], payload['message'])
+            await broadcast_message(self.group_name, self.scope['user'], payload)
+
+        if type == 'avatar.position':
+            await broadcast_entity_position(self.group_name, type, payload)
             
     async def participants(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def message(self, event):
+        await self.send(text_data=json.dumps(humps.camelize(event)))
+
+    async def avatar_position(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def connection_error(self, event):

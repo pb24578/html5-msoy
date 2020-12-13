@@ -5,12 +5,13 @@ from rest.getters.user import get_display_name, get_id
 channel_layer = get_channel_layer()
 
 
-async def broadcast_message(room_channel_name, user, message):
+async def broadcast_message(room_channel_name, user, payload):
     """
-    Send a message to the users of the room.
+    Sends a message to the users of the room.
     """
 
     # prevent blank messages from being sent
+    message = payload['message']
     if not bool(message) or message.isspace():
         return
 
@@ -29,5 +30,18 @@ async def broadcast_message(room_channel_name, user, message):
         {
             'type': 'message',
             'payload': {'sender': sender, 'message': message}
+        }
+    )
+
+async def broadcast_entity_position(room_channel_name, type, payload):
+    """
+    Sends the new entity position to the users of the room.
+    """
+
+    await channel_layer.group_send(
+        room_channel_name,
+        {
+            'type': type,
+            'payload': payload
         }
     )
