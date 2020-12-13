@@ -7,6 +7,11 @@ export class ActorControl extends EntityControl {
   protected currentState: string;
   protected moving;
 
+  /**
+   * A request frame id to keep track of the animation frame.
+   */
+  public request: number = 0;
+
   constructor(name: string, sheet: PIXI.Spritesheet, script: string) {
     super(sheet, script);
     this.currentState = this.default;

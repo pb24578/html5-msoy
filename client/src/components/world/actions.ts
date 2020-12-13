@@ -108,22 +108,21 @@ export const [setAvatarPosition] = createAsyncAction(
       const xVelocity = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
       const yVelocity = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
 
-      let request = 0;
       const moveAvatar = () => {
         if ((xVelocity < 0 && avatar.x <= x) || (xVelocity >= 0 && avatar.x >= x)) {
           ctrl.setPosition(x, y);
           ctrl.setMoving(false);
           return;
         }
-        request = requestAnimationFrame(moveAvatar);
+        ctrl.request = requestAnimationFrame(moveAvatar);
         ctrl.setPosition(avatar.x + xVelocity, avatar.y + yVelocity);
         state.world.pixi.app.renderer.render(stage);
       };
 
       ctrl.setMoving(true);
-      if (request) {
+      if (ctrl.request) {
         // cancel the previous movement for this avatar
-        cancelAnimationFrame(request);
+        cancelAnimationFrame(ctrl.request);
       }
       moveAvatar();
     },
