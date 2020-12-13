@@ -110,6 +110,20 @@ export const [setParticipantMap] = createAsyncAction(
             }
           }
         });
+
+        /**
+         * Remove avatars from the stage that are no longer in the world.
+         */
+        Object.values(participantMap).forEach((participant) => {
+          if (!newParticipantMap[participant.id]) {
+            // delete this avatar since it's no longer in the world
+            const ctrl = participant.avatar;
+            if (ctrl) {
+              stage.removeChild(ctrl.getSprite());
+              stage.removeChild(ctrl.getName());
+            }
+          }
+        });
         store.dispatch(updateParticipantMap(newParticipantMap));
       });
     },
