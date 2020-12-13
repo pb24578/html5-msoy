@@ -4,7 +4,7 @@ import { replace } from 'connected-react-router';
 import styled, { ThemeContext } from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import * as PIXI from 'pixi.js-legacy';
-import { Jovial, PixiBackground } from '../../assets';
+import { PixiBackground } from '../../assets';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
 import { getUser, isSessionLoaded } from '../../shared/user/selectors';
@@ -93,26 +93,32 @@ export const World = React.memo(() => {
     container.addChild(background);
 
     // example ctrl, TODO: delete later
-    const ctrl = new AvatarControl('http://localhost:8000/static/body.js');
-    setTimeout(() => {
-      ctrl.setMoving(true);
-    }, 3000);
+    const jovialSprite = 'http://localhost:8000/media/jovial/texture.png';
+    const jovialTexture = 'http://localhost:8000/media/jovial/texture.json';
+    PIXI.Loader.shared.add(jovialTexture);
+    PIXI.Loader.shared.add(jovialSprite);
+    PIXI.Loader.shared.load(() => {
+      const sheet = PIXI.Loader.shared.resources[jovialTexture].spritesheet;
+      if (sheet) {
+        const ctrl = new AvatarControl(sheet, 'http://localhost:8000/media/body.js');
+        const avatar = ctrl.getEntity();
 
-    // add an example avatar onto the middle of the container
-    const avatar = PIXI.Sprite.from(Jovial);
-    avatar.width = 156;
-    avatar.height = 156;
-    avatar.x = background.width / 2;
-    avatar.y = background.height / 2;
-    avatar.anchor.set(0.5);
-    container.addChild(avatar);
+        // add an example avatar onto the middle of the container
+        avatar.width = 142;
+        avatar.height = 156;
+        avatar.x = background.width / 2;
+        avatar.y = background.height / 2;
+        avatar.anchor.set(0.5);
+        container.addChild(avatar);
 
-    // add the user's name above the avatar
-    const name = new PIXI.Text(displayName, { fill: 0xffffff, fontSize: 16 });
-    name.x = avatar.x;
-    name.y = avatar.y - avatar.height / 2 - 10;
-    name.anchor.set(0.5);
-    container.addChild(name);
+        // add the user's name above the avatar
+        const name = new PIXI.Text(displayName, { fill: 0xffffff, fontSize: 16 });
+        name.x = avatar.x;
+        name.y = avatar.y - avatar.height / 2 - 10;
+        name.anchor.set(0.5);
+        container.addChild(name);
+      }
+    });
   }, [pixiRef.current, sessionLoaded]);
 
   /**
