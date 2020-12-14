@@ -14,7 +14,7 @@ export const RestURI = `http://${hostName}:8000`;
  *
  * The URI must NOT end in a slash.
  */
-export const MediaURI = RestURI;
+export const MediaURI = `http://${hostName}:8000`;
 
 /**
  * The URI for the web-socket connections.
