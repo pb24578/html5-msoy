@@ -141,6 +141,7 @@ export class ActorControl extends EntityControl {
       (this.velocityX < 0 && this.sprite.x <= this.clickedX) ||
       (this.velocityX >= 0 && this.sprite.x >= this.clickedX)
     ) {
+      // stop moving because the actor has arrived to the clicked position
       this.setPosition(this.clickedX, this.clickedY);
       this.setMoving(false);
       this.clickedX = 0;
