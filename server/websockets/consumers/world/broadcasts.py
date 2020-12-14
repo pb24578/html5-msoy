@@ -70,6 +70,7 @@ async def broadcast_participant_position(room_channel_name, channel_name, json_d
     payload = json_data['payload']
     entity_id = payload["id"]
     position = payload["position"]
+    animate = payload["animate"]
 
     def get_participant():
         participant = Participant.objects.get(
@@ -98,6 +99,7 @@ async def broadcast_participant_position(room_channel_name, channel_name, json_d
                 "id": entity_id,
                 "participant_id": participant_id,
                 "position": position,
+                "animate": animate,
             }
         }
     )

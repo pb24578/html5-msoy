@@ -94,12 +94,13 @@ export const [handleAvatarPosition] = createAsyncAction(
       /**
        * Updates the position of the avatar.
        */
-      const updatePosition = (x: number, y: number) => {
+      const updatePosition = (x: number, y: number, animate: boolean) => {
         const avatarPosition: SendEntityPosition = {
           type: 'avatar.position',
           payload: {
             id: ctrl.getEntityId(),
             position: { x, y },
+            animate,
           },
         };
         socket.send(JSON.stringify(avatarPosition));
@@ -108,13 +109,12 @@ export const [handleAvatarPosition] = createAsyncAction(
       // set the initial position of this user's avatar
       const x = stage.width / 2;
       const y = stage.height / 2;
-      ctrl.setPosition(x, y);
-      updatePosition(x, y);
+      updatePosition(x, y, false);
 
       // move the avatar whenever the container is clicked
       stage.on('mousedown', (event: PIXI.InteractionEvent) => {
         const { x, y } = event.data.global;
-        updatePosition(x, y);
+        updatePosition(x, y, true);
       });
     },
   },
@@ -125,7 +125,7 @@ export const [setAvatarPosition] = createAsyncAction(
   {
     id: 'set-avatar-position',
     async: (store, status) => async (position: ReceiveEntityPosition) => {
-      const { participantId } = position.payload;
+      const { animate, participantId } = position.payload;
       const { x, y } = position.payload.position;
       const state = store.getState() as IState;
       const participant = state.world.room.participantMap[participantId];
@@ -140,11 +140,13 @@ export const [setAvatarPosition] = createAsyncAction(
       const xDistance = x - sprite.x;
       const yDistance = y - sprite.y;
       const distance = Math.sqrt(xDistance ** 2 + yDistance ** 2);
-      if (distance !== 0) {
+      if (animate && distance !== 0) {
         const speed = 5;
         const velocityX = speed * (xDistance / distance);
         const velocityY = speed * (yDistance / distance);
         ctrl.moveTo(x, y, velocityX, velocityY);
+      } else if (!animate) {
+        ctrl.setPosition(x, y);
       }
     },
   },

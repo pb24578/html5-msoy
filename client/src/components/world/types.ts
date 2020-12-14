@@ -85,6 +85,7 @@ export interface SendEntityPosition {
   payload: {
     id: number;
     position: EntityPosition;
+    animate: boolean;
   };
 }
 
@@ -94,6 +95,7 @@ export interface ReceiveEntityPosition {
     id: number;
     participantId: number;
     position: EntityPosition;
+    animate: boolean;
   };
 }
 
