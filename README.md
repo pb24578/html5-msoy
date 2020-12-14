@@ -44,32 +44,15 @@ the sprite sheets.
 
 5. Minify the texture.json file using this small script https://gist.github.com/KinoAR/a5cf8a207529ee643389c4462ebf13cd.
 
-### 1. Example addEventListener Between index.js and Avatar:
-In index.js worker:  
-```js
-postMessage(type: 'addEventListener', payload: { type: 'onEnterFrame', name: 'enterFrame');
-```
-
-Now the AvatarBody.ts will receive the message, then register an onEnterFrame listener.
-
-Then in the worker "message" event listener, it will listen for the event.
-
-To remove event, execute in worker:  
-```js
-postMessage(type: 'removeEventListener', payload: { type: 'onEnterFrame', name: 'enterFrame');
-```
-
-### 2. Example setState Between index.js and Avatar:
+### Example setState Between index.js and Avatar:
 In worker:  
-```
+```js
 postMessage(type: 'setState', payload: { name: 'Dance' });
 ```
 
-Now the AvatarBody will receive this message, then send a socket message to the world to perform a setState('Dance'), the server will validate that the entity id
-that called the setState is owned by the user (since the entity has a foreign key to the user), then it'll send a message to update the state for all users.
-- This backend logic is performed in the world_consumer.py
+Now the AvatarBody will receive this message, then send a socket message to the world to perform a setState('Dance'), the server will validate that the entity id that called the setState is owned by the user (since the entity has a foreign key to the user), then it'll send a message to update the state for all users. This backend logic is performed in the world -> consumer.py file.
 
-In the update state listener (on the client), the client then updates the state of the Avatar for all users viewing it by performing the setState function in AvatarControl.
+Once the client receives a setState payload from the socket, then it updates the state the user is viewing.
 
 # PixiJS VCam To Do
 6. Use https://github.com/davidfig/pixi-viewport to set the PixiJS VCam.
