@@ -123,7 +123,6 @@ export class ActorControl extends EntityControl {
     this.clickedY = y;
     this.velocityX = velocityX;
     this.velocityY = velocityY;
-    this.setOrientation(velocityX);
   }
 
   /**
@@ -132,7 +131,7 @@ export class ActorControl extends EntityControl {
    * @param directionX The direction that the actor will face horizontally.
    * A negative value makes the actor face left while a positive value faces right.
    */
-  private setOrientation(directionX: number) {
+  public setOrientation(directionX: number) {
     const isChangeLeft = directionX <= 0 || this.sprite.scale.x >= 0;
     const isChangeRight = directionX >= 0 || this.sprite.scale.x <= 0;
     if (isChangeLeft && isChangeRight) {

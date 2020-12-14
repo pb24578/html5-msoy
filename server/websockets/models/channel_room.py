@@ -20,6 +20,7 @@ class ChannelRoomManager(models.Manager):
             channel_room.add_participant(user_channel_name, user)
         except Exception as e:
             return
+
         return channel_room
 
     def remove(self, room_channel_name, user_channel_name):
@@ -29,9 +30,9 @@ class ChannelRoomManager(models.Manager):
 
         try:
             channel_room = ChannelRoom.objects.get(channel_name=room_channel_name)
+            channel_room.remove_participant(user_channel_name)
         except ChannelRoom.DoesNotExist:
             return
-        channel_room.remove_participant(user_channel_name)
 
 
 class ChannelRoom(models.Model):
@@ -77,18 +78,19 @@ class ChannelRoom(models.Model):
             async_to_sync(channel_layer.group_add)(self.channel_name, channel_name)
             self.broadcast_changed(added=True)
 
-    def remove_participant(self, channel_name=None, participant=None):
+        return created
+
+    def remove_participant(self, channel_name=None):
         """
         Removes an existing channel from the room.
         """
         
-        if participant is None:
-            try:
-                participant = Participant.objects.get(channel_room=self, channel_name=channel_name)
-            except Participant.DoesNotExist:
-                return
+        try:
+            participant = Participant.objects.get(channel_room=self, channel_name=channel_name)
+        except Participant.DoesNotExist:
+            return
 
-        async_to_sync(channel_layer.group_discard)(self.channel_name, participant.channel_name)
+        async_to_sync(channel_layer.group_discard)(self.channel_name, channel_name)
         participant.delete()
         self.broadcast_changed(removed=True)
         self.prune_room()

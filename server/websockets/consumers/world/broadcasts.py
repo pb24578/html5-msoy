@@ -84,6 +84,7 @@ async def broadcast_participant_position(room_channel_name, channel_name, json_d
     def set_participant_position():
         participant.x = position["x"]
         participant.y = position["y"]
+        participant.direction_x = position["directionX"]
         participant.save()
     await sync_to_async(set_participant_position)()
 

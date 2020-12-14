@@ -10,6 +10,7 @@ class Participant(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     x = models.FloatField(default=0)
     y = models.FloatField(default=0)
+    direction_x = models.FloatField(default=0)
 
     def __str__(self):
         return f"{str(self.user)} -> {str(self.channel_room)}"

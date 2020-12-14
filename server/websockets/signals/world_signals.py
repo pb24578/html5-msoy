@@ -36,6 +36,7 @@ def broadcast_participants(sender, channel_room, **kwargs):
         # format the participant's data
         participant = {
             'id': participant.id,
+            'me': True,
             'profile': profile,
             'avatar': {
                 "id": user_id,

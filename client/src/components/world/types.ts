@@ -40,12 +40,14 @@ export const isConnectionError = (object: any): object is ConnectionError =>
 
 export interface Participant {
   id: number;
+  me: boolean;
   profile: Profile;
   avatar?: AvatarControl;
 }
 
 export const ServerParticipant: Participant = {
   id: 0,
+  me: false,
   profile: {
     id: 0,
     redirectRoomId: 1,
@@ -56,6 +58,7 @@ export const ServerParticipant: Participant = {
 export interface EntityPosition {
   x: number;
   y: number;
+  directionX: number;
 }
 
 export interface AvatarPayload {
@@ -67,6 +70,7 @@ export interface AvatarPayload {
 
 export interface ParticipantPayload {
   id: number;
+  me: boolean;
   profile: Profile;
   avatar: AvatarPayload;
 }

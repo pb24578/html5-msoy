@@ -59,8 +59,7 @@ export const [setParticipantMap] = createAsyncAction(
             ctrl.setPosition(avatar.position.x, avatar.position.y);
 
             // if this avatar is handled by this user, then listen for position changes
-            const isUserParticipant = participant.profile.id === user.id;
-            if (isUserParticipant) {
+            if (participant.me) {
               handleAvatarPosition(ctrl);
             }
           }
@@ -94,12 +93,12 @@ export const [handleAvatarPosition] = createAsyncAction(
       /**
        * Updates the position of the avatar.
        */
-      const updatePosition = (x: number, y: number, animate: boolean) => {
+      const updatePosition = (x: number, y: number, directionX: number, animate: boolean) => {
         const avatarPosition: SendEntityPosition = {
           type: 'avatar.position',
           payload: {
             id: ctrl.getEntityId(),
-            position: { x, y },
+            position: { x, y, directionX },
             animate,
           },
         };
@@ -109,12 +108,13 @@ export const [handleAvatarPosition] = createAsyncAction(
       // set the initial position of this user's avatar
       const x = stage.width / 2;
       const y = stage.height / 2;
-      updatePosition(x, y, false);
+      updatePosition(x, y, -1, false);
 
       // move the avatar whenever the container is clicked
       stage.on('mousedown', (event: PIXI.InteractionEvent) => {
         const { x, y } = event.data.global;
-        updatePosition(x, y, true);
+        const directionX = x - ctrl.getSprite().x;
+        updatePosition(x, y, directionX, true);
       });
     },
   },
@@ -126,7 +126,7 @@ export const [setAvatarPosition] = createAsyncAction(
     id: 'set-avatar-position',
     async: (store, status) => async (position: ReceiveEntityPosition) => {
       const { animate, participantId } = position.payload;
-      const { x, y } = position.payload.position;
+      const { x, y, directionX } = position.payload.position;
       const state = store.getState() as IState;
       const participant = state.world.room.participantMap[participantId];
       if (!participant || !participant.avatar) return;
@@ -149,6 +149,7 @@ export const [setAvatarPosition] = createAsyncAction(
         } else {
           ctrl.setPosition(x, y);
         }
+        ctrl.setOrientation(directionX);
       }
     },
   },
