@@ -20,6 +20,7 @@ export class EntityControl extends AbstractControl {
 
     [this.default] = animations;
     this.sprite = new PIXI.AnimatedSprite(sheet.animations[this.default]);
+    this.sprite.play();
     this.sheet = sheet;
     this.worker = this.loadEntityWorker(script);
 

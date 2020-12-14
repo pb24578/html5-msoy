@@ -75,6 +75,7 @@ export class ActorControl extends EntityControl {
     if (!newState || !this.sheet.animations[newState]) return;
     this.currentState = newState;
     this.sprite.textures = this.sheet.animations[state];
+    this.sprite.play();
   }
 
   /**
