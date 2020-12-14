@@ -39,7 +39,7 @@ def broadcast_participants(sender, channel_room, **kwargs):
             'profile': profile,
             'avatar': {
                 "id": user_id,
-                "texture": static('jovial/Jovial.json'),
+                "texture": static('jovial/texture.json'),
                 "script": static('body.js'),
                 "position": {
                     "id": user_id,

@@ -91,7 +91,7 @@ export class ActorControl extends EntityControl {
     this.sprite.x = x;
     this.sprite.y = y;
     this.name.x = this.sprite.x;
-    this.name.y = this.sprite.y - this.sprite.height - 20;
+    this.name.y = this.sprite.y - this.sprite.height + 20;
   }
 
   /**
@@ -122,6 +122,19 @@ export class ActorControl extends EntityControl {
     this.clickedY = y;
     this.velocityX = velocityX;
     this.velocityY = velocityY;
+    this.setOrientation(velocityX);
+  }
+
+  /**
+   * Set the orientation of the avatar based on the direction.
+   */
+  private setOrientation(velocityX: number) {
+    const isChangeLeft = velocityX <= 0 || this.sprite.scale.x >= 0;
+    const isChangeRight = velocityX >= 0 || this.sprite.scale.x <= 0;
+    if (isChangeLeft && isChangeRight) {
+      // flip the direction since the avatar is changing direction
+      this.sprite.scale.x *= -1;
+    }
   }
 
   /**

@@ -84,8 +84,8 @@ export const [setParticipantMap] = createAsyncAction(
             const name = ctrl.getName();
 
             // add the avatar and the name onto the stage
-            sprite.width = 142;
-            sprite.height = 156;
+            sprite.width = 300;
+            sprite.height = 225;
             sprite.anchor.set(0.5, 1);
             name.anchor.set(0.5);
             stage.addChild(sprite);
@@ -131,14 +131,14 @@ export const [setAvatarPosition] = createAsyncAction(
       const participant = state.world.room.participantMap[participantId];
       if (!participant || !participant.avatar) return;
       const ctrl = participant.avatar;
-      const avatar = ctrl.getSprite();
+      const sprite = ctrl.getSprite();
 
       /**
        * Move the avatar using a normalized x and y velocity.
        * https://stackoverflow.com/questions/52897297/move-a-ball-an-ellipse-at-a-certain-speed-to-where-the-mouse-was-clicked-pr
        */
-      const xDistance = x - avatar.x;
-      const yDistance = y - avatar.y;
+      const xDistance = x - sprite.x;
+      const yDistance = y - sprite.y;
       const distance = Math.sqrt(xDistance ** 2 + yDistance ** 2);
       if (distance !== 0) {
         const speed = 5;
