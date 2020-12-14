@@ -10,42 +10,6 @@ import { actions } from '../reducer';
 
 const { setParticipantMap: updateParticipantMap } = actions;
 
-export const [handleAvatarPosition] = createAsyncAction(
-  {
-    id: 'handle-avatar-position',
-    async: (store, status, stage, socket) => async (ctrl: AvatarControl) => {
-      if (!socket) return;
-
-      /**
-       * Updates the position of the avatar.
-       */
-      const updatePosition = (x: number, y: number) => {
-        const avatarPosition: SendEntityPosition = {
-          type: 'avatar.position',
-          payload: {
-            id: ctrl.getEntityId(),
-            position: { x, y },
-          },
-        };
-        socket.send(JSON.stringify(avatarPosition));
-      };
-
-      // set the initial position of this user's avatar
-      const x = stage.width / 2;
-      const y = stage.height / 2;
-      ctrl.setPosition(x, y);
-      updatePosition(x, y);
-
-      // move the avatar whenever the container is clicked
-      stage.on('mousedown', (event: PIXI.InteractionEvent) => {
-        const { x, y } = event.data.global;
-        updatePosition(x, y);
-      });
-    },
-  },
-  [getPixiStage, getWorldSocket],
-);
-
 export const [setParticipantMap] = createAsyncAction(
   {
     id: 'set-participant-map',
@@ -119,6 +83,42 @@ export const [setParticipantMap] = createAsyncAction(
     },
   },
   [getParticipantMap, getPixiStage, getUser],
+);
+
+export const [handleAvatarPosition] = createAsyncAction(
+  {
+    id: 'handle-avatar-position',
+    async: (store, status, stage, socket) => async (ctrl: AvatarControl) => {
+      if (!socket) return;
+
+      /**
+       * Updates the position of the avatar.
+       */
+      const updatePosition = (x: number, y: number) => {
+        const avatarPosition: SendEntityPosition = {
+          type: 'avatar.position',
+          payload: {
+            id: ctrl.getEntityId(),
+            position: { x, y },
+          },
+        };
+        socket.send(JSON.stringify(avatarPosition));
+      };
+
+      // set the initial position of this user's avatar
+      const x = stage.width / 2;
+      const y = stage.height / 2;
+      ctrl.setPosition(x, y);
+      updatePosition(x, y);
+
+      // move the avatar whenever the container is clicked
+      stage.on('mousedown', (event: PIXI.InteractionEvent) => {
+        const { x, y } = event.data.global;
+        updatePosition(x, y);
+      });
+    },
+  },
+  [getPixiStage, getWorldSocket],
 );
 
 export const [setAvatarPosition] = createAsyncAction(
