@@ -55,7 +55,7 @@ export const [setParticipantMap] = createAsyncAction(
         // setup this avatar's files and load its texture
         avatar.texture = ContentURI + avatar.texture;
         avatar.script = ContentURI + avatar.script;
-        if (avatar && !PIXI.Loader.shared.resources[avatar.texture]) {
+        if (!PIXI.Loader.shared.resources[avatar.texture]) {
           PIXI.Loader.shared.add(avatar.texture);
         }
       });
