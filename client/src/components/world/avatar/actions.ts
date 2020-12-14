@@ -140,13 +140,15 @@ export const [setAvatarPosition] = createAsyncAction(
       const xDistance = x - sprite.x;
       const yDistance = y - sprite.y;
       const distance = Math.sqrt(xDistance ** 2 + yDistance ** 2);
-      if (animate && distance !== 0) {
-        const speed = 5;
-        const velocityX = speed * (xDistance / distance);
-        const velocityY = speed * (yDistance / distance);
-        ctrl.moveTo(x, y, velocityX, velocityY);
-      } else if (!animate) {
-        ctrl.setPosition(x, y);
+      if (distance !== 0) {
+        if (animate) {
+          const speed = 5;
+          const velocityX = speed * (xDistance / distance);
+          const velocityY = speed * (yDistance / distance);
+          ctrl.moveTo(x, y, velocityX, velocityY);
+        } else {
+          ctrl.setPosition(x, y);
+        }
       }
     },
   },
