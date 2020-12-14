@@ -15,22 +15,11 @@ export const [handleUserAvatarPosition] = createAsyncAction(
     id: 'handle-user-avatar-position',
     async: (store, status, stage, socket) => async (ctrl: AvatarControl) => {
       if (!socket) return;
-      // set the initial position of this user's avatar
-      const x = stage.width / 2;
-      const y = stage.height / 2;
-      ctrl.setPosition(x, y);
-      const avatarPosition: SendEntityPosition = {
-        type: 'avatar.position',
-        payload: {
-          id: ctrl.getEntityId(),
-          position: { x, y },
-        },
-      };
-      socket.send(JSON.stringify(avatarPosition));
 
-      // move the avatar whenever the container is clicked
-      stage.on('mousedown', (event: PIXI.InteractionEvent) => {
-        const { x, y } = event.data.global;
+      /**
+       * Updates the position of the avatar.
+       */
+      const updatePosition = (x: number, y: number) => {
         const avatarPosition: SendEntityPosition = {
           type: 'avatar.position',
           payload: {
@@ -39,6 +28,18 @@ export const [handleUserAvatarPosition] = createAsyncAction(
           },
         };
         socket.send(JSON.stringify(avatarPosition));
+      };
+
+      // set the initial position of this user's avatar
+      const x = stage.width / 2;
+      const y = stage.height / 2;
+      ctrl.setPosition(x, y);
+      updatePosition(x, y);
+
+      // move the avatar whenever the container is clicked
+      stage.on('mousedown', (event: PIXI.InteractionEvent) => {
+        const { x, y } = event.data.global;
+        updatePosition(x, y);
       });
     },
   },
