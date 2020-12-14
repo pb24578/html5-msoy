@@ -4,8 +4,10 @@ from django.conf.urls.static import static
 from . import views
 
 media_path = []
-if settings.DEBUG is True:
+static_path = []
+if settings.DEBUG:
     media_path = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    static_path = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns = [
     path('session', views.SessionView.as_view()),
@@ -13,4 +15,4 @@ urlpatterns = [
     path('signup', views.SignupView.as_view()),
     path('rooms', views.RoomsView.as_view()),
     path('profiles/<int:id>', views.ProfilesView.as_view()),
-] + media_path
+] + static_path + media_path
