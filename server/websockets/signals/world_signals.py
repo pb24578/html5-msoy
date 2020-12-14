@@ -40,7 +40,7 @@ def broadcast_participants(sender, channel_room, **kwargs):
             'avatar': {
                 "id": user_id,
                 "texture": static('soda/texture.json'),
-                "script": static('body.json'),
+                "script": static('body.js'),
                 "position": {
                     "id": user_id,
                     "x": participant.x,
