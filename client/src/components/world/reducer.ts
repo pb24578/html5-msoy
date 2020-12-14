@@ -7,6 +7,7 @@ export const initialState: World = {
   pixi: {
     app: new PIXI.Application(),
     stage: new PIXI.Container(),
+    background: new PIXI.Sprite(),
   },
   room: {
     id: 0,
@@ -20,10 +21,20 @@ const slice = createSlice({
   initialState,
   reducers: {
     resizePixiApp: (state) => {
-      const { app } = state.pixi;
+      const { app, background } = state.pixi;
       const parent = app.view.parentElement;
       if (parent) {
         app.renderer.resize(parent.clientWidth, parent.clientHeight);
+      }
+
+      if (background.width < app.screen.width) {
+        // resize the background width if it's too small to fit the app's screen
+        background.width = app.screen.width;
+      }
+
+      if (background.height < app.screen.height) {
+        // resize the background height if it's too small to fit the app's screen
+        background.width = app.screen.width;
       }
     },
     setParticipantMap: (state, action: PayloadAction<ParticipantMap>) => {

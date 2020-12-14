@@ -13,7 +13,15 @@ import { actions as chatActions } from '../chat/reducer';
 import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
-import { getParticipantMap, getPixiApp, getPixiStage, getRoomId, getWorldError, getWorldSocket } from './selectors';
+import {
+  getParticipantMap,
+  getPixiApp,
+  getPixiBackground,
+  getPixiStage,
+  getRoomId,
+  getWorldError,
+  getWorldSocket,
+} from './selectors';
 import { connectToRoom, disconnectFromRoom } from './actions';
 import { setAvatarPosition, setParticipantMap } from './avatar/actions';
 import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants, ServerParticipant } from './types';
@@ -58,8 +66,6 @@ export const World = React.memo(() => {
   const dispatch = useDispatch();
   const location = useLocation();
   const error = useSelector(getWorldError);
-  const app = useSelector(getPixiApp);
-  const stage = useSelector(getPixiStage);
   const sessionLoaded = useSelector(isSessionLoaded);
   const { redirectRoomId } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
@@ -70,6 +76,11 @@ export const World = React.memo(() => {
   const worldsMatch: WorldsMatch = useSelector(getWorldsMatch);
   const paramRoomId = worldsMatch?.params.id;
   const roomId = paramRoomId ? Number(paramRoomId) : redirectRoomId;
+
+  // receive pixi-related objects
+  const app = useSelector(getPixiApp);
+  const stage = useSelector(getPixiStage);
+  const background = useSelector(getPixiBackground);
 
   // handle the participants in the world
   const [pixiRequestFrame, setPixiRequestFrame] = useState(0);
@@ -94,7 +105,7 @@ export const World = React.memo(() => {
     app.stage.addChild(stage);
 
     // add the container's background
-    const background = PIXI.Sprite.from(PixiBackground);
+    background.texture = PIXI.Texture.from(PixiBackground);
     background.width = app.screen.width;
     background.height = app.screen.height;
     stage.addChild(background);
@@ -196,7 +207,7 @@ export const World = React.memo(() => {
   }, [location]);
 
   /**
-   * Resize the Pixi App container whenever the window size changes.
+   * Resize the Pixi App container and background whenever the window size changes.
    */
   window.onresize = () => {
     dispatch(resizePixiApp());
