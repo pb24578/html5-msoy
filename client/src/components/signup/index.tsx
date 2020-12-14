@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FlexColumn } from '../../shared/styles/flex';
+import { closeMenu } from '../menu-bar/actions';
 import { signup } from './actions';
 
 const Container = styled(FlexColumn)`
@@ -64,7 +65,11 @@ export const Signup = React.memo(() => {
 
   const onSignup = async () => {
     try {
-      await signup(username, email, password).promise;
+      const user = await signup(username, email, password).promise;
+      if (user) {
+        // created an account, get out of the signup page
+        closeMenu();
+      }
     } catch (error) {
       setError(error);
     }

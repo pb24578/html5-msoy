@@ -67,7 +67,7 @@ export const World = React.memo(() => {
   const location = useLocation();
   const error = useSelector(getWorldError);
   const sessionLoaded = useSelector(isSessionLoaded);
-  const { redirectRoomId } = useSelector(getUser);
+  const { redirectRoomId, session } = useSelector(getUser);
   const currentRoomId = useSelector(getRoomId);
   const socket = useSelector(getWorldSocket);
   const theme = useContext(ThemeContext);
@@ -159,7 +159,7 @@ export const World = React.memo(() => {
     if (sessionLoaded) {
       connectToRoom(roomId);
     }
-  }, [sessionLoaded]);
+  }, [session, sessionLoaded]);
 
   /**
    * Listen to messages when the socket is established.

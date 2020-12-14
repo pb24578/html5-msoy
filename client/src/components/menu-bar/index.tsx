@@ -5,7 +5,7 @@ import { replace } from 'connected-react-router';
 import { Close } from '@styled-icons/material';
 import routes from '../../shared/routes';
 import { FlexRow } from '../../shared/styles/flex';
-import { getRoomId } from '../world/selectors';
+import { closeMenu } from './actions';
 
 const Container = styled(FlexRow)`
   align-items: center;
@@ -25,15 +25,16 @@ const CloseIcon = styled(Close)`
 `;
 
 export const MenuBar = React.memo(() => {
-  const dispatch = useDispatch();
-  const roomId = useSelector(getRoomId);
-
   /**
    * When closing the menu bar, go to the world that the user is in right now.
    */
   const onClickClose = () => {
-    dispatch(replace(`${routes.worlds.pathname}/${roomId}`));
+    closeMenu();
   };
 
-  return <Container>{roomId && <CloseIcon onClick={onClickClose} />}</Container>;
+  return (
+    <Container>
+      <CloseIcon onClick={onClickClose} />
+    </Container>
+  );
 });

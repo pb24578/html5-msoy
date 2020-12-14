@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FlexColumn } from '../../shared/styles/flex';
+import { closeMenu } from '../menu-bar/actions';
 import { login } from './actions';
 
 const Container = styled(FlexColumn)`
@@ -58,7 +59,11 @@ export const Login = React.memo(() => {
 
   const onLogin = async () => {
     try {
-      await login(email, password).promise;
+      const user = await login(email, password).promise;
+      if (user) {
+        // logged in, so get out of the login page
+        closeMenu();
+      }
     } catch (error) {
       setError(error);
     }
