@@ -111,7 +111,7 @@ export const [handleAvatarPosition] = createAsyncAction(
         socket.send(JSON.stringify(avatarPosition));
       };
 
-      // set the initial position of this user's avatar
+      // set the initial position of this avatar
       const x = stage.width / 2;
       const y = stage.height / 2;
       updatePosition(x, y, -1, false);
