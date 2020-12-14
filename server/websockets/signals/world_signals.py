@@ -2,8 +2,8 @@ from django.dispatch import Signal, receiver
 from django.templatetags.static import static
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from rest.getters.user import get_display_name, get_id
-from rest.serializers import ProfileSerializer
+from django.contrib.auth.models import AnonymousUser
+from rest.serializers import AnonymousSerializer, ProfileSerializer
 
 channel_layer = get_channel_layer()
 
@@ -22,27 +22,21 @@ def broadcast_participants(sender, channel_room, **kwargs):
     participants = []
     for participant in channel_room.get_participants():
         user = participant.user
-        user_id = get_id(user)
 
-        if user and user.is_authenticated:
-            profile = ProfileSerializer(user).data
-        else:
-            profile = {
-                "id": user_id,
-                "display_name": get_display_name(user),
-                "redirect_room_id": 1,
-            }
+        # based on the authentication of this user, receive its profile
+        profile = ProfileSerializer(user) if user and user.is_authenticated else AnonymousSerializer(AnonymousUser())
+        profile = profile.data
 
         # format the participant's data
         participant = {
             'id': participant.id,
             'profile': profile,
             'avatar': {
-                "id": user_id,
+                "id": profile["id"],
                 "texture": static('jovial/texture.json'),
                 "script": static('body.js'),
                 "position": {
-                    "id": user_id,
+                    "id": profile["id"],
                     "x": participant.x,
                     "y": participant.y
                 }

@@ -1,7 +1,8 @@
 from asgiref.sync import sync_to_async
 from channels.layers import get_channel_layer
 from ...models import Participant
-from rest.serializers import ProfileSerializer
+from django.contrib.auth.models import AnonymousUser
+from rest.serializers import AnonymousSerializer, ProfileSerializer
 from rest.getters.user import get_display_name, get_id
 
 channel_layer = get_channel_layer()
@@ -32,14 +33,10 @@ async def broadcast_message(room_channel_name, channel_name, json_data):
     participant = await sync_to_async(get_participant)()
 
     def get_profile():
-        if participant.user and participant.user.is_authenticated:
-            profile = ProfileSerializer(participant.user).data
-        else:
-            profile = {
-                "id": get_id(participant.user),
-                "display_name": get_display_name(participant.user),
-                "redirect_room_id": 1,
-            }
+        # based on the authentication of this user, receive its profile
+        user = participant.user
+        profile = ProfileSerializer(user) if user and user.is_authenticated else AnonymousSerializer(AnonymousUser())
+        profile = profile.data
         return profile
     profile = await sync_to_async(get_profile)()
 

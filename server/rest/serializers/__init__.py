@@ -1,2 +1,2 @@
 from .room import RoomSerializer
-from .user import ProfileSerializer, UserSerializer
+from .user import AnonymousSerializer, ProfileSerializer, UserSerializer

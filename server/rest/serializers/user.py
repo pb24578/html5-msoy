@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import AnonymousUser
 from ..models import Room, User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -55,4 +56,22 @@ class ProfileSerializer(serializers.ModelSerializer):
         except:
             return
         return root_room.id
+
+class AnonymousSerializer(serializers.Serializer):
+    id = serializers.SerializerMethodField('get_id')
+    display_name = serializers.SerializerMethodField('get_display_name')
+    redirect_room_id = serializers.SerializerMethodField('get_redirect_room_id')
+
+    class Meta:
+        model = AnonymousUser
+        fields = ['id', 'display_name', 'redirect_room_id']
+
+    def get_id(self, obj):
+        return 0
+
+    def get_display_name(self, obj):
+        return "Anonymous"
+
+    def get_redirect_room_id(self, obj):
+        return 1
 
