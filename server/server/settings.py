@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'websockets',
 ]
 
+if DEBUG:
+    INSTALLED_APPS.remove('django.contrib.staticfiles')
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',

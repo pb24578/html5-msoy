@@ -6,8 +6,8 @@ from . import views
 media_path = []
 static_path = []
 if settings.DEBUG:
-    media_path = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    static_path = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    media_path = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, view=views.cors_serve)
+    static_path = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT, view=views.cors_serve)
 
 urlpatterns = [
     path('session', views.SessionView.as_view()),
