@@ -14,7 +14,8 @@ import { ChatMessage, isReceiveChatMessage } from '../chat/types';
 import { Toolbar } from '../toolbar';
 import { actions } from './reducer';
 import { getParticipantMap, getPixiApp, getPixiStage, getRoomId, getWorldError, getWorldSocket } from './selectors';
-import { connectToRoom, disconnectFromRoom, setAvatarPosition, setParticipantMap } from './actions';
+import { connectToRoom, disconnectFromRoom } from './actions';
+import { setAvatarPosition, setParticipantMap } from './avatar/actions';
 import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants, ServerParticipant } from './types';
 
 const { addMessage } = chatActions;
