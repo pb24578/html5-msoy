@@ -136,9 +136,9 @@ export const [setAvatarPosition] = createAsyncAction(
       // receive the x and y velocity to move this avatar
       const xDistance = Math.abs(x - avatar.x);
       const yDistance = Math.abs(y - avatar.y);
-      const invVelocity = 56;
-      const velocityX = xDistance / (x > avatar.x ? invVelocity : -invVelocity);
-      const velocityY = yDistance / (y > avatar.y ? invVelocity : -invVelocity);
+      const time = 56;
+      const velocityX = xDistance / (x > avatar.x ? time : -time);
+      const velocityY = yDistance / (y > avatar.y ? time : -time);
       ctrl.moveTo(x, y, velocityX, velocityY);
     },
   },
