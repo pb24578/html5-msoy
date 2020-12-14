@@ -9,12 +9,11 @@ export const RestURI = `http://${hostName}:8000`;
 
 /**
  * The URI for static and media files. The app uses the same URI for static
- * and media files because it doesn't between those two contents and uses
- * the same hosting service for it.
+ * and media files because it expects to use the same hosting service for content.
  *
  * The URI must NOT end in a slash.
  */
-export const MediaURI = `http://${hostName}:8000`;
+export const ContentURI = `http://${hostName}:8000`;
 
 /**
  * The URI for the web-socket connections.

@@ -1,7 +1,7 @@
 import { createAsyncAction } from 'async-selector-kit';
 import * as PIXI from 'pixi.js-legacy';
 import { IState } from '../../store';
-import { SocketURI, MediaURI } from '../../shared/constants';
+import { SocketURI, ContentURI } from '../../shared/constants';
 import { getSession, getUser } from '../../shared/user/selectors';
 import { AvatarControl } from '../../shared/sdk/world';
 import { getWorldSocket, getParticipantMap, getPixiStage } from './selectors';
@@ -93,8 +93,8 @@ export const [setParticipantMap] = createAsyncAction(
     async: (store, status, participantMap, stage, user) => async (participants: ParticipantPayload[]) => {
       participants.forEach(({ avatar }) => {
         // setup this avatar's files and load its texture
-        avatar.texture = MediaURI + avatar.texture;
-        avatar.script = MediaURI + avatar.script;
+        avatar.texture = ContentURI + avatar.texture;
+        avatar.script = ContentURI + avatar.script;
         if (avatar && !PIXI.Loader.shared.resources[avatar.texture]) {
           PIXI.Loader.shared.add(avatar.texture);
         }
