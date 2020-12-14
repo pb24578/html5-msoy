@@ -4,17 +4,18 @@ import { IState } from '../../../store';
 import { ContentURI } from '../../../shared/constants';
 import { getUser } from '../../../shared/user/selectors';
 import { AvatarControl } from '../../../shared/sdk/world';
-import { getWorldSocket, getParticipantMap, getPixiStage } from '../selectors';
+import { getParticipant, getParticipantMap, getPixiStage, getWorldSocket } from '../selectors';
 import { ParticipantMap, ParticipantPayload, ReceiveEntityPosition, SendEntityPosition } from '../types';
 import { actions } from '../reducer';
 
-const { setParticipantMap: updateParticipantMap } = actions;
+const { setParticipant, setParticipantMap: updateParticipantMap } = actions;
 
 export const [setParticipantMap] = createAsyncAction(
   {
     id: 'set-participant-map',
-    // eslint-disable-next-line max-len
-    async: (store, status, participantMap, stage, user) => async (participants: ParticipantPayload[]) => {
+    async: (store, status, myParticipant, participantMap, stage, user) => async (
+      participants: ParticipantPayload[],
+    ) => {
       participants.forEach(({ avatar }) => {
         // setup this avatar's files and load its texture
         avatar.texture = ContentURI + avatar.texture;
@@ -58,8 +59,13 @@ export const [setParticipantMap] = createAsyncAction(
             // move the avatar to the loaded position
             ctrl.setPosition(avatar.position.x, avatar.position.y);
 
-            // if this avatar is handled by this user, then listen for position changes
-            if (participant.me) {
+            // set this user's participant if it doesn't already exist for this room
+            const isMe = participant.profile.id === user.id;
+            if (!myParticipant && isMe) {
+              const myNewParticipant = newParticipantMap[participant.id];
+              store.dispatch(setParticipant(myNewParticipant));
+
+              // listen for this avatar's position changes
               handleAvatarPosition(ctrl);
             }
           }
@@ -81,7 +87,7 @@ export const [setParticipantMap] = createAsyncAction(
       });
     },
   },
-  [getParticipantMap, getPixiStage, getUser],
+  [getParticipant, getParticipantMap, getPixiStage, getUser],
 );
 
 export const [handleAvatarPosition] = createAsyncAction(

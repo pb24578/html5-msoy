@@ -19,6 +19,7 @@ export type ParticipantMap = { [id: number]: Participant };
 
 export interface Room {
   id: number;
+  participant: Participant | null;
   participantMap: ParticipantMap;
 }
 
@@ -40,14 +41,12 @@ export const isConnectionError = (object: any): object is ConnectionError =>
 
 export interface Participant {
   id: number;
-  me: boolean;
   profile: Profile;
   avatar?: AvatarControl;
 }
 
 export const ServerParticipant: Participant = {
   id: 0,
-  me: false,
   profile: {
     id: 0,
     redirectRoomId: 1,
@@ -70,7 +69,6 @@ export interface AvatarPayload {
 
 export interface ParticipantPayload {
   id: number;
-  me: boolean;
   profile: Profile;
   avatar: AvatarPayload;
 }

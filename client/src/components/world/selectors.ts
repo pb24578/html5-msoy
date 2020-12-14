@@ -16,5 +16,6 @@ export const getPixiBackground = (state: IState) => state.world.pixi.background;
 /**
  * Room-related selectors.
  */
+export const getParticipant = (state: IState) => state.world.room.participant;
 export const getParticipantMap = (state: IState) => state.world.room.participantMap;
 export const getRoomId = (state: IState) => state.world.room.id;

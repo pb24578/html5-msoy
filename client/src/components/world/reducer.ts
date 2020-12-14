@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import * as PIXI from 'pixi.js-legacy';
-import { ParticipantMap, Room, World, WorldError } from './types';
+import { Participant, ParticipantMap, Room, World, WorldError } from './types';
 
 export const initialState: World = {
   error: null,
@@ -11,6 +11,7 @@ export const initialState: World = {
   },
   room: {
     id: 0,
+    participant: null,
     participantMap: {},
   },
   socket: null,
@@ -36,6 +37,9 @@ const slice = createSlice({
         // resize the background height if it's too small to fit the app's screen
         background.width = app.screen.width;
       }
+    },
+    setParticipant: (state, action: PayloadAction<Participant>) => {
+      state.room.participant = action.payload;
     },
     setParticipantMap: (state, action: PayloadAction<ParticipantMap>) => {
       state.room.participantMap = action.payload;
