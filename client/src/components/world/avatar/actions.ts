@@ -10,9 +10,9 @@ import { actions } from '../reducer';
 
 const { setParticipantMap: updateParticipantMap } = actions;
 
-export const [handleUserAvatarPosition] = createAsyncAction(
+export const [handleAvatarPosition] = createAsyncAction(
   {
-    id: 'handle-user-avatar-position',
+    id: 'handle-avatar-position',
     async: (store, status, stage, socket) => async (ctrl: AvatarControl) => {
       if (!socket) return;
 
@@ -94,10 +94,10 @@ export const [setParticipantMap] = createAsyncAction(
             // move the avatar to the loaded position
             ctrl.setPosition(avatar.position.x, avatar.position.y);
 
-            // if this avatar is handled by this user, then handle its position
+            // if this avatar is handled by this user, then listen for position changes
             const isUserParticipant = participant.profile.id === user.id;
             if (isUserParticipant) {
-              handleUserAvatarPosition(ctrl);
+              handleAvatarPosition(ctrl);
             }
           }
         });
