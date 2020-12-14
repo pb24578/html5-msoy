@@ -128,10 +128,13 @@ export class ActorControl extends EntityControl {
 
   /**
    * Set the orientation of the avatar based on the direction.
+   *
+   * @param directionX The direction that the actor will face horizontally.
+   * A negative value makes the actor face left while a positive value faces right.
    */
-  private setOrientation(velocityX: number) {
-    const isChangeLeft = velocityX <= 0 || this.sprite.scale.x >= 0;
-    const isChangeRight = velocityX >= 0 || this.sprite.scale.x <= 0;
+  private setOrientation(directionX: number) {
+    const isChangeLeft = directionX <= 0 || this.sprite.scale.x >= 0;
+    const isChangeRight = directionX >= 0 || this.sprite.scale.x <= 0;
     if (isChangeLeft && isChangeRight) {
       // flip the direction since the avatar is changing direction
       this.sprite.scale.x *= -1;
