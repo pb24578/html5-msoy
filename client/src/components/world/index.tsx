@@ -88,6 +88,7 @@ export const World = React.memo(() => {
     dispatch(resizePixiApp());
 
     // reset the app's stage
+    stage.off('mousedown');
     stage.removeChildren();
     stage.interactive = true;
     app.stage.addChild(stage);
