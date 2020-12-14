@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,7 +46,7 @@ INSTALLED_APPS = [
     'websockets',
 ]
 
-if DEBUG:
+if DEBUG and 'runserver' in sys.argv:
     INSTALLED_APPS.remove('django.contrib.staticfiles')
 
 REST_FRAMEWORK = {
