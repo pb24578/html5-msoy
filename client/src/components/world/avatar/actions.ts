@@ -133,13 +133,19 @@ export const [setAvatarPosition] = createAsyncAction(
       const ctrl = participant.avatar;
       const avatar = ctrl.getSprite();
 
-      // receive the x and y velocity to move this avatar
-      const xDistance = Math.abs(x - avatar.x);
-      const yDistance = Math.abs(y - avatar.y);
-      const time = 56;
-      const velocityX = xDistance / (x > avatar.x ? time : -time);
-      const velocityY = yDistance / (y > avatar.y ? time : -time);
-      ctrl.moveTo(x, y, velocityX, velocityY);
+      /**
+       * Move the avatar using a normalized x and y velocity.
+       * https://stackoverflow.com/questions/52897297/move-a-ball-an-ellipse-at-a-certain-speed-to-where-the-mouse-was-clicked-pr
+       */
+      const xDistance = x - avatar.x;
+      const yDistance = y - avatar.y;
+      const distance = Math.sqrt(xDistance ** 2 + yDistance ** 2);
+      if (distance !== 0) {
+        const speed = 5;
+        const velocityX = speed * (xDistance / distance);
+        const velocityY = speed * (yDistance / distance);
+        ctrl.moveTo(x, y, velocityX, velocityY);
+      }
     },
   },
   [],
