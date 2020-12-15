@@ -14,12 +14,17 @@ self.onmessage = (event) => {
     animations = Object.keys(value.animations);
     [currentState] = animations;
 
-    // store all of the states and actions
+    // store all of the states and actions, but do not store transition or walking states
     animations.forEach((animation) => {
-      if (animation.startsWith("state_")) {
-        states.push(animation);
-      } else if (animation.startsWith("action_")) {
+      if (animation.startsWith("action_")) {
         actions.push(animation);
+        return;
+      }
+
+      const isWalking = animation.endsWith("_walking");
+      if (animation.startsWith("state_") && !isWalking) {
+        states.push(animation);
+        return;
       }
     });
 
