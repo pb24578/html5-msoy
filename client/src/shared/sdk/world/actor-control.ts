@@ -68,12 +68,11 @@ export class ActorControl extends EntityControl {
   }
 
   /**
-   * Set a state, the state must be in the registered states.
+   * Set a state, the state must be in the animations.
    */
   public setState(state: string) {
-    const newState = this.states.find((currentState) => currentState === state);
-    if (!newState || !this.sheet.animations[newState]) return;
-    this.currentState = newState;
+    if (!this.sheet.animations[state]) return;
+    this.currentState = state;
     this.sprite.textures = this.sheet.animations[state];
     this.sprite.play();
   }
