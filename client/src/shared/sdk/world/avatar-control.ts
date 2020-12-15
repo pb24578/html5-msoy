@@ -20,6 +20,7 @@ export class AvatarControl extends ActorControl {
 
   /**
    * Registers the avatar's actions.
+   * These actions will appear for the user to see and change between them.
    *
    * @param actions An Array of actions, each must be less than 64 characters.
    */

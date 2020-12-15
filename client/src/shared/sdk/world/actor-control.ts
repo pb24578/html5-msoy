@@ -44,6 +44,7 @@ export class ActorControl extends EntityControl {
 
   /**
    * Registers the actor's states. The first state will be your "default" state.
+   * These states will appear for the user to see and change between them.
    *
    * @param states An Array of states, each must be less than 64 characters.
    */
