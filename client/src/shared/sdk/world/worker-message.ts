@@ -1,26 +1,26 @@
-export class WorkerMessage {
+export enum WorkerMessage {
   /**
-   * Called once the spritesheet data has loaded.
+   * Called to the worker once the spritesheet data has loaded.
    */
-  public static spritesheet: string = 'spritesheet';
+  spritesheet = 'spritesheet',
 
   /**
-   * Called whenever the actor is moving.
+   * Called to the worker whenever the actor is moving.
    */
-  public static moving: string = 'moving';
+  moving = 'moving',
 
   /**
-   * Called to register states to the actor.
+   * Called whenever the worker registers states to the actor.
    */
-  public static registerStates: string = 'registerStates';
+  registerStates = 'registerStates',
 
   /**
-   * Called to register actions to the avatar.
+   * Called whenever the worker registers actions to the avatar.
    */
-  public static registerActions: string = 'registerActions';
+  registerActions = 'registerActions',
 
   /**
-   * Called to set a state to the actor.
+   * Called whenever the worker sets a state to the actor.
    */
-  public static setState: string = 'setState';
+  setState = 'setState',
 }

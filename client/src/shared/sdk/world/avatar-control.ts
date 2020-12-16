@@ -10,7 +10,6 @@ export class AvatarControl extends ActorControl {
     super.listenWorkerMessage();
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-
       if (data.type === WorkerMessage.registerActions) {
         const { value } = data.payload;
         this.registerActions(value);

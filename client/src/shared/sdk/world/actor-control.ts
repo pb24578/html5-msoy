@@ -29,13 +29,10 @@ export class ActorControl extends EntityControl {
     super.listenWorkerMessage();
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-
       if (data.type === WorkerMessage.registerStates) {
         const { value } = data.payload;
         this.registerStates(value);
-      }
-
-      if (data.type === WorkerMessage.setState) {
+      } else if (data.type === WorkerMessage.setState) {
         const { value } = data.payload;
         this.setState(value);
       }
