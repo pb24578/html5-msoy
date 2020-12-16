@@ -3,7 +3,6 @@ from channels.layers import get_channel_layer
 from ...models import Participant
 from django.contrib.auth.models import AnonymousUser
 from rest.serializers import AnonymousSerializer, ProfileSerializer
-from rest.getters.user import get_display_name, get_id
 
 channel_layer = get_channel_layer()
 

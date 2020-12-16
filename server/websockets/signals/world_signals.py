@@ -38,7 +38,8 @@ def broadcast_participants(sender, channel_room, **kwargs):
                 "position": {
                     "id": profile["id"],
                     "x": participant.x,
-                    "y": participant.y
+                    "y": participant.y,
+                    "direction_x": participant.direction_x
                 }
             }
         }
