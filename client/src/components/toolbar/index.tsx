@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { VolumeUp, People, MeetingRoom } from '@styled-icons/material';
 import { FlexRow, FlexCenter } from '../../shared/styles/flex';
 import { getWorldSocket } from '../world/selectors';
-import { SendChatMessage } from '../chat/types';
+import { sendMessage } from '../chat/actions';
 
 const Container = styled(FlexRow)`
   align-items: center;
@@ -48,12 +48,12 @@ const maxChars = 256;
 
 export const Toolbar = React.memo(() => {
   const socket = useSelector(getWorldSocket);
-  const [textMessage, setMessage] = useState('');
+  const [textMessage, setTextMessage] = useState('');
 
   const onChangeText = (event: React.FormEvent<EventTarget>) => {
     const { value } = event.target as HTMLInputElement;
     if (value.length <= maxChars) {
-      setMessage(value);
+      setTextMessage(value);
     }
   };
 
@@ -65,15 +65,8 @@ export const Toolbar = React.memo(() => {
   };
 
   const onSendMessage = () => {
-    if (!socket) return;
-    const message: SendChatMessage = {
-      type: 'message',
-      payload: {
-        message: textMessage,
-      },
-    };
-    socket.send(JSON.stringify(message));
-    setMessage('');
+    sendMessage(textMessage);
+    setTextMessage('');
   };
 
   return (

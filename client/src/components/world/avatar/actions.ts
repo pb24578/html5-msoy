@@ -5,7 +5,7 @@ import { ContentURI } from '../../../shared/constants';
 import { getUser } from '../../../shared/user/selectors';
 import { AvatarControl } from '../../../shared/sdk/world';
 import { getParticipant, getParticipantMap, getPixiStage, getWorldSocket } from '../selectors';
-import { ParticipantMap, ParticipantPayload, ReceiveEntityPosition, SendEntityPosition } from '../types';
+import { EntityPosition, ParticipantMap, ParticipantPayload, ReceiveEntityPosition } from '../types';
 import { actions } from '../reducer';
 
 const { setParticipant, setParticipantMap: updateParticipantMap } = actions;
@@ -56,8 +56,8 @@ export const [setParticipantMap] = createAsyncAction(
             stage.addChild(sprite);
             stage.addChild(name);
 
-            // move the avatar to the loaded position and orientation
-            ctrl.setPosition(avatar.position.x, avatar.position.y);
+            // move the avatar to the loaded coordinates and orientation
+            ctrl.setCoordinates(avatar.position.x, avatar.position.y);
             ctrl.setOrientation(avatar.position.directionX);
 
             // set this user's participant if it doesn't already exist for this room
@@ -97,35 +97,40 @@ export const [handleAvatarPosition] = createAsyncAction(
     async: (store, status, stage, socket) => async (ctrl: AvatarControl) => {
       if (!socket) return;
 
-      /**
-       * Updates the position of the avatar.
-       */
-      const updatePosition = (x: number, y: number, directionX: number, animate: boolean) => {
-        const avatarPosition: SendEntityPosition = {
-          type: 'avatar.position',
-          payload: {
-            id: ctrl.getEntityId(),
-            position: { x, y, directionX },
-            animate,
-          },
-        };
-        socket.send(JSON.stringify(avatarPosition));
-      };
-
       // set the initial position of this avatar
       const x = stage.width / 2;
       const y = stage.height / 2;
-      updatePosition(x, y, -1, false);
+      sendAvatarPosition(ctrl, { x, y, directionX: -1 }, false);
 
       // move the avatar whenever the container is clicked
       stage.on('mousedown', (event: PIXI.InteractionEvent) => {
         const { x, y } = event.data.global;
         const directionX = x - ctrl.getSprite().x;
-        updatePosition(x, y, directionX, true);
+        sendAvatarPosition(ctrl, { x, y, directionX }, true);
       });
     },
   },
   [getPixiStage, getWorldSocket],
+);
+
+export const [sendAvatarPosition] = createAsyncAction(
+  {
+    id: 'send-avatar-position',
+    // eslint-disable-next-line max-len
+    async: (store, status, socket) => async (ctrl: AvatarControl, position: EntityPosition, animate: boolean) => {
+      if (!socket) return;
+      const avatarPosition = {
+        type: 'avatar.position',
+        payload: {
+          id: ctrl.getEntityId(),
+          position,
+          animate,
+        },
+      };
+      socket.send(JSON.stringify(avatarPosition));
+    },
+  },
+  [getWorldSocket],
 );
 
 export const [setAvatarPosition] = createAsyncAction(
@@ -154,7 +159,7 @@ export const [setAvatarPosition] = createAsyncAction(
           const velocityY = speed * (yDistance / distance);
           ctrl.moveTo(x, y, velocityX, velocityY);
         } else {
-          ctrl.setPosition(x, y);
+          ctrl.setCoordinates(x, y);
         }
         ctrl.setOrientation(directionX);
       }

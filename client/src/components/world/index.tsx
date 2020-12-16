@@ -87,9 +87,8 @@ export const World = React.memo(() => {
   const participantMap = useSelector(getParticipantMap);
 
   /**
-   * Creates a reference to the Pixi App container. Once the reference
-   * has been created, then set the Pixi app's view to the container,
-   * reset the Pixi app, and add this room's content onto the app.
+   * Creates a reference to the Pixi App container. Once the reference has been created,
+   * then set the Pixi app's view to the container and reset the PIXI app.
    */
   const pixiRef = createRef<HTMLDivElement>();
   useEffect(() => {
@@ -162,27 +161,20 @@ export const World = React.memo(() => {
   }, [session, sessionLoaded]);
 
   /**
-   * Listen to messages when the socket is established.
+   * Listen to messages once the socket has established a connection to this world.
    */
   useEffect(() => {
     if (!socket) return;
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-
       if (isReceiveParticipants(data)) {
         setParticipantMap(data.payload.participants);
-      }
-
-      if (isReceiveAvatarPosition(data)) {
+      } else if (isReceiveAvatarPosition(data)) {
         setAvatarPosition(data);
-      }
-
-      if (isReceiveChatMessage(data)) {
+      } else if (isReceiveChatMessage(data)) {
         dispatch(addMessage(data.payload));
-      }
-
-      if (isConnectionError(data)) {
+      } else if (isConnectionError(data)) {
         disconnectFromRoom();
         dispatch(setWorldError(data.payload));
       }

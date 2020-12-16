@@ -86,9 +86,9 @@ export class ActorControl extends EntityControl {
   }
 
   /**
-   * Sets the actor's position. This is helpful to align the name with the sprite.
+   * Sets the actor's coordinates. This is helpful to align the name with the sprite.
    */
-  public setPosition(x: number, y: number) {
+  public setCoordinates(x: number, y: number) {
     this.sprite.x = x;
     this.sprite.y = y;
     this.name.x = this.sprite.x;
@@ -158,7 +158,7 @@ export class ActorControl extends EntityControl {
       (this.velocityX >= 0 && this.sprite.x >= this.clickedX)
     ) {
       // stop moving because the actor has arrived to the clicked position
-      this.setPosition(this.clickedX, this.clickedY);
+      this.setCoordinates(this.clickedX, this.clickedY);
       this.setMoving(false);
       this.clickedX = 0;
       this.clickedY = 0;
@@ -166,6 +166,6 @@ export class ActorControl extends EntityControl {
       this.velocityY = 0;
       return;
     }
-    this.setPosition(this.sprite.x + this.velocityX, this.sprite.y + this.velocityY);
+    this.setCoordinates(this.sprite.x + this.velocityX, this.sprite.y + this.velocityY);
   }
 }

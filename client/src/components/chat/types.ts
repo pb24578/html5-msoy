@@ -4,13 +4,6 @@ export interface Chat {
   messages: ChatMessage[];
 }
 
-export interface SendChatMessage {
-  type: string;
-  payload: {
-    message: string;
-  };
-}
-
 export interface ReceiveChatMessage {
   type: string;
   payload: {

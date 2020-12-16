@@ -83,15 +83,6 @@ export interface ReceiveParticipants {
 export const isReceiveParticipants = (object: any): object is ReceiveParticipants =>
   'type' in object && object.type === 'participants';
 
-export interface SendEntityPosition {
-  type: string;
-  payload: {
-    id: number;
-    position: EntityPosition;
-    animate: boolean;
-  };
-}
-
 export interface ReceiveEntityPosition {
   type: string;
   payload: {
