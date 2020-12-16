@@ -8,15 +8,22 @@ export class ActorControl extends EntityControl {
   protected moving;
 
   /**
-   * The position and velocity to animate the actor to.
+   * The coordinates and velocity to animate the actor.
    */
   private clickedX: number = 0;
   private clickedY: number = 0;
   private velocityX: number = 0;
   private velocityY: number = 0;
 
-  constructor(id: number, name: string, sheet: PIXI.Spritesheet, script: string) {
-    super(id, sheet, script);
+  constructor(
+    socket: WebSocket,
+    hasControl: boolean,
+    id: number,
+    name: string,
+    sheet: PIXI.Spritesheet,
+    script: string,
+  ) {
+    super(socket, hasControl, id, sheet, script);
     this.currentState = this.default;
     this.moving = false;
     this.name = new PIXI.Text(name, { fill: 0xffffff, fontSize: 16 });

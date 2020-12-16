@@ -13,7 +13,7 @@ const { setParticipant, setParticipantMap: updateParticipantMap } = actions;
 export const [setParticipantMap] = createAsyncAction(
   {
     id: 'set-participant-map',
-    async: (store, status, myParticipant, participantMap, stage, user) => async (
+    async: (store, status, myParticipant, participantMap, stage, user, socket) => async (
       participants: ParticipantPayload[],
     ) => {
       participants.forEach(({ avatar }) => {
@@ -38,8 +38,15 @@ export const [setParticipantMap] = createAsyncAction(
           const { avatar, profile } = participant;
           const texture = PIXI.Loader.shared.resources[avatar.texture];
           const sheet = texture && texture.spritesheet;
-          if (sheet) {
-            const ctrl = new AvatarControl(avatar.id, profile.displayName, sheet, avatar.script);
+          if (sheet && socket) {
+            // determine whether this participant is the owner of this new avatar
+            const isMe = !myParticipant && participant.profile.id === user.id;
+
+            // create the avatar control and set the participant
+            const entityId = avatar.id;
+            const { displayName } = profile;
+            const { script } = avatar;
+            const ctrl = new AvatarControl(socket, isMe, entityId, displayName, sheet, script);
             newParticipantMap[participant.id] = {
               ...participant,
               avatar: ctrl,
@@ -60,9 +67,8 @@ export const [setParticipantMap] = createAsyncAction(
             ctrl.setCoordinates(avatar.position.x, avatar.position.y);
             ctrl.setOrientation(avatar.position.directionX);
 
-            // set this user's participant if it doesn't already exist for this room
-            const isMe = participant.profile.id === user.id;
-            if (!myParticipant && isMe) {
+            // set this user's participant
+            if (isMe) {
               const myNewParticipant = newParticipantMap[participant.id];
               store.dispatch(setParticipant(myNewParticipant));
 
@@ -88,7 +94,7 @@ export const [setParticipantMap] = createAsyncAction(
       });
     },
   },
-  [getParticipant, getParticipantMap, getPixiStage, getUser],
+  [getParticipant, getParticipantMap, getPixiStage, getUser, getWorldSocket],
 );
 
 export const [handleAvatarPosition] = createAsyncAction(

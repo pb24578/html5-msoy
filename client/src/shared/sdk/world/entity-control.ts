@@ -2,15 +2,18 @@ import * as PIXI from 'pixi.js-legacy';
 import { AbstractControl, WorkerMessage } from '.';
 
 export class EntityControl extends AbstractControl {
+  protected hasControl: boolean;
   protected id: number;
   protected sprite: PIXI.AnimatedSprite;
   protected default: string;
   protected sheet: PIXI.Spritesheet;
   protected worker: Worker;
 
-  constructor(id: number, sheet: PIXI.Spritesheet, script: string) {
-    super();
+  // eslint-disable-next-line max-len
+  constructor(socket: WebSocket, hasControl: boolean, id: number, sheet: PIXI.Spritesheet, script: string) {
+    super(socket);
     this.id = id;
+    this.hasControl = hasControl;
 
     // receive the "default" animation, which is the first sheet animation
     const animations = Object.keys(sheet.animations);
