@@ -56,8 +56,9 @@ export const [setParticipantMap] = createAsyncAction(
             stage.addChild(sprite);
             stage.addChild(name);
 
-            // move the avatar to the loaded position
+            // move the avatar to the loaded position and orientation
             ctrl.setPosition(avatar.position.x, avatar.position.y);
+            ctrl.setOrientation(avatar.position.directionX);
 
             // set this user's participant if it doesn't already exist for this room
             const isMe = participant.profile.id === user.id;
