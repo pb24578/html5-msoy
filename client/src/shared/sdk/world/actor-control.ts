@@ -83,7 +83,7 @@ export class ActorControl extends EntityControl {
   }
 
   /**
-   * Sets the actor's coordinates. This is helpful to align the name with the sprite.
+   * Sets the actor's coordinates. This function also aligns the name with the sprite.
    */
   public setCoordinates(x: number, y: number) {
     this.sprite.x = x;
