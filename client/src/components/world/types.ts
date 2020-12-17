@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js-legacy';
-import { Profile } from '../profile/types';
 import { AvatarControl } from '../../shared/sdk/world';
+import { Profile } from '../profile/types';
+import { AvatarPayload } from './avatar/types';
 
 export interface World {
   error: WorldError | null;
@@ -54,19 +55,6 @@ export const ServerParticipant: Participant = {
   },
 };
 
-export interface EntityPosition {
-  x: number;
-  y: number;
-  directionX: number;
-}
-
-export interface AvatarPayload {
-  id: number;
-  texture: string;
-  script: string;
-  position: EntityPosition;
-}
-
 export interface ParticipantPayload {
   id: number;
   profile: Profile;
@@ -82,16 +70,3 @@ export interface ReceiveParticipants {
 
 export const isReceiveParticipants = (object: any): object is ReceiveParticipants =>
   'type' in object && object.type === 'participants';
-
-export interface ReceiveEntityPosition {
-  type: string;
-  payload: {
-    id: number;
-    participantId: number;
-    position: EntityPosition;
-    animate: boolean;
-  };
-}
-
-export const isReceiveAvatarPosition = (object: any): object is ReceiveEntityPosition =>
-  'type' in object && object.type === 'avatar.position';

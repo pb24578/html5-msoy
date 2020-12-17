@@ -8,11 +8,11 @@ import { PixiBackground } from '../../assets';
 import routes, { getWorldsMatch, WorldsMatch } from '../../shared/routes';
 import { FlexCenter, FlexColumn, FlexRow } from '../../shared/styles/flex';
 import { getUser, isSessionLoaded } from '../../shared/user/selectors';
+import { Toolbar } from '../toolbar';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
-import { ChatMessage, isReceiveChatMessage } from '../chat/types';
-import { Toolbar } from '../toolbar';
-import { actions } from './reducer';
+import { isReceiveChatMessage } from '../chat/types';
+import { actions as worldActions } from './reducer';
 import {
   getParticipantMap,
   getPixiApp,
@@ -24,10 +24,11 @@ import {
 } from './selectors';
 import { connectToRoom, disconnectFromRoom } from './actions';
 import { setAvatarPosition, setParticipantMap } from './avatar/actions';
-import { isConnectionError, isReceiveAvatarPosition, isReceiveParticipants, ServerParticipant } from './types';
+import { isReceiveAvatarPosition } from './avatar/types';
+import { isConnectionError, isReceiveParticipants, ServerParticipant } from './types';
 
 const { addMessage } = chatActions;
-const { resizePixiApp, setWorldError } = actions;
+const { resizePixiApp, setWorldError } = worldActions;
 
 const Container = styled(FlexColumn)`
   padding-right: 8px;
@@ -181,7 +182,7 @@ export const World = React.memo(() => {
     };
 
     socket.onclose = () => {
-      const errorMessage: ChatMessage = {
+      const errorMessage = {
         sender: ServerParticipant,
         message: 'There was an issue connecting to the room. The server will redirect you elsewhere.',
         backgroundColor: theme.warningColors.primary,

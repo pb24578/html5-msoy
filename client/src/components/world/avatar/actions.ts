@@ -5,8 +5,9 @@ import { ContentURI } from '../../../shared/constants';
 import { getUser } from '../../../shared/user/selectors';
 import { AvatarControl } from '../../../shared/sdk/world';
 import { getParticipant, getParticipantMap, getPixiStage, getWorldSocket } from '../selectors';
-import { EntityPosition, ParticipantMap, ParticipantPayload, ReceiveEntityPosition } from '../types';
+import { ParticipantMap, ParticipantPayload } from '../types';
 import { actions } from '../reducer';
+import { EntityPosition, ReceiveEntityPosition } from './types';
 
 const { setParticipant, setParticipantMap: updateParticipantMap } = actions;
 
