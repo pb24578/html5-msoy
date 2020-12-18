@@ -43,7 +43,7 @@ export class ActorControl extends EntityControl {
         if (this.hasControl) {
           const { type, payload } = data;
           const sendSetState = {
-            type: `${this.type}.${type}`,
+            type: `${this.getEntityType()}.${type}`,
             payload,
           };
           this.socket.send(JSON.stringify(sendSetState));

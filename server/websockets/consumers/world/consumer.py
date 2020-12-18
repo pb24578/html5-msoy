@@ -2,7 +2,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from rest.models import Room
 from ...models import ChannelRoom
-from .broadcasts import broadcast_message, broadcast_avatar_position
+from . import broadcasts
 import humps
 import json
 
@@ -59,14 +59,20 @@ class WorldConsumer(AsyncWebsocketConsumer):
         type = json_data['type']
 
         if type == 'message':
-            await broadcast_message(self.group_name, self.channel_name, json_data)
+            await broadcasts.broadcast_message(self.group_name, self.channel_name, json_data)
         elif type == 'avatar.position':
-            await broadcast_avatar_position(self.group_name, self.channel_name, json_data)
+            await broadcasts.broadcast_avatar_position(self.group_name, self.channel_name, json_data)
+        elif type == 'avatar.setState':
+            await broadcasts.broadcast_avatar_state(self.group_name, self.channel_name, json_data)
             
     async def participants(self, event):
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def avatar_position(self, event):
+        await self.send(text_data=json.dumps(humps.camelize(event)))
+
+    async def avatar_set_state(self, event):
+        event['type'] = humps.camelize(event['type'])
         await self.send(text_data=json.dumps(humps.camelize(event)))
 
     async def message(self, event):

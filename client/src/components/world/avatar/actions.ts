@@ -7,7 +7,7 @@ import { AvatarControl } from '../../../shared/sdk/world';
 import { getParticipant, getParticipantMap, getPixiStage, getWorldSocket } from '../selectors';
 import { ParticipantMap, ParticipantPayload } from '../types';
 import { actions } from '../reducer';
-import { EntityPosition, ReceiveEntityPosition } from './types';
+import { EntityPosition, ReceiveActorPosition, ReceiveActorState } from './types';
 
 const { setParticipant, setParticipantMap: updateParticipantMap } = actions;
 
@@ -127,9 +127,8 @@ export const [sendAvatarPosition] = createAsyncAction(
     async: (store, status, socket) => async (ctrl: AvatarControl, position: EntityPosition, animate: boolean) => {
       if (!socket) return;
       const avatarPosition = {
-        type: 'avatar.position',
+        type: `${ctrl.getEntityType()}.position`,
         payload: {
-          id: ctrl.getEntityId(),
           position,
           animate,
         },
@@ -143,11 +142,10 @@ export const [sendAvatarPosition] = createAsyncAction(
 export const [setAvatarPosition] = createAsyncAction(
   {
     id: 'set-avatar-position',
-    async: (store, status) => async (position: ReceiveEntityPosition) => {
+    async: (store, status, participantMap) => async (position: ReceiveActorPosition) => {
       const { animate, participantId } = position.payload;
       const { x, y, directionX } = position.payload.position;
-      const state = store.getState() as IState;
-      const participant = state.world.room.participantMap[participantId];
+      const participant = participantMap[participantId];
       if (!participant || !participant.avatar) return;
       const ctrl = participant.avatar;
       const sprite = ctrl.getSprite();
@@ -172,5 +170,19 @@ export const [setAvatarPosition] = createAsyncAction(
       }
     },
   },
-  [],
+  [getParticipantMap],
+);
+
+export const [setAvatarState] = createAsyncAction(
+  {
+    id: 'set-avatar-state',
+    async: (store, status, participantMap) => async (position: ReceiveActorState) => {
+      const { participantId, state } = position.payload;
+      const participant = participantMap[participantId];
+      if (!participant || !participant.avatar) return;
+      const ctrl = participant.avatar;
+      ctrl.setState(state);
+    },
+  },
+  [getParticipantMap],
 );

@@ -87,6 +87,13 @@ export class EntityControl extends AbstractControl {
   }
 
   /**
+   * Returns the entity's type
+   */
+  public getEntityType() {
+    return this.type;
+  }
+
+  /**
    * Returns the entity's animated sprite.
    */
   public getSprite() {

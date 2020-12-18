@@ -12,8 +12,8 @@ import { Toolbar } from '../toolbar';
 import { Chat } from '../chat';
 import { actions as chatActions } from '../chat/reducer';
 import { isReceiveChatMessage } from '../chat/types';
-import { setAvatarPosition, setParticipantMap } from './avatar/actions';
-import { isReceiveAvatarPosition } from './avatar/types';
+import { setAvatarPosition, setAvatarState, setParticipantMap } from './avatar/actions';
+import { isReceiveAvatarPosition, isReceiveAvatarState } from './avatar/types';
 import { actions as worldActions } from './reducer';
 import {
   getParticipantMap,
@@ -173,6 +173,8 @@ export const World = React.memo(() => {
         setParticipantMap(data.payload.participants);
       } else if (isReceiveAvatarPosition(data)) {
         setAvatarPosition(data);
+      } else if (isReceiveAvatarState(data)) {
+        setAvatarState(data);
       } else if (isReceiveChatMessage(data)) {
         dispatch(addMessage(data.payload));
       } else if (isConnectionError(data)) {

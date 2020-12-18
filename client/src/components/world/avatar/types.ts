@@ -11,15 +11,25 @@ export interface EntityPosition {
   directionX: number;
 }
 
-export interface ReceiveEntityPosition {
+export interface ReceiveActorPosition {
   type: string;
   payload: {
-    id: number;
     participantId: number;
     position: EntityPosition;
     animate: boolean;
   };
 }
 
-export const isReceiveAvatarPosition = (object: any): object is ReceiveEntityPosition =>
+export const isReceiveAvatarPosition = (object: any): object is ReceiveActorPosition =>
   'type' in object && object.type === 'avatar.position';
+
+export interface ReceiveActorState {
+  type: string;
+  payload: {
+    participantId: number;
+    state: string;
+  };
+}
+
+export const isReceiveAvatarState = (object: any): object is ReceiveActorState =>
+  'type' in object && object.type === 'avatar.setState';
