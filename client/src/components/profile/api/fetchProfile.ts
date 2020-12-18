@@ -1,4 +1,4 @@
-import { RestURI } from '../../../shared/constants';
+import { REST_URI } from '../../../shared/constants';
 import { Profile } from '../types';
 
 /**
@@ -7,7 +7,7 @@ import { Profile } from '../types';
  * @param id The profile id of the user to view.
  */
 export const fetchProfile = async (id: number): Promise<Profile> => {
-  const url = `${RestURI}/profiles/${id}`;
+  const url = `${REST_URI}/profiles/${id}`;
   const resp = await fetch(url, {
     method: 'GET',
   });

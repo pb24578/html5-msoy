@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import routes from '../../shared/routes';
-import { AppName } from '../../shared/constants';
+import { APP_NAME } from '../../shared/constants';
 import { FlexRow, FlexColumn } from '../../shared/styles/flex';
 import { logout } from '../../shared/user/actions';
 import { getUser } from '../../shared/user/selectors';
@@ -74,7 +74,7 @@ export const Header = React.memo(() => {
 
   return (
     <Container>
-      <Logo>{AppName}</Logo>
+      <Logo>{APP_NAME}</Logo>
       <Spacing />
       <Navigation>
         <Account>

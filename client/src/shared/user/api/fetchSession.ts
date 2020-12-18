@@ -1,4 +1,4 @@
-import { LocalStorage, RestURI } from '../../constants';
+import { LocalStorage, REST_URI } from '../../constants';
 import { User } from '../types';
 
 /**
@@ -7,7 +7,7 @@ import { User } from '../types';
  * @param token The auth token to receive the session from
  */
 export const fetchSession = async (token: string): Promise<User> => {
-  const url = `${RestURI}/session`;
+  const url = `${REST_URI}/session`;
   const resp = await fetch(url, {
     method: 'GET',
     headers: {
@@ -18,7 +18,7 @@ export const fetchSession = async (token: string): Promise<User> => {
 
   if (!resp.ok) {
     // remove the session from the local storage
-    localStorage.removeItem(LocalStorage.Session);
+    localStorage.removeItem(LocalStorage.SESSION);
 
     // return the first error thrown by the server
     const error = await resp.json();

@@ -1,5 +1,5 @@
 import { createAsyncAction } from 'async-selector-kit';
-import { SocketURI } from '../../shared/constants';
+import { SOCKET_URI } from '../../shared/constants';
 import { getSession } from '../../shared/user/selectors';
 import { getWorldSocket } from './selectors';
 import { Room } from './types';
@@ -35,7 +35,7 @@ export const [connectToRoom, loadingConnectToRoom, errorConnectToRoom] = createA
       /**
        * Establish a new connection to this world's room.
        */
-      const socket = new WebSocket(`${SocketURI}/worlds/${id}?token=${token}`);
+      const socket = new WebSocket(`${SOCKET_URI}/worlds/${id}?token=${token}`);
       const room: Room = {
         ...initialState.room,
         id,

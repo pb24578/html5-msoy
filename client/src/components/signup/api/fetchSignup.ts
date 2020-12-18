@@ -1,4 +1,4 @@
-import { RestURI } from '../../../shared/constants';
+import { REST_URI } from '../../../shared/constants';
 import { User } from '../../../shared/user/types';
 
 /**
@@ -11,7 +11,7 @@ import { User } from '../../../shared/user/types';
  */
 // eslint-disable-next-line max-len
 export const fetchSignup = async (username: string, email: string, password: string): Promise<User> => {
-  const url = `${RestURI}/signup`;
+  const url = `${REST_URI}/signup`;
   const body = {
     username,
     email,

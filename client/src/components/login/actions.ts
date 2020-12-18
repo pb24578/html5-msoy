@@ -11,7 +11,7 @@ export const [login, loadingLogin, errorLogin] = createAsyncAction({
   async: (store, status) => async (email: string, password: string) => {
     const hashedPassword = sha256(password).toString();
     const user = await fetchLogin(email, hashedPassword);
-    localStorage.setItem(LocalStorage.Session, JSON.stringify(user.session));
+    localStorage.setItem(LocalStorage.SESSION, JSON.stringify(user.session));
     store.dispatch(setUser(user));
     return user;
   },

@@ -5,7 +5,7 @@ const hostName = window.location.hostname;
  *
  * The URI must NOT end in a slash.
  */
-export const RestURI = `http://${hostName}:8000`;
+export const REST_URI = `http://${hostName}:8000`;
 
 /**
  * The URI for static and media files. The app uses the same URI for static
@@ -13,24 +13,24 @@ export const RestURI = `http://${hostName}:8000`;
  *
  * The URI must NOT end in a slash.
  */
-export const ContentURI = `http://${hostName}:8000`;
+export const CONTENT_URI = `http://${hostName}:8000`;
 
 /**
  * The URI for the web-socket connections.
  *
  * The URI must NOT end in a slash.
  */
-export const SocketURI = `ws://${hostName}:8000`;
+export const SOCKET_URI = `ws://${hostName}:8000`;
 
 /**
  * The application name, can be changed and will render a different
  * name for every component that uses it.
  */
-export const AppName = 'HTML5 Whirled';
+export const APP_NAME = 'HTML5 Whirled';
 
 /**
  * Keys used for local storage.
  */
 export enum LocalStorage {
-  Session = 'Session',
+  SESSION = 'Session',
 }

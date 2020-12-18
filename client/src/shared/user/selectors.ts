@@ -10,7 +10,7 @@ export const getSession = (state: IState) => state.user.session;
  * true if there is no session in the local storage.
  */
 export const isSessionLoaded = createSelector(getSession, (session) => {
-  const sessionStored = localStorage.getItem(LocalStorage.Session);
+  const sessionStored = localStorage.getItem(LocalStorage.SESSION);
   if (!sessionStored) {
     /**
      * Returns true if there is no session stored in local storage since

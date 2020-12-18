@@ -1,4 +1,4 @@
-import { RestURI } from '../../../shared/constants';
+import { REST_URI } from '../../../shared/constants';
 import { User } from '../../../shared/user/types';
 
 /**
@@ -10,7 +10,7 @@ import { User } from '../../../shared/user/types';
  * @param password The password to authenticate
  */
 export const fetchLogin = async (email: string, password: string): Promise<User> => {
-  const url = `${RestURI}/login`;
+  const url = `${REST_URI}/login`;
   const body = {
     email,
     password,
