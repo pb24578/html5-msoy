@@ -1,26 +1,31 @@
+export enum EntityType {
+  ENTITY = 'entity',
+  AVATAR = 'avatar',
+}
+
 export enum WorkerMessage {
   /**
    * Called to the worker once the spritesheet data has loaded.
    */
-  spritesheet = 'spritesheet',
+  SPRITESHEET = 'spritesheet',
 
   /**
    * Called to the worker whenever the actor is moving.
    */
-  moving = 'moving',
+  MOVING = 'moving',
 
   /**
    * Called whenever the worker registers states to the actor.
    */
-  registerStates = 'registerStates',
+  REGISTER_STATES = 'registerStates',
 
   /**
    * Called whenever the worker registers actions to the avatar.
    */
-  registerActions = 'registerActions',
+  REGISTER_ACTIONS = 'registerActions',
 
   /**
    * Called whenever the worker sets a state to the actor.
    */
-  setState = 'setState',
+  SET_STATE = 'setState',
 }

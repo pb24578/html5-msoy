@@ -1,9 +1,10 @@
 import * as PIXI from 'pixi.js-legacy';
-import { AbstractControl, WorkerMessage } from '.';
+import { AbstractControl, EntityType, WorkerMessage } from '.';
 
 export class EntityControl extends AbstractControl {
-  protected hasControl: boolean;
   protected id: number;
+  protected type: string;
+  protected hasControl: boolean;
   protected sprite: PIXI.AnimatedSprite;
   protected default: string;
   protected sheet: PIXI.Spritesheet;
@@ -13,6 +14,7 @@ export class EntityControl extends AbstractControl {
   constructor(socket: WebSocket, hasControl: boolean, id: number, sheet: PIXI.Spritesheet, script: string) {
     super(socket);
     this.id = id;
+    this.type = EntityType.ENTITY;
     this.hasControl = hasControl;
 
     // receive the "default" animation, which is the first sheet animation
@@ -29,7 +31,7 @@ export class EntityControl extends AbstractControl {
 
     // send the spritesheet JSON data to the worker
     this.worker.postMessage({
-      type: WorkerMessage.spritesheet,
+      type: WorkerMessage.SPRITESHEET,
       payload: {
         value: this.sheet.data,
       },

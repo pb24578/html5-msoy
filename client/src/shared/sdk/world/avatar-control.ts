@@ -1,7 +1,20 @@
-import { ActorControl, WorkerMessage } from '.';
+import * as PIXI from 'pixi.js-legacy';
+import { ActorControl, EntityType, WorkerMessage } from '.';
 
 export class AvatarControl extends ActorControl {
   private actions: string[] = [];
+
+  constructor(
+    socket: WebSocket,
+    hasControl: boolean,
+    id: number,
+    name: string,
+    sheet: PIXI.Spritesheet,
+    script: string,
+  ) {
+    super(socket, hasControl, id, name, sheet, script);
+    this.type = EntityType.AVATAR;
+  }
 
   /**
    * @override
@@ -10,7 +23,7 @@ export class AvatarControl extends ActorControl {
     super.listenWorkerMessage();
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-      if (data.type === WorkerMessage.registerActions) {
+      if (data.type === WorkerMessage.REGISTER_ACTIONS) {
         const { value } = data.payload;
         this.registerActions(value);
       }

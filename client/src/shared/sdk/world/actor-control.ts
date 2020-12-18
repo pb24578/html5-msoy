@@ -36,12 +36,18 @@ export class ActorControl extends EntityControl {
     super.listenWorkerMessage();
     this.worker.addEventListener('message', (event: MessageEvent) => {
       const { data } = event;
-      if (data.type === WorkerMessage.registerStates) {
+      if (data.type === WorkerMessage.REGISTER_STATES) {
         const { value } = data.payload;
         this.registerStates(value);
-      } else if (data.type === WorkerMessage.setState) {
-        const { value } = data.payload;
-        this.setState(value);
+      } else if (data.type === WorkerMessage.SET_STATE) {
+        if (this.hasControl) {
+          const { type, payload } = data;
+          const sendSetState = {
+            type: `${this.type}.${type}`,
+            payload,
+          };
+          this.socket.send(JSON.stringify(sendSetState));
+        }
       }
     });
   }
@@ -112,7 +118,7 @@ export class ActorControl extends EntityControl {
   public setMoving(moving: boolean) {
     this.moving = moving;
     this.worker.postMessage({
-      type: WorkerMessage.moving,
+      type: WorkerMessage.MOVING,
       payload: {
         value: moving,
       },
