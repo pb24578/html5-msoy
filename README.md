@@ -32,8 +32,7 @@ To see the production processes running, execute ```pm2 list```. To end any of t
 
 # Todo: Uploading Avatars
 1. Best way to make avatars is to create a sprite sheet with the entire avatar in there. Avatars are created using spritesheets and the art can be made from whatever tool you wanna use (like paintnet, photoshop, adobe flash, etc). You create a sprite sheet using a free (and open-source) texture packer tool online at http://free-tex-packer.com/ for web version https://free-tex-packer.com/app/.
-
-Then the creator add a json tag called "animations" with array of images that specify the states, actions, and transitions. This is similar to how y0> is doing it.
+    - Then the creator add a json tag called "animations" with array of images that specify the states, actions, and transitions. This is similar to how y0> is doing it.
 
 2. The body.js will receive the texture.json file from post message. Then the body will start sending messages back to the avatar control to setup the avatar. This file will be modeled after the file from Whirled. Note that the index.js (logic script by the user) file will import the body.js.
 
@@ -66,6 +65,5 @@ Once the client receives a setState payload from the socket, then it updates the
     
 # Todo: Entity Popup
 7. In Whirled, you can create popups and perform actions on your Entity. We should be able to do the same. The creator can create a .html file with the css, html, and js all in this file. This file will be the popup.
-
-Load the popup in an iframe. Then, the popup can postMessage to the parent. The parent can also postMessage to the iframe. If the popup performs a postMessage, then receive the URL of the popup (so it knows which entity id it came from) and send that message onto the AvatarControl.
-- Here's how to perform postMessage from an iframe to a parent https://gist.github.com/cirocosta/9f730967347faf9efb0b
+    - Load the popup in an iframe. Then, the popup can postMessage to the parent. The parent can also postMessage to the iframe. If the popup performs a postMessage, then receive the URL of the popup (so it knows which entity id it came from) and send that message onto the AvatarControl.
+    - Here's how to perform postMessage from an iframe to a parent https://gist.github.com/cirocosta/9f730967347faf9efb0b
